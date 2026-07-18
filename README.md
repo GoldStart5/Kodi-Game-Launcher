@@ -37,6 +37,23 @@ Game shortcut launched
 - Playnite
 - AutoHotkey v2
 
+## Recommended Addons
+
+### TV Tunes
+
+Recommended for adding custom theme music and intro sounds to Kodi libraries.
+
+Features:
+
+- TV show theme music
+- Background audio
+- Custom library atmosphere
+- Works well with custom Kodi skins
+
+TV Tunes repository:
+
+https://github.com/tvaddonsco/script.tvtunes
+
 ## Quick Setup
 
 1. Install Kodi Game Launcher

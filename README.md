@@ -1,4 +1,4 @@
-# Kodi Game Launcher
+# 🎮 Kodi Game Launcher
 
 A complete PC gaming frontend solution for Kodi.
 
@@ -39,7 +39,7 @@ Game shortcut launched
 
 ## Recommended Addons
 
-### TV Tunes
+### 📺 TV Tunes
 
 Recommended for adding custom theme music and intro sounds to Kodi libraries.
 
@@ -51,8 +51,7 @@ Features:
 - Works well with custom Kodi skins
 
 TV Tunes repository:
-
-https://github.com/tvaddonsco/script.tvtunes
+https://forum.kodi.tv/showthread.php?tid=347428
 
 ## Quick Setup
 

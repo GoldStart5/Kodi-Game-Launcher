@@ -48,3 +48,6 @@ Game shortcut launched
 ## Documentation
 
 Complete installation instructions and troubleshooting are included with the download.
+
+- 📘 [Full Installation Guide](README.txt)
+- 🛠️ [Troubleshooting](troubleshooting.md)

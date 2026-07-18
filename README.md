@@ -50,5 +50,5 @@ Game shortcut launched
 
 Complete installation instructions and troubleshooting are included with the download.
 
-- 📘 [Full Installation Guide](README.txt)
+- 📘 [Full Installation Guide](Installation-Guide.md)
 - 🛠️ [Troubleshooting](troubleshooting.md)

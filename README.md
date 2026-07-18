@@ -39,7 +39,7 @@ Game shortcut launched
 
 ## Quick Setup
 
-1.Install Kodi Game Launcher
+1. Install Kodi Game Launcher
 2. Export your Playnite library using KodiGameMediaExporter.
 3. Add a `.lnk` shortcut to each game folder.
 4. Add `Play.avi` to each game folder.

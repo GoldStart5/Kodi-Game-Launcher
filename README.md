@@ -47,7 +47,4 @@ Game shortcut launched
 
 ## Documentation
 
-See:
-
-- `README.txt` - Full installation and configuration guide
-- `troubleshooting.txt` - Troubleshooting information
+Complete installation instructions and troubleshooting are included with the download.

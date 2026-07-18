@@ -45,7 +45,7 @@ Recommended for adding custom theme music and intro sounds to Kodi libraries.
 
 Features:
 
-- TV show theme music
+- Games theme music
 - Background audio
 - Custom library atmosphere
 - Works well with custom Kodi skins

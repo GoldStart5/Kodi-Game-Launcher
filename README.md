@@ -12,7 +12,7 @@ artwork.
 - Kodi game library integration
 - Playnite metadata export
 - Local Kodi media support
-- Launch games from Kodi
+- Game Launcher
 - Custom intro videos
 - Steam, Epic, GOG, emulator, and standalone game support
 

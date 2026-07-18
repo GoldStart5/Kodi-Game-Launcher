@@ -5,14 +5,14 @@ A complete PC gaming frontend solution for Kodi.
 Kodi Game Launcher connects Kodi with Windows game launching by using
 `Play.avi` as the trigger file. Combined with KodiGameMediaExporter,
 it allows Playnite game libraries to be exported into Kodi with metadata,
-artwork, and automatic game launching.
+artwork.
 
 ## Features
 
 - Kodi game library integration
 - Playnite metadata export
 - Local Kodi media support
-- Game launching through Kodi
+- Launch games from Kodi
 - Custom intro videos
 - Steam, Epic, GOG, emulator, and standalone game support
 

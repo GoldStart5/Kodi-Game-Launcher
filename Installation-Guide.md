@@ -565,26 +565,9 @@ For the best experience:
 
 The default Kodi skin has limited customization options.
 
+Any Skin that support custom Home Menu works for adding games to the Home Screen.
 
----
-
-# Recommended Kodi Skin
-
-## Arctic Fuse 3
-
-Recommended for Kodi Game Launcher.
-
-Features:
-
-- Modern interface
-- Console-style browsing
-- Custom home menus
-- Playlist support
-- Large library support
-
-
-Other Jurialmunkey skins may also work depending on your setup.
-
+⚠️Go to Settings → System → Display enable Fullscreen Window so that games launch on top of Kodi⚠️
 
 ---
 

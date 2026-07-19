@@ -1,4 +1,4 @@
-# Kodi Game Launcher + KodiGameMediaExporter  
+# Kodi Game Launcher + Playnite Kodi Exporter
 ## Complete Installation Guide
 
 Kodi Game Launcher turns Kodi into a complete PC gaming frontend.
@@ -6,7 +6,7 @@ Kodi Game Launcher turns Kodi into a complete PC gaming frontend.
 It combines:
 
 - **Playnite** for managing games and metadata.
-- **KodiGameMediaExporter** for creating a Kodi-compatible local game library.
+- **PlayniteKodiExporter** for creating a Kodi-compatible local game library.
 - **Kodi Game Launcher** for launching Windows games directly from Kodi.
 
 The result is a console-style gaming experience inside Kodi with:
@@ -50,7 +50,7 @@ Playnite
 Manage games and metadata
    |
    v
-KodiGameMediaExporter
+Playnite Kodi Exporter
    |
    v
 Kodi Local Game Library
@@ -93,7 +93,7 @@ Required:
 - Kodi installed
 - Playnite installed
 - AutoHotkey v2
-- KodiGameMediaExporter installed
+- Playnite Kodi Exporter installed
 - Kodi Game Launcher installed
 - Portable MPV included with launcher
 
@@ -128,11 +128,11 @@ The Kodi Game Launcher installer will:
 
 ---
 
-# KodiGameMediaExporter
+# Playnite Kodi Exporter
 
-## What Is KodiGameMediaExporter?
+## What Is Playnite KodiExporter?
 
-KodiGameMediaExporter is a Playnite extension designed for users who want Kodi to act as their gaming frontend.
+Playnite Kodi Exporter is a Playnite extension designed for users who want Kodi to act as their gaming frontend.
 
 It exports your Playnite game library into a Kodi-compatible local media structure using:
 
@@ -147,7 +147,7 @@ The exported library can then be imported into Kodi as a local media collection.
 
 ---
 
-# Installing KodiGameMediaExporter
+# Installing Playnite Kodi Exporter
 
 1. Open Playnite.
 
@@ -163,7 +163,7 @@ The extension is now installed.
 
 ---
 
-# Using KodiGameMediaExporter
+# Using Playnite Kodi Exporter
 
 Open Playnite:
 
@@ -344,7 +344,7 @@ KodiGameMedia
 
 ## Game Name.nfo
 
-Kodi metadata file created by KodiGameMediaExporter.
+Kodi metadata file created by Playnite Kodi Exporter.
 
 Contains:
 
@@ -420,7 +420,7 @@ The shortcut can point to:
 
 ---
 
-# KodiGameMediaExporter Features
+# Playnite Kodi Exporter Features
 
 Features:
 
@@ -438,7 +438,7 @@ Features:
 
 # Extra Metadata Loader ClearLogo Support
 
-KodiGameMediaExporter reads logos from:
+Playnite Kodi Exporter reads logos from:
 
 ```
 %AppData%\Playnite\ExtraMetadata\games\<GameID>\Logo.png

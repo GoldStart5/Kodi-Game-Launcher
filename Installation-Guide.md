@@ -149,34 +149,16 @@ The exported library can then be imported into Kodi as a local media collection.
 
 # Installing KodiGameMediaExporter
 
-Copy the:
+1. Open Playnite.
 
-```
-KodiGameMediaExporter
-```
+2. Drag and drop the `.pext` file into the Playnite window.
 
-folder into your Playnite extensions directory:
+3. Confirm the installation.
 
-```
-%AppData%\Playnite\Extensions\
-```
+4. Restart Playnite.
 
-The final location should be:
-
-```
-%AppData%\Playnite\Extensions\KodiGameMediaExporter\
-```
-
-The folder should contain:
-
-```
-KodiGameMediaExporter
-|
-└── KodiGameMediaExporter.psm1
-```
-
-
-Restart Playnite after installation.
+The extension is now installed.
+.
 
 
 ---

@@ -15,8 +15,7 @@
 
 <img src="https://capsule-render.vercel.app/api?type=rect&color=0:3782AC,50:5AD4E3,100:001F3E&height=3&section=header"/>
 
-Kodi Game Launcher connects Kodi with Windows game launching by using
-Kodi Game Launcher. Combined with Playnite Kodi Exporter, it allows Playnite game libraries to be exported into Kodi with metadata, artwork.
+Kodi Game Launcher connects Kodi with Windows game launching combined with Playnite Kodi Exporter, it allows Playnite game libraries to be exported into Kodi with metadata, artwork.
 
 ## ✨ Features
 
@@ -39,8 +38,6 @@ Playnite
 Playnite Kodi Exporter
    ↓
 Kodi Game Library
-   ↓
-Play.avi detected
    ↓
 Kodi Game Launcher
    ↓

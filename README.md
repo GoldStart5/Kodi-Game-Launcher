@@ -2,7 +2,7 @@
 
 <img src="https://capsule-render.vercel.app/api?type=waving&color=0:3782AC,50:5AD4E3,100:001F3E&height=200&section=header&text=Kodi%20Game%20Launcher&fontSize=48&fontColor=FFF2B2&animation=fadeIn&desc=A%20Complete%20PC%20Gaming%20Frontend%20for%20Kodi&descAlignY=65&descSize=18" width="100%"/>
 
-<img src="https://readme-typing-svg.demolab.com?font=Fira+Code&size=22&duration=3000&pause=1000&color=B8860B&background=001F3E00&center=true&vCenter=true&width=600&lines=Connect+Kodi+%2B+Windows+game+launching;Play.avi+as+the+trigger+file;Playnite+%E2%86%92+Kodi+library+export" alt="Typing SVG" />
+<img src="https://readme-typing-svg.demolab.com?font=Fira+Code&size=22&duration=3000&pause=1000&color=B8860B&background=001F3E00&center=true&vCenter=true&width=600&lines=Connect+Kodi+%2B+Windows+game+launching;Playnite+%E2%86%92+Kodi+library+export" alt="Typing SVG" />
 
 <br/>
 

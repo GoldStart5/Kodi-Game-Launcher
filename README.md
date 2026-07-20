@@ -16,9 +16,7 @@
 <img src="https://capsule-render.vercel.app/api?type=rect&color=0:3782AC,50:5AD4E3,100:001F3E&height=3&section=header"/>
 
 Kodi Game Launcher connects Kodi with Windows game launching by using
-`Play.avi` as the trigger file. Combined with KodiGameMediaExporter,
-it allows Playnite game libraries to be exported into Kodi with metadata,
-artwork.
+Kodi Game Launcher. Combined with Playnite Kodi Exporter, it allows Playnite game libraries to be exported into Kodi with metadata, artwork.
 
 ## ✨ Features
 

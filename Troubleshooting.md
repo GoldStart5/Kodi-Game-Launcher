@@ -1,187 +1,70 @@
-Kodi Game Launcher
-Troubleshooting
-================
+# Kodi Game Launcher: Troubleshooting
 
+## First, check the log
 
-Game Does Not Launch
---------------------
+The addon writes to Kodi's log with the prefix `[service.gamelauncher]`. The log is at `%APPDATA%\Kodi\kodi.log`. You should see lines such as:
 
-Check the following:
+```
+[service.gamelauncher] Service started
+[service.gamelauncher] Trigger file playing: D:\Games\Game Name\Play.avi
+[service.gamelauncher] Launching D:\Games\Game Name\Game Name.lnk
+```
 
-1. The game folder contains:
+Where the sequence stops tells you which step failed.
 
-   Play.avi
+## Nothing happens when I play a game
 
-2. The game folder contains a shortcut:
+- **No "Service started" line:** the addon isn't installed or isn't enabled. Go to **Add-ons → My add-ons → Services** and check that Game Launcher is listed and enabled, then restart Kodi.
+- **"Service started" but no "Trigger file playing" line:** Kodi isn't playing `Play.avi` with its own player. See the next section.
+- **"Trigger file playing" but no "Launching" line:** the folder has no `.lnk` (a "No .lnk shortcut found" notification will appear), or you are using *After the intro video finishes* mode and the video was stopped before it ended.
 
-   Game Name.lnk
+## Play.avi opens in MPV (or another external player)
 
-3. The shortcut works correctly when opened manually in Windows.
+Your `playercorefactory.xml` still sends `.avi` files to an external player.
 
-4. Kodi Game Launcher is running.
+1. Open `%APPDATA%\Kodi\userdata\playercorefactory.xml`.
+2. Put `<rule filetypes="avi" player="default"/>` as the first rule inside `<rules action="prepend">`.
+3. Remove `avi` from any `filetypes` list that points to an external player.
+4. Restart Kodi.
 
+If you only used the file for this project, delete it instead.
 
-MPV Plays The Video But Nothing Happens
----------------------------------------
+## Play.avi is not detected
 
-Possible causes:
+- The file name must be `Play.avi` (or match the **Trigger file name** setting).
+- `Play.avi` and the `.lnk` must be in the **same folder**. A subfolder won't work.
+- Kodi must play the real file. Check that the library item points to the game folder and not to a different file.
 
-- Kodi Game Launcher is not running.
-- AutoHotkey v2 is missing.
-- The shortcut file is missing.
-- The shortcut is not inside the same folder as Play.avi.
+## "No .lnk shortcut found"
 
-The launcher requires:
+Add a Windows shortcut to the game folder. It should be named after the folder (`Game Name.lnk`). If no name matches, the first `.lnk` in the folder is used.
 
-Game Folder
-|
-+-- Play.avi
-+-- Game Name.lnk
+## The shortcut launches the wrong game, or does nothing
 
+The addon only starts the shortcut, so test it first: double-click the `.lnk` in Windows. Check its target, "Start in" folder, and arguments.
 
-Kodi Does Not Play Play.avi
----------------------------
+## The game opens but is behind Kodi
 
-Check:
+Enable **Settings → System → Display → Fullscreen Window**. If Windows still keeps Kodi in front, make sure the game or launcher is not set to start minimized.
 
-- playercorefactory.xml is installed correctly.
-- Kodi is using MPV for AVI files.
-- MPV installation folder has not been moved.
-- Play.avi is a valid playable video file.
+## The splash closes too early
 
+The splash closes when another app takes the foreground. Some launchers show a small window first, which counts. Turn the splash off in the addon settings if that is distracting, or leave it and accept the early close.
 
-Game Does Not Appear In Kodi
-----------------------------
+## The splash stays too long
 
-Check:
+It stays until another app gets the foreground, the timeout runs out, or you press Back. Lower **Splash timeout** in the addon settings.
 
-- The game folder contains Play.avi.
-- Kodi has scanned the correct library folder.
-- Your Kodi playlist points to the correct location.
-- The game folder contains valid metadata.
+## The video flashes before the game starts
 
+Use **Immediately** mode with a very short, black `Play.avi`, or switch to **After the intro video finishes** if you want the video to play.
 
-Shortcut Launches The Wrong Game
---------------------------------
+## Games don't appear in Kodi
 
-Open the shortcut properties.
+- Check that the folder was scanned and its content type is set to **Movies** with **Local information only**.
+- Confirm the smart playlist path points to your games folder.
+- Make sure each game folder has a valid `.nfo` from the exporter.
 
-Verify:
+## Still stuck
 
-- Target path.
-- Working directory.
-- Launcher arguments.
-
-Kodi Game Launcher only starts the shortcut.
-The shortcut controls what application is launched.
-
-
-Moved Installation Folder
--------------------------
-
-Do not move the Kodi Game Launcher folder after installation.
-
-Moving the folder can break:
-
-- MPV path configuration.
-- Kodi playercorefactory.xml settings.
-- Startup launcher path.
-
-
-Custom playercorefactory.xml Problems
--------------------------------------
-
-If you already had a custom playercorefactory.xml:
-
-1. Restore your backup.
-2. Add the Kodi Game Launcher MPV rules manually if required.
-
-Do not overwrite custom Kodi player settings without a backup.
-
-
-Play.avi Is Not Detected
-------------------------
-
-Make sure:
-
-- The filename is exactly:
-
-  Play.avi
-
-- The file is inside the same folder as the game shortcut.
-- MPV is playing that exact file.
-
-Example:
-
-Correct:
-
-Games
-|
-+-- Example Game
-    |
-    +-- Play.avi
-    +-- Example Game.lnk
-
-
-Incorrect:
-
-Games
-|
-+-- Example Game
-    |
-    +-- Videos
-        |
-        +-- Play.avi
-
-
-AutoHotkey Problems
--------------------
-
-Verify:
-
-- AutoHotkey v2 is installed.
-- KodiGameLauncher.ahk exists.
-- The script exists in:
-
-%APPDATA%\Microsoft\Windows\Start Menu\Programs\Startup
-
-
-Multiple AutoHotkey Scripts
----------------------------
-
-Do not delete all AutoHotkey scripts.
-
-Only remove:
-
-KodiGameLauncher.ahk
-
-Other scripts may belong to different programs.
-
-
-Still Not Working
------------------
-
-Check the complete chain:
-
-Kodi
- |
- v
-Play.avi opens
- |
- v
-MPV starts playback
- |
- v
-KodiGameLauncher detects MPV
- |
- v
-Game folder detected
- |
- v
-.lnk shortcut found
- |
- v
-Game launches
-
-
-If one step fails, that identifies where the problem is located.
+Run through the chain and find the step that fails: Kodi plays `Play.avi` → addon logs "Trigger file playing" → `.lnk` found → "Launching" → game starts. Include the `[service.gamelauncher]` lines from `kodi.log` when you open an issue.

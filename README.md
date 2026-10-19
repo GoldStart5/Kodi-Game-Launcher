@@ -1,94 +1,83 @@
-<div align="center">
+# Kodi Game Launcher
 
-<img src="https://capsule-render.vercel.app/api?type=waving&color=0:3782AC,50:5AD4E3,100:001F3E&height=200&section=header&text=Kodi%20Game%20Launcher&fontSize=48&fontColor=FFF2B2&animation=fadeIn&desc=A%20Complete%20PC%20Gaming%20Frontend%20for%20Kodi&descAlignY=65&descSize=18" width="100%"/>
+**Turn Kodi into a console-style frontend for your PC game library.**
 
-<img src="https://readme-typing-svg.demolab.com?font=Fira+Code&size=22&duration=3000&pause=1000&color=B8860B&background=001F3E00&center=true&vCenter=true&width=600&lines=Connect+Kodi+%2B+Windows+game+launching;Playnite+%E2%86%92+Kodi+library+export" alt="Typing SVG" />
+![Windows](https://img.shields.io/badge/Windows-0078D6?style=for-the-badge&logo=windows&logoColor=white)
+![Kodi](https://img.shields.io/badge/Kodi-17B2E7?style=for-the-badge&logo=kodi&logoColor=white)
+![Playnite](https://img.shields.io/badge/Playnite-001F3E?style=for-the-badge)
 
-<br/>
-
-![Windows](https://img.shields.io/badge/Windows-001F3E?style=for-the-badge&logo=windows&logoColor=5AD4E3)
-[![Kodi](https://img.shields.io/badge/Kodi-3782AC?style=for-the-badge&logo=kodi&logoColor=white)](https://kodi.tv)
-[![Playnite](https://img.shields.io/badge/Playnite-001F3E?style=for-the-badge&logoColor=D4AF37)](https://playnite.link)
-[![AutoHotkey](https://img.shields.io/badge/AutoHotkey_v2-3782AC?style=for-the-badge&logoColor=D4AF37)](https://www.autohotkey.com/)
-
-</div>
-
-<img src="https://capsule-render.vercel.app/api?type=rect&color=0:3782AC,50:5AD4E3,100:001F3E&height=3&section=header"/>
-
-Kodi Game Launcher connects Kodi with Windows game launching combined with Playnite Kodi Exporter, it allows Playnite game libraries to be exported into Kodi with metadata, artwork.
+Kodi Game Launcher is now a **native Kodi addon**. It works together with the Playnite Kodi Exporter to bring your Playnite library into Kodi with metadata and artwork, and it launches games straight from Kodi. No AutoHotkey and no external video player are needed.
 
 ## ✨ Features
 
 - 🎮 Kodi game library integration
-- 📦 Playnite metadata export
-- 🗂️ Local Kodi media support
-- 🚀 Game Launcher
-- 🎬 Custom intro videos
-- 🕹️ Steam, Epic, GOG, emulator, and standalone game support
-
-<img src="https://capsule-render.vercel.app/api?type=rect&color=0:3782AC,50:5AD4E3,100:001F3E&height=3"/>
+- 📦 Playnite metadata export (posters, fanart, clear logos)
+- 🚀 Launches any Windows shortcut (`.lnk`): Steam, Epic, GOG, emulators, standalone games
+- 🖼️ Fullscreen fanart + logo splash while the game loads
+- 🎬 Optional custom intro videos (`Play.avi`)
+- ⚙️ Settings inside Kodi: trigger name, launch mode, splash on/off, splash timeout
 
 ## ⚙️ How It Works
 
-<div align="center">
-
 ```
-Playnite
-   ↓
-Playnite Kodi Exporter
-   ↓
-Kodi Game Library
-   ↓
-Kodi Game Launcher
-   ↓
-Game shortcut launched
+Playnite → Playnite Kodi Exporter → Kodi game library
+                                          │
+                       you select a game in Kodi
+                                          │
+                            Kodi plays Play.avi
+                                          │
+              Game Launcher addon (Kodi service) detects it
+                                          │
+        stops playback → shows fanart splash → launches Game Name.lnk
 ```
 
-</div>
-
-<img src="https://capsule-render.vercel.app/api?type=rect&color=0:3782AC,50:5AD4E3,100:001F3E&height=3"/>
+The addon runs as a Kodi service. When the file being played is called `Play.avi` it finds the `.lnk` in the same folder, shows that folder's `fanart` while the game loads, and starts the shortcut. The splash closes when the game (or its launcher) takes the foreground, when the timeout runs out, or when you press Back.
 
 ## 🧩 Requirements
 
 | Requirement | Notes |
-|---|---|
-| 🪟 Windows | Host OS |
-| 📺 Kodi | Media center frontend |
+| --- | --- |
+| 🪟 Windows | Uses `os.startfile` to launch shortcuts |
+| 📺 Kodi 19 or newer | Addon uses Python 3 |
 | 🎯 Playnite | Game library manager |
-| 🤖 AutoHotkey v2 | Trigger + launch scripting |
-
-## 🎵 Recommended Addons
-
-### 📺 TV Tunes
-
-Recommended for adding custom theme music and intro sounds to Kodi libraries.
-
-**Features:**
-- 🎼 Games theme music
-- 🔊 Background audio
-- 🌆 Custom library atmosphere
-- 🎨 Works well with custom Kodi skins
-
-> TV Tunes repository: https://forum.kodi.tv/showthread.php?tid=347428
-
-<img src="https://capsule-render.vercel.app/api?type=rect&color=0:3782AC,50:5AD4E3,100:001F3E&height=3"/>
+| 📤 Playnite Kodi Exporter | Exports your library to Kodi format |
 
 ## 🚀 Quick Setup
 
-1. Install Kodi Game Launcher
-2. Export your Playnite library using Playnite Kodi Exporter.
-3. Add a `.lnk` shortcut to each game folder.
-4. Add `Play.avi` to each game folder.
-5. Import the library into Kodi.
-6. Launch games from Kodi.
+1. Download `service.gamelauncher-<version>.zip` from the [Releases](../../releases) page.
+2. In Kodi: **Add-ons → Install from zip file** and pick the zip.
+3. Export your Playnite library with Playnite Kodi Exporter.
+4. Add a `Play.avi` and a `Game Name.lnk` to every game folder.
+5. Import the folder into Kodi (see the [Installation Guide](Installation-Guide.md)).
+6. Pick a game in Kodi and play it.
+
+## 📁 Game Folder Layout
+
+```
+Game Name
+├── Game Name.nfo
+├── poster.jpg
+├── fanart.jpg        ← shown on the splash
+├── clearlogo.png     ← shown on the splash
+├── Play.avi          ← the trigger file
+└── Game Name.lnk     ← launched by the addon
+```
+
+## ⬆️ Upgrading from the AutoHotkey version
+
+1. Close and remove `KodiGameLauncher.ahk` from your Windows Startup folder.
+2. Remove the MPV rule for `Play.avi` from `playercorefactory.xml` (or delete the file if you only used it for this project). See the [Installation Guide](Installation-Guide.md#4-keep-playavi-out-of-mpv).
+3. Install the addon as above. Your game folders and Kodi library do not change.
+
+## 🎵 Recommended Addon: TV Tunes
+
+Adds theme music to your Kodi library, which works nicely for games: <https://forum.kodi.tv/showthread.php?tid=347428>
 
 ## 📚 Documentation
 
-Complete installation instructions and troubleshooting are included with the download.
+- 📘 [Installation Guide](Installation-Guide.md)
+- 🛠️ [Troubleshooting](Troubleshooting.md)
 
-- 📘 [Full Installation Guide](Installation-Guide.md)
-- 🛠️ [Troubleshooting](troubleshooting.md)
+## 📄 License
 
-<div align="center">
-<img src="https://capsule-render.vercel.app/api?type=waving&color=0:3782AC,50:5AD4E3,100:001F3E&height=100&section=footer"/>
-</div>
+MIT. See [LICENSE](LICENSE).

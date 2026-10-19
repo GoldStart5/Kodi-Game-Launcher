@@ -1,626 +1,134 @@
-# Kodi Game Launcher + Playnite Kodi Exporter
-## Complete Installation Guide
+# Kodi Game Launcher: Installation Guide
 
-Kodi Game Launcher turns Kodi into a complete PC gaming frontend.
+Kodi Game Launcher is a Kodi service addon that launches Windows games from Kodi. It combines:
 
-It combines:
+- **Playnite** to manage games and metadata
+- **Playnite Kodi Exporter** to create a Kodi-compatible local game library
+- **Game Launcher addon** (`service.gamelauncher`) to start games from Kodi
 
-- **Playnite** for managing games and metadata.
-- **PlayniteKodiExporter** for creating a Kodi-compatible local game library.
-- **Kodi Game Launcher** for launching Windows games directly from Kodi.
+No AutoHotkey and no external player are required.
 
-The result is a console-style gaming experience inside Kodi with:
+## How it works
 
-- Game metadata
-- Artwork
-- Clear logos
-- Custom intro videos
-- Game launcher integration
+Each game folder contains a `Play.avi` trigger file and a Windows shortcut (`.lnk`).
 
+1. You select a game in Kodi and Kodi plays `Play.avi` with its own player.
+2. The addon sees that `Play.avi` is playing.
+3. It stops the video (or waits for the intro to finish, depending on your setting).
+4. It shows the game's fanart and logo full screen.
+5. It launches the `.lnk` found in the same folder.
+6. The splash closes once the game or its launcher comes to the foreground.
 
----
-
-# Overview
-
-The system works by connecting Kodi's media library with Windows game shortcuts.
-
-Each game folder contains:
-
-- A `Play.avi` trigger file.
-- A Windows shortcut (`.lnk`) used to launch the game.
-
-When a game is selected in Kodi:
-
-1. Kodi opens `Play.avi`.
-2. Kodi sends the file to MPV.
-3. Kodi Game Launcher detects the MPV playback event.
-4. The launcher identifies the game folder.
-5. The launcher finds the matching shortcut.
-6. Windows launches the game.
-
-
----
-
-# Complete Workflow
-
-```
-Playnite
-   |
-   v
-Manage games and metadata
-   |
-   v
-Playnite Kodi Exporter
-   |
-   v
-Kodi Local Game Library
-   |
-   v
-Add game shortcuts manually
-   |
-   v
-Kodi displays games
-   |
-   v
-User selects game
-   |
-   v
-Kodi opens Play.avi
-   |
-   v
-MPV plays Play.avi
-   |
-   v
-Kodi Game Launcher detects playback
-   |
-   v
-Launcher starts Game Name.lnk
-   |
-   v
-Game launches
-```
-
-
----
-
-# Requirements
-
-## Hardware / Software
-
-Required:
+## Requirements
 
 - Windows PC
-- Kodi installed
-- Playnite installed
-- AutoHotkey v2
-- Playnite Kodi Exporter installed
-- Kodi Game Launcher installed
-- Portable MPV included with launcher
+- Kodi 19 or newer
+- Playnite
+- Playnite Kodi Exporter
 
+## 1. Install the addon
 
----
+1. Download `service.gamelauncher-<version>.zip` from the Releases page. Do not unzip it.
+2. In Kodi go to **Settings → Add-ons → Install from zip file**. If asked, allow installs from unknown sources.
+3. Select the zip. Kodi shows a notification when the addon is installed.
 
-# Installation
+The addon starts automatically with Kodi. Restart Kodi once after installing.
 
-## Before Installation
+## 2. Export your library from Playnite
 
-Before installing Kodi Game Launcher:
-
-1. Install Kodi.
-2. Close Kodi.
-3. Make sure AutoHotkey v2 is installed or available.
-
-
----
-
-## Kodi Game Launcher Installer
-
-The Kodi Game Launcher installer will:
-
-- Install Kodi Game Launcher.
-- Install portable MPV.
-- Configure MPV.
-- Install AutoHotkey v2 if required.
-- Add Kodi `playercorefactory.xml` integration.
-- Add `KodiGameLauncher.ahk` to Windows Startup.
-- Configure required paths.
-
-
----
-
-# Playnite Kodi Exporter
-
-## What Is Playnite KodiExporter?
-
-Playnite Kodi Exporter is a Playnite extension designed for users who want Kodi to act as their gaming frontend.
-
-It exports your Playnite game library into a Kodi-compatible local media structure using:
-
-- Playnite game metadata
-- Cover artwork
-- Background artwork
-- Extra Metadata Loader logos
-
-
-The exported library can then be imported into Kodi as a local media collection.
-
-
----
-
-# Installing Playnite Kodi Exporter
-
-1. Open Playnite.
-
-2. Drag and drop the `.pext` file into the Playnite window.
-
-3. Confirm the installation.
-
-4. Restart Playnite.
-
-The extension is now installed.
-.
-
-
----
-
-# Using Playnite Kodi Exporter
-
-Open Playnite:
-
-```
-Playnite Logo
-      ↓
-Kodi
-      ↓
-Export Kodi Local Metadata
-```
-
-Select the folder where you want your Kodi game media exported.
-
-The exporter will create your Kodi game library structure.
-
-
----
-
-# Export Structure
+1. In Playnite, drag the Playnite Kodi Exporter `.pext` file into the window, confirm, and restart Playnite.
+2. Open the Playnite menu → **Kodi → Export Kodi Local Metadata**.
+3. Choose the folder for your Kodi game media.
 
 The exporter creates:
 
 ```
 KodiGameMedia
-|
-+-- Game Name
-    |
-    +-- Game Name.nfo
-    +-- poster.jpg/png
-    +-- fanart.jpg/png
-    +-- clearlogo.png
+└── Game Name
+    ├── Game Name.nfo
+    ├── poster.jpg/png
+    ├── fanart.jpg/png
+    └── clearlogo.png
 ```
 
+Running the exporter again adds new games and missing artwork without replacing existing files.
 
----
-
-# Add Game Shortcuts Manually
-
-## Important
-
-Before using Kodi to launch games, you must manually add a Windows shortcut inside every exported game folder.
-
-For every exported game folder, create a shortcut:
-
-```
-Game Name.lnk
-```
-
-The shortcut can point to:
-
-- Game executable
-- Steam launcher
-- Epic Games launcher
-- GOG launcher
-- Emulator
-- Custom launcher
-
-
-Example:
+## 3. Add Play.avi and the shortcut to every game folder
 
 ```
 KodiGameMedia
-|
-+-- Game Name
-    |
-    +-- Game Name.nfo
-    +-- poster.jpg
-    +-- fanart.jpg
-    +-- clearlogo.png
-    +-- Play.avi
-    +-- Game Name.lnk
+└── Game Name
+    ├── Game Name.nfo
+    ├── poster.jpg
+    ├── fanart.jpg
+    ├── clearlogo.png
+    ├── Play.avi
+    └── Game Name.lnk
 ```
 
+- **`Play.avi`**: the trigger. The file name must be `Play.avi` (not case sensitive) unless you change it in the addon settings. It can be any video: a short intro, or a 1-second black clip if you want no intro.
+- **`Game Name.lnk`**: a Windows shortcut to the game, Steam, Epic, GOG, an emulator, or any launcher. Name it after the folder. If the folder has no matching name, the first `.lnk` found is used.
 
-## Shortcut Naming Rule
+Each game can have its own `Play.avi`.
 
-The shortcut name must match the game folder name.
+## 4. Keep Play.avi out of MPV
 
-Example:
+Older versions of this project sent video to MPV through `playercorefactory.xml`. The addon needs Kodi's own player to play `Play.avi`, so make sure no rule sends `.avi` files to an external player.
 
-Folder:
+- **You only had this file for Kodi Game Launcher:** delete `%APPDATA%\Kodi\userdata\playercorefactory.xml` and restart Kodi.
+- **You use it for other things (for example MPV for all other video):** add this rule as the **first** rule inside `<rules action="prepend">`, because the first match wins:
 
-```
-Cyberpunk 2077
-```
-
-Shortcut:
-
-```
-Cyberpunk 2077.lnk
+```xml
+<rule filetypes="avi" player="default"/>
 ```
 
-Kodi Game Launcher uses this shortcut when launching the game.
+and remove `avi` from any `filetypes` list that targets your external player. To limit the exception to the trigger file only, use:
 
-
----
-
-# Kodi Game Launcher
-
-## How It Works
-
-Kodi Game Launcher monitors MPV playback.
-
-When Kodi opens:
-
-```
-Play.avi
+```xml
+<rule filename=".*[\\/]play\.avi" player="default"/>
 ```
 
-the launcher:
+Restart Kodi after changing the file.
 
-1. Finds the folder containing `Play.avi`.
-2. Searches that folder for a `.lnk` shortcut.
-3. Launches the shortcut.
+## 5. Set up the Kodi library
 
+1. Open **Settings → Media → Library → Videos**, then add your exported games folder as a source.
+2. Open the context menu on it and choose **Set content**:
+   - This directory contains: **Movies**
+   - Information provider: **Local information only**
+   - Enable **Movies are in separate folders that match the movie title**
+3. Press **OK** and let Kodi scan.
 
-Kodi Game Launcher does not need to know which platform the game uses.
+### Smart playlist and home screen
 
-It only launches the shortcut.
+1. Create a Smart Playlist with the rule **Path → contains → your games folder** (for example `D:\Games\`).
+2. Add the playlist to the Kodi home screen. Use a skin that supports custom home menu items, as the default skin has limited customization.
 
+### Display setting
 
----
+Go to **Settings → System → Display** and enable **Fullscreen Window** so games open on top of Kodi.
 
-# The Importance of Play.avi
+## 6. Addon settings
 
-`Play.avi` is the connection between Kodi and Kodi Game Launcher.
+Open **Add-ons → My add-ons → Services → Game Launcher → Configure**.
 
-It is not only an intro video.
+| Setting | What it does |
+| --- | --- |
+| Trigger file name | The file that starts a launch. Default `play.avi`. |
+| Launch the game | **Immediately** stops the video and launches. **After the intro video finishes** lets `Play.avi` play to the end first. Stopping the video yourself cancels the launch. |
+| Show fanart splash | Shows `fanart` and `clearlogo` full screen while the game loads. |
+| Splash timeout | Longest time the splash stays up (default 30 seconds). |
 
-It acts as the trigger file that allows Kodi Game Launcher to detect the selected game.
+The splash closes earlier if another application takes the foreground, or if you press Back.
 
-Kodi uses:
+## Custom intro videos
 
-```
-Play.avi
-```
+Put a different `Play.avi` in each game folder for a unique intro per game. Use **After the intro video finishes** in the settings to play intros in full before the game starts.
 
-as the playable media item.
+## Notes and limits
 
-The launcher uses the MPV playback event to:
+- Works with local drives and Windows network (UNC) paths. Kodi-only sources such as `smb://` can't be launched, because Windows needs a real path.
+- In **Immediately** mode the video may flash for a moment before it is stopped. A very short black `Play.avi` hides this.
+- The addon detects the game by watching which window is in front. It can't see inside the game itself.
 
-- Detect the selected game.
-- Locate the correct folder.
-- Find the shortcut.
-- Launch the game.
-
-
-Without `Play.avi`:
-
-- Kodi may not create a playable game entry.
-- Kodi Game Launcher receives no playback event.
-- Game launching will not work.
-
-
----
-
-# Complete Game Folder Structure
-
-A finished game folder should contain:
-
-```
-KodiGameMedia
-|
-+-- Game Name
-    |
-    +-- Game Name.nfo
-    +-- poster.jpg
-    +-- fanart.jpg
-    +-- clearlogo.png
-    +-- Play.avi
-    +-- Game Name.lnk
-```
-
-
----
-
-# File Information
-
-## Game Name.nfo
-
-Kodi metadata file created by Playnite Kodi Exporter.
-
-Contains:
-
-- Game title
-- Description
-- Metadata information
-
-
----
-
-## poster.jpg / poster.png
-
-Game cover artwork.
-
-
----
-
-## fanart.jpg / fanart.png
-
-Background artwork displayed by Kodi skins.
-
-
----
-
-## clearlogo.png
-
-Kodi clear logo artwork.
-
-Created from Playnite Extra Metadata Loader logos.
-
-
----
-
-## Play.avi
-
-Required Kodi Game Launcher trigger file.
-
-Can contain:
-
-- Game intro animation
-- Retro gaming intro
-- Any video you want
-
-
-Filename must always be:
-
-```
-Play.avi
-```
-
-
----
-
-## Game Name.lnk
-
-Windows shortcut used to launch the game.
-
-Example:
-
-```
-Game Name.lnk
-```
-
-The shortcut can point to:
-
-- Steam games
-- Epic Games games
-- GOG games
-- Emulators
-- Standalone games
-- Custom launchers
-
-
----
-
-# Playnite Kodi Exporter Features
-
-Features:
-
-- Exports Playnite games to Kodi local format
-- Creates Kodi `.nfo` files
-- Exports cover artwork
-- Exports background artwork
-- Supports Extra Metadata Loader logos
-- Converts `Logo.png` into Kodi `clearlogo.png`
-- Keeps existing Kodi files safe
-- Adds missing artwork during updates
-
-
----
-
-# Extra Metadata Loader ClearLogo Support
-
-Playnite Kodi Exporter reads logos from:
-
-```
-%AppData%\Playnite\ExtraMetadata\games\<GameID>\Logo.png
-```
-
-and exports them as:
-
-```
-clearlogo.png
-```
-
-for Kodi.
-
-
----
-
-# Updating Existing Libraries
-
-Running the exporter again will:
-
-- Add new games.
-- Add missing artwork.
-- Keep existing `.nfo` files.
-- Keep existing artwork.
-- Avoid replacing Kodi customizations.
-
-
----
-
-# Kodi Setup
-
-After your game folders contain:
-
-```
-Game Name
-|
-+-- Game Name.nfo
-+-- poster.jpg
-+-- fanart.jpg
-+-- clearlogo.png
-+-- Play.avi
-+-- Game Name.lnk
-```
-
-configure Kodi.
-
-
----
-
-# Set Kodi To Use Local Information Only
-
-1. Open:
-
-```
-Settings → Media → Library → Videos
-```
-
-2. Locate your exported games folder.
-
-3. Open the context menu.
-
-4. Select:
-
-```
-Set content
-```
-
-5. Configure:
-
-```
-This directory contains:
-Movies
-
-Information provider:
-Local information only
-```
-
-6. Enable:
-
-```
-✓ Movies are in separate folders that match the movie title
-```
-
-7. Press:
-
-```
-OK
-```
-
-Kodi will now use the local metadata stored inside your exported game folders.
-
-
----
-
-# Create A Smart Playlist
-
-Create a Kodi Smart Playlist pointing to your game folder.
-
-Recommended rule:
-
-```
-Path → contains → your games folder path
-```
-
-Example:
-
-```
-D:\Games\
-```
-
-This automatically includes your exported games.
-
-
----
-
-# Add Games To Kodi Home Screen
-
-For the best experience:
-
-1. Create your Smart Playlist.
-2. Add the playlist to the Kodi home screen.
-3. Use a custom Kodi skin.
-
-
-The default Kodi skin has limited customization options.
-
-Any Skin that support custom Home Menu works for adding games to the Home Screen.
-
-⚠️Go to Settings → System → Display enable Fullscreen Window so that games launch on top of Kodi⚠️
-
----
-
-# Custom Intro Videos
-
-Every game can have its own custom:
-
-```
-Play.avi
-```
-
-Example:
-
-```
-Games
-|
-+-- Game 1
-|   |
-|   +-- Play.avi
-|
-+-- Game 2
-    |
-    +-- Play.avi
-```
-
-The launcher automatically detects the correct game folder.
-
-This allows every game to have a unique intro animation.
-
-
----
-
-# Troubleshooting
-
-See:
-
-```
-troubleshooting.txt
-```
-
-
----
-
-# Enjoy Kodi Game Launcher
-
-Use Kodi as your complete gaming frontend with:
-
-- Playnite-powered metadata
-- Kodi local library support
-- Artwork
-- Clear logos
-- Custom intro videos
-- Windows game launching
-
-
-```
+Problems? See [Troubleshooting](Troubleshooting.md).

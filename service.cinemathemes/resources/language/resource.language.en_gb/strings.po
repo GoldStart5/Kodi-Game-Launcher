@@ -1,0 +1,151 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: service.cinemathemes\n"
+"Language: en_GB\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgctxt "#30000"
+msgid "Player and fades"
+msgstr ""
+
+msgctxt "#30001"
+msgid "Behaviour"
+msgstr ""
+
+msgctxt "#30002"
+msgid "Advanced"
+msgstr ""
+
+msgctxt "#30010"
+msgid "mpv"
+msgstr ""
+
+msgctxt "#30011"
+msgid "Theme files"
+msgstr ""
+
+msgctxt "#30012"
+msgid "Volume and fades"
+msgstr ""
+
+msgctxt "#30013"
+msgid "When to play"
+msgstr ""
+
+msgctxt "#30014"
+msgid "Fallback root themes and logging"
+msgstr ""
+
+msgctxt "#30100"
+msgid "Location of mpv.exe"
+msgstr ""
+
+msgctxt "#30101"
+msgid "Full path to your portable mpv.exe (or the folder that contains it). special:// paths work too. Leave empty to use mpv from the system PATH."
+msgstr ""
+
+msgctxt "#30102"
+msgid "Extra mpv arguments"
+msgstr ""
+
+msgctxt "#30103"
+msgid "Optional, for example --audio-device=wasapi/{device-id}. mpv.conf is not read, so use this to pick an audio device."
+msgstr ""
+
+msgctxt "#30104"
+msgid "Theme file keyword"
+msgstr ""
+
+msgctxt "#30105"
+msgid "Any audio file whose name contains this word counts as a theme (theme.mp3, Main Theme.flac, ...)."
+msgstr ""
+
+msgctxt "#30106"
+msgid "Volume"
+msgstr ""
+
+msgctxt "#30107"
+msgid "Fade-in duration (ms)"
+msgstr ""
+
+msgctxt "#30108"
+msgid "Fade-out duration (ms)"
+msgstr ""
+
+msgctxt "#30109"
+msgid "When a folder has several themes"
+msgstr ""
+
+msgctxt "#30110"
+msgid "Random order"
+msgstr ""
+
+msgctxt "#30111"
+msgid "In order (by file name)"
+msgstr ""
+
+msgctxt "#30112"
+msgid "Loop theme"
+msgstr ""
+
+msgctxt "#30113"
+msgid "Start at a random position"
+msgstr ""
+
+msgctxt "#30114"
+msgid "Fade out and pause when Kodi loses focus"
+msgstr ""
+
+msgctxt "#30115"
+msgid "Fade out and pause while Kodi is playing media"
+msgstr ""
+
+msgctxt "#30116"
+msgid "Fade out and pause outside the video library"
+msgstr ""
+
+msgctxt "#30117"
+msgid "Delay before switching themes (ms)"
+msgstr ""
+
+msgctxt "#30118"
+msgid "Movies fallback root theme"
+msgstr ""
+
+msgctxt "#30119"
+msgid "TV shows fallback root theme"
+msgstr ""
+
+msgctxt "#30120"
+msgid "Enable debug logging"
+msgstr ""
+
+msgctxt "#30121"
+msgid "All themes found in a folder are queued. Random shuffles them, In order plays them alphabetically."
+msgstr ""
+
+msgctxt "#30122"
+msgid "Starts the first theme somewhere between 5% and 70% of its length."
+msgstr ""
+
+msgctxt "#30123"
+msgid "Uses the Windows foreground window to tell whether Kodi is the active application."
+msgstr ""
+
+msgctxt "#30124"
+msgid "Also covers trailers and music played by Kodi itself. The theme resumes when playback ends."
+msgstr ""
+
+msgctxt "#30125"
+msgid "On the home screen, in settings and so on. The theme resumes when you return to the library."
+msgstr ""
+
+msgctxt "#30126"
+msgid "How long the selection must stay put before the theme changes. Prevents restarts while scrolling."
+msgstr ""
+
+msgctxt "#30127"
+msgid "Optional. Played when a source folder has no theme file of its own. Pick a file or leave empty."
+msgstr ""

@@ -27,13 +27,13 @@ Steam, Epic, GOG, emulators and standalone games all work, because the shortcut 
 
 Download the repository addon and install it in Kodi with **Add-ons → Install from zip file**:
 
-[repository.kodigamelauncher-1.0.0.zip](https://github.com/GoldStart5/Kodi-Game-Launcher/raw/main/zips/repository.kodigamelauncher/repository.kodigamelauncher-1.0.0.zip)
+[repository.kodigamelauncher-1.0.1.zip](https://github.com/GoldStart5/Kodi-Game-Launcher/raw/main/zips/repository.kodigamelauncher/repository.kodigamelauncher-1.0.1.zip)
 
 Then install both addons from the repository. Kodi will keep them updated. Full steps are in the [Installation Guide](Installation-Guide.md), and fixes for common problems are in [Troubleshooting](Troubleshooting.md).
 
 ## Tip
 
-The TV Tunes addon adds theme music to your game pages.
+The optional Cinema Themes addon, included in the repository, plays theme music for your game pages. It needs a separate copy of `mpv.exe`.
 
 ## License
 

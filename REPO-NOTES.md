@@ -15,5 +15,5 @@ Layout (all in the root of the GitHub repo, next to your existing README/guides)
 
 ## Installing in Kodi
 Settings -> Add-ons -> Install from zip file ->
-`zips/repository.kodigamelauncher/repository.kodigamelauncher-1.0.0.zip`.
+`zips/repository.kodigamelauncher/repository.kodigamelauncher-1.0.1.zip`.
 Then Install from repository -> Kodi Game Launcher Repository -> install both addons.

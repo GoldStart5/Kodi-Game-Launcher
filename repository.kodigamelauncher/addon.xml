@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="repository.kodigamelauncher" name="Kodi Game Launcher Repository" version="1.0.0" provider-name="GoldStart5">
+<addon id="repository.kodigamelauncher" name="Kodi Game Launcher Repository" version="1.0.1" provider-name="GoldStart5">
   <requires>
     <import addon="xbmc.addon" version="17.0.0"/>
   </requires>
@@ -12,7 +12,10 @@
   </extension>
   <extension point="xbmc.addon.metadata">
     <summary lang="en_GB">Kodi Game Launcher addons</summary>
-    <description lang="en_GB">Repository for the IGDB + SteamGridDB game scraper and the Game Launcher service.</description>
+    <description lang="en_GB">Repository for the IGDB + SteamGridDB game scraper, the Game Launcher service and Cinema Themes.</description>
     <platform>all</platform>
+    <assets>
+      <icon>icon.png</icon>
+    </assets>
   </extension>
 </addon>

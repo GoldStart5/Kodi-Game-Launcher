@@ -4,7 +4,7 @@ Playnite is not needed. You need Kodi (19 or newer) on Windows, the two addons f
 
 ## 1. Install the repository
 
-1. Download [repository.kodigamelauncher-1.0.0.zip](https://github.com/GoldStart5/Kodi-Game-Launcher/raw/main/zips/repository.kodigamelauncher/repository.kodigamelauncher-1.0.0.zip).
+1. Download [repository.kodigamelauncher-1.0.1.zip](https://github.com/GoldStart5/Kodi-Game-Launcher/raw/main/zips/repository.kodigamelauncher/repository.kodigamelauncher-1.0.1.zip).
 2. In Kodi, go to **Settings → Add-ons → Install from zip file** and pick it. If Kodi asks, allow installs from unknown sources.
 
 ## 2. Install the addons
@@ -13,6 +13,7 @@ Go to **Add-ons → Install from repository → Kodi Game Launcher Repository** 
 
 - **Game Launcher** (under Services)
 - **IGDB + SteamGridDB Game Scraper** (under Information providers → Movie information providers)
+- **Cinema Themes** (optional, under Services): plays a `theme` music file from each movie or show folder while you browse. It needs a separate copy of `mpv.exe`.
 
 ## 3. Get your free keys
 

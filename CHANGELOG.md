@@ -2,6 +2,8 @@
 
 ## Addon updates since 3.0.0
 
+- **Cinema Themes 1.0.4** added to the repository: theme music for movie and show folders, played with mpv.
+- **Repository 1.0.1:** new icon, and Cinema Themes is listed.
 - **IGDB + SteamGridDB Game Scraper 1.3.0:** new "SteamGridDB fanart size" setting (3840x1240 by default, 1920x620 or both), with IGDB images used when no hero matches. Optionally mix IGDB artworks and screenshots into the fanart list, with reserved slots.
 - **Game Launcher 1.5.0:** new "Show splash before launching the game" time (1 to 7 seconds), a "Longest wait for the game to open" timeout, and an option to update "Last played" when a game launches while keeping it unwatched. The fanart zoom setting was removed.
 

@@ -53,7 +53,7 @@ v1.0.0
     <disclaimer lang="en_GB">This add-on is not affiliated with or endorsed by IGDB, Twitch or SteamGridDB.</disclaimer>
   </extension>
 </addon>
-<addon id="repository.kodigamelauncher" name="Kodi Game Launcher Repository" version="1.0.0" provider-name="GoldStart5">
+<addon id="repository.kodigamelauncher" name="Kodi Game Launcher Repository" version="1.0.1" provider-name="GoldStart5">
   <requires>
     <import addon="xbmc.addon" version="17.0.0"/>
   </requires>
@@ -66,8 +66,32 @@ v1.0.0
   </extension>
   <extension point="xbmc.addon.metadata">
     <summary lang="en_GB">Kodi Game Launcher addons</summary>
-    <description lang="en_GB">Repository for the IGDB + SteamGridDB game scraper and the Game Launcher service.</description>
+    <description lang="en_GB">Repository for the IGDB + SteamGridDB game scraper, the Game Launcher service and Cinema Themes.</description>
     <platform>all</platform>
+    <assets>
+      <icon>icon.png</icon>
+    </assets>
+  </extension>
+</addon>
+<addon id="service.cinemathemes" name="Cinema Themes" version="1.0.4" provider-name="GoldStart5">
+  <requires>
+    <import addon="xbmc.python" version="3.0.1"/>
+  </requires>
+  <extension point="xbmc.service" library="service.py" start="login"/>
+  <extension point="xbmc.addon.metadata">
+    <platform>all</platform>
+    <summary lang="en_GB">Movie and TV show theme music for your library, played with mpv</summary>
+    <description lang="en_GB">Cinema Themes by GoldStart5 gives your video library its own soundtrack. Like TvTunes, it finds a file with "theme" in its name in each movie or TV show folder and plays it through a portable mpv, with Playnite Sounds-style fading. Looks for a file containing the word "theme" in each movie or TV show folder. While browsing the library it plays the root theme of the source folder (for example D:\Movies\theme.mp3). Opening a TV show, its seasons or episodes, or the info dialog of a movie or show plays that item's own theme. The theme fades out and pauses when Kodi loses focus or plays media, and fades back in when it returns.</description>
+    <disclaimer lang="en_GB">Requires a Windows PC and a separate copy of mpv.exe.</disclaimer>
+    <assets>
+      <icon>icon.png</icon>
+    </assets>
+    <license>GPL-2.0-or-later</license>
+    <news>1.0.4: new icon
+1.0.3: added addon icon
+1.0.2: addon ID changed to service.cinemathemes
+1.0.1: renamed to Cinema Themes, finds the root theme when Kodi reports no video sources
+1.0.0: first release</news>
   </extension>
 </addon>
 <addon id="service.gamelauncher" name="Game Launcher" version="1.5.0" provider-name="GoldStart5">

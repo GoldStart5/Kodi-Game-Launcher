@@ -2,6 +2,55 @@
 <addons>
 <addon id="metadata.games.igdb"
        name="IGDB + SteamGridDB Game Scraper"
+       version="1.2.1"
+       provider-name="GoldStart5">
+  <requires>
+    <import addon="xbmc.metadata" version="2.1.0"/>
+    <import addon="xbmc.python" version="3.0.0"/>
+    <import addon="script.module.requests" version="2.31.0"/>
+  </requires>
+  <extension point="xbmc.metadata.scraper.movies"
+             library="python/scraper.py"/>
+  <extension point="xbmc.service"
+             library="python/service.py"/>
+  <extension point="xbmc.addon.metadata">
+    <reuselanguageinvoker>true</reuselanguageinvoker>
+    <news>v1.2.1
+- New icon; author is now GoldStart5
+
+v1.2.0
+- Removed the fanart crop/convert feature; fanart is used exactly as SteamGridDB serves it (no image downloads or processing, Pillow no longer needed)
+- New toggle "Full-resolution art": adds/removes avoidtruefalse, imageres and fanartres (9999) in advancedsettings.xml (restart Kodi afterwards)
+
+v1.1.0
+- All artwork now comes from SteamGridDB (poster, keyart, landscape, thumb, banner, fanart, clearlogo, icon); IGDB supplies metadata only
+- Every SteamGridDB image is listed: all pages, humor/epilepsy art included, no per-type dimension filtering, animated .webm skipped
+- IGDB images are used only for an art type SteamGridDB has nothing for (can be switched off)
+- Fix: IGDB search now returns the actual game instead of DLC/skins (filters on game type, ranks by name similarity)
+
+v1.0.2
+- Fix: settings were read from a stale object, so keys saved after the first scrape were never seen
+- Keys are remembered in credentials.json (add-on data folder); the file can also be written by hand
+
+v1.0.1
+- Read IGDB/SteamGridDB keys from per-source scraper settings as well as global settings
+- Much faster: parallel SteamGridDB lookups, capped and cheaper image conversion
+- Warn when IGDB keys are missing instead of silently using SteamGridDB only
+
+v1.0.0
+- Initial release: IGDB metadata, SteamGridDB artwork fallback, 16:9 fanart processing</news>
+    <platform>all</platform>
+    <license>GPL-2.0-or-later</license>
+    <assets>
+      <icon>resources/icon.png</icon>
+    </assets>
+    <summary lang="en_GB">IGDB + SteamGridDB game scraper</summary>
+    <description lang="en_GB">Scrapes video game metadata from IGDB and all artwork from SteamGridDB (IGDB images only as a fallback). Games are added to the Kodi library as movies. Requires a free Twitch developer app (for IGDB) and a free SteamGridDB API key.</description>
+    <disclaimer lang="en_GB">This add-on is not affiliated with or endorsed by IGDB, Twitch or SteamGridDB.</disclaimer>
+  </extension>
+</addon>
+<addon id="metadata.games.igdb"
+       name="IGDB + SteamGridDB Game Scraper"
        version="1.3.0"
        provider-name="GoldStart5">
   <requires>
@@ -53,6 +102,23 @@ v1.0.0
     <disclaimer lang="en_GB">This add-on is not affiliated with or endorsed by IGDB, Twitch or SteamGridDB.</disclaimer>
   </extension>
 </addon>
+<addon id="repository.kodigamelauncher" name="Kodi Game Launcher Repository" version="1.0.0" provider-name="GoldStart5">
+  <requires>
+    <import addon="xbmc.addon" version="17.0.0"/>
+  </requires>
+  <extension point="xbmc.addon.repository" name="Kodi Game Launcher Repository">
+    <dir>
+      <info compressed="false">https://raw.githubusercontent.com/GoldStart5/Kodi-Game-Launcher/main/zips/addons.xml</info>
+      <checksum>https://raw.githubusercontent.com/GoldStart5/Kodi-Game-Launcher/main/zips/addons.xml.md5</checksum>
+      <datadir zip="true">https://raw.githubusercontent.com/GoldStart5/Kodi-Game-Launcher/main/zips/</datadir>
+    </dir>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <summary lang="en_GB">Kodi Game Launcher addons</summary>
+    <description lang="en_GB">Repository for the IGDB + SteamGridDB game scraper and the Game Launcher service.</description>
+    <platform>all</platform>
+  </extension>
+</addon>
 <addon id="repository.kodigamelauncher" name="Kodi Game Launcher Repository" version="1.0.1" provider-name="GoldStart5">
   <requires>
     <import addon="xbmc.addon" version="17.0.0"/>
@@ -71,6 +137,27 @@ v1.0.0
     <assets>
       <icon>icon.png</icon>
     </assets>
+  </extension>
+</addon>
+<addon id="service.cinemathemes" name="Cinema Themes" version="1.0.4" provider-name="GoldStart5">
+  <requires>
+    <import addon="xbmc.python" version="3.0.1"/>
+  </requires>
+  <extension point="xbmc.service" library="service.py" start="login"/>
+  <extension point="xbmc.addon.metadata">
+    <platform>all</platform>
+    <summary lang="en_GB">Movie and TV show theme music for your library, played with mpv</summary>
+    <description lang="en_GB">Cinema Themes by GoldStart5 gives your video library its own soundtrack. Like TvTunes, it finds a file with "theme" in its name in each movie or TV show folder and plays it through a portable mpv, with Playnite Sounds-style fading. Looks for a file containing the word "theme" in each movie or TV show folder. While browsing the library it plays the root theme of the source folder (for example D:\Movies\theme.mp3). Opening a TV show, its seasons or episodes, or the info dialog of a movie or show plays that item's own theme. The theme fades out and pauses when Kodi loses focus or plays media, and fades back in when it returns.</description>
+    <disclaimer lang="en_GB">Requires a Windows PC and a separate copy of mpv.exe.</disclaimer>
+    <assets>
+      <icon>icon.png</icon>
+    </assets>
+    <license>GPL-2.0-or-later</license>
+    <news>1.0.4: new icon
+1.0.3: added addon icon
+1.0.2: addon ID changed to service.cinemathemes
+1.0.1: renamed to Cinema Themes, finds the root theme when Kodi reports no video sources
+1.0.0: first release</news>
   </extension>
 </addon>
 <addon id="service.cinemathemes" name="Cinema Themes" version="1.1.0" provider-name="GoldStart5">
@@ -93,6 +180,36 @@ v1.0.0
 1.0.2: addon ID changed to service.cinemathemes
 1.0.1: renamed to Cinema Themes, finds the root theme when Kodi reports no video sources
 1.0.0: first release</news>
+  </extension>
+</addon>
+<addon id="service.gamelauncher" name="Game Launcher" version="1.2.0" provider-name="GoldStart5">
+  <requires>
+    <import addon="xbmc.python" version="3.0.0"/>
+  </requires>
+  <extension point="xbmc.service" library="service.py" start="login"/>
+  <extension point="xbmc.addon.metadata">
+    <summary lang="en_GB">Launch PC games from Kodi by detecting Play.avi</summary>
+    <description lang="en_GB">Detects when Kodi starts playing Play.avi, stops playback, shows the game's fanart while the game loads, and launches the .lnk shortcut in the same folder. Windows only. No AutoHotkey or external player needed.</description>
+    <platform>windows</platform>
+    <license>MIT</license>
+    <assets>
+      <icon>icon.png</icon>
+    </assets>
+  </extension>
+</addon>
+<addon id="service.gamelauncher" name="Game Launcher" version="1.5.0" provider-name="GoldStart5">
+  <requires>
+    <import addon="xbmc.python" version="3.0.0"/>
+  </requires>
+  <extension point="xbmc.service" library="service.py" start="login"/>
+  <extension point="xbmc.addon.metadata">
+    <summary lang="en_GB">Launch PC games from Kodi by detecting Play.avi</summary>
+    <description lang="en_GB">Detects when Kodi starts playing Play.avi, stops playback, shows the game's fanart while the game loads, and launches the .lnk shortcut in the same folder. Windows only. No AutoHotkey or external player needed.</description>
+    <platform>windows</platform>
+    <license>MIT</license>
+    <assets>
+      <icon>icon.png</icon>
+    </assets>
   </extension>
 </addon>
 <addon id="service.gamelauncher" name="Game Launcher" version="1.6.1" provider-name="GoldStart5">

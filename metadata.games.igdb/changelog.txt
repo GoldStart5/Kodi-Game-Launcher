@@ -1,3 +1,7 @@
+v1.3.0
+- SteamGridDB hero size setting (3840x1240 default / 1920x620 / both); IGDB images used when none match
+- Optionally add IGDB artworks and screenshots to the remote fanart list, with reserved slots
+
 v1.2.1
 - New icon; author GoldStart5
 

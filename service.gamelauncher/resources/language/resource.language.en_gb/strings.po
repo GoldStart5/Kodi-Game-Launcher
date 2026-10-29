@@ -21,7 +21,7 @@ msgid "Show fanart splash while the game loads"
 msgstr ""
 
 msgctxt "#30004"
-msgid "Splash timeout (seconds)"
+msgid "Longest wait for the game to open (seconds)"
 msgstr ""
 
 msgctxt "#30005"
@@ -30,10 +30,6 @@ msgstr ""
 
 msgctxt "#30006"
 msgid "Artwork source"
-msgstr ""
-
-msgctxt "#30007"
-msgid "Fanart zoom to hide black bars (%)"
 msgstr ""
 
 msgctxt "#30021"
@@ -46,6 +42,14 @@ msgstr ""
 
 msgctxt "#30023"
 msgid "Local files only"
+msgstr ""
+
+msgctxt "#30008"
+msgid "Update Last played when a game launches (keeps it unwatched)"
+msgstr ""
+
+msgctxt "#30009"
+msgid "Show splash before launching the game (seconds)"
 msgstr ""
 
 msgctxt "#30011"

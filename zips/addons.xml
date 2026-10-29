@@ -2,7 +2,7 @@
 <addons>
 <addon id="metadata.games.igdb"
        name="IGDB + SteamGridDB Game Scraper"
-       version="1.2.1"
+       version="1.3.0"
        provider-name="GoldStart5">
   <requires>
     <import addon="xbmc.metadata" version="2.1.0"/>
@@ -15,7 +15,11 @@
              library="python/service.py"/>
   <extension point="xbmc.addon.metadata">
     <reuselanguageinvoker>true</reuselanguageinvoker>
-    <news>v1.2.1
+    <news>v1.3.0
+- New setting "SteamGridDB fanart size": 3840x1240 only (default), 1920x620 only, or both. If no hero matches, IGDB artworks/screenshots are used instead
+- New setting "IGDB images in the fanart list": mix IGDB artworks (and screenshots) in after the SteamGridDB heroes, with a number of slots reserved for them
+
+v1.2.1
 - New icon; author is now GoldStart5
 
 v1.2.0
@@ -66,7 +70,7 @@ v1.0.0
     <platform>all</platform>
   </extension>
 </addon>
-<addon id="service.gamelauncher" name="Game Launcher" version="1.2.0" provider-name="GoldStart5">
+<addon id="service.gamelauncher" name="Game Launcher" version="1.5.0" provider-name="GoldStart5">
   <requires>
     <import addon="xbmc.python" version="3.0.0"/>
   </requires>

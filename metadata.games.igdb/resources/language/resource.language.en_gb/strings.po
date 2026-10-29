@@ -57,7 +57,7 @@ msgid "Artwork"
 msgstr ""
 
 msgctxt "#30025"
-msgid "Use IGDB images only when SteamGridDB has none"
+msgid "Use IGDB poster/landscape only when SteamGridDB has none"
 msgstr ""
 
 msgctxt "#30026"
@@ -78,4 +78,40 @@ msgstr ""
 
 msgctxt "#30032"
 msgid "When on, adds avoidtruefalse, imageres and fanartres (9999) to your advancedsettings.xml; when off, removes them. Restart Kodi afterwards. Change this in the add-on's own Configure page (Add-ons > My add-ons > Metadata scrapers), not in the Set content dialog."
+msgstr ""
+
+msgctxt "#30033"
+msgid "SteamGridDB fanart size"
+msgstr ""
+
+msgctxt "#30034"
+msgid "3840x1240 only"
+msgstr ""
+
+msgctxt "#30035"
+msgid "1920x620 only"
+msgstr ""
+
+msgctxt "#30036"
+msgid "Both sizes"
+msgstr ""
+
+msgctxt "#30037"
+msgid "IGDB images in the fanart list"
+msgstr ""
+
+msgctxt "#30038"
+msgid "SteamGridDB only"
+msgstr ""
+
+msgctxt "#30039"
+msgid "Add IGDB artworks"
+msgstr ""
+
+msgctxt "#30040"
+msgid "Add IGDB artworks and screenshots"
+msgstr ""
+
+msgctxt "#30041"
+msgid "Fanart slots reserved for IGDB images"
 msgstr ""

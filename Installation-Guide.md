@@ -62,7 +62,10 @@ Open **Add-ons → My add-ons → Services → Game Launcher → Configure**.
 
 - **Trigger file name:** the file that starts a launch (default `Play.avi`).
 - **Launch the game:** immediately, or after the intro video finishes.
-- **Fanart splash:** shown while the game loads, with a timeout and optional animation.
+- **Fanart splash:** shown while the game loads, with optional animation.
+- **Show splash before launching the game (seconds):** how long the splash shows before the game starts (1 to 7 seconds).
+- **Longest wait for the game to open (seconds):** the splash closes after this time at the latest.
+- **Update Last played:** records the launch in Kodi's "Last played" while keeping the game unwatched.
 - **Artwork source:** Kodi library first, local files first, or local files only.
 
 If games open behind Kodi, set Kodi's display mode to **Fullscreen Window** in the display settings.
@@ -70,6 +73,8 @@ If games open behind Kodi, set Kodi's display mode to **Fullscreen Window** in t
 ## Optional: sharper artwork
 
 In the scraper's Configure page (see step 4), turn on **Full-resolution art** and restart Kodi. This edits `advancedsettings.xml` to stop Kodi downscaling images.
+
+The same page lets you choose the **SteamGridDB fanart size** (3840x1240, 1920x620 or both) and optionally add IGDB artworks and screenshots to the fanart list.
 
 ## Updates
 

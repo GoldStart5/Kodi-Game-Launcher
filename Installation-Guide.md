@@ -55,9 +55,28 @@ Games\
 
 Don't enter your keys here. If you skipped step 4, cancel, do it first, then come back.
 
-Your games now show up with descriptions and artwork. Add a smart playlist or widget to your home screen if you want them front and centre.
+Your games now show up with descriptions and artwork, but they are stored as movies, so they will also appear in your normal Movies list. The next step keeps them apart.
 
-## 7. Launcher settings
+## 7. Separate games from movies with smart playlists
+
+Create two smart playlists, so games and movies each get their own list.
+
+**Games playlist**
+1. Go to **Videos → Playlists** and choose **New smart playlist**.
+2. Set the type to **Movies**.
+3. Add a rule: **Path** → **contains** → the name of your games folder (for example `Games`).
+4. Give it a name such as `Games`, then save it.
+
+**Movies playlist**
+1. Create another smart playlist of type **Movies**.
+2. Add a rule: **Path** → **does not contain** → the same games folder name.
+3. Give it a name such as `Movies`, then save it.
+
+Use text that appears only in your games path. For example, if your games are in `D:\Games` and your movies in `D:\Movies`, the word `Games` is enough. If your movie path also contains that word, use more of the games path, such as `D:\Games`.
+
+Add the playlists to your home screen as menu items or widgets. How you do that depends on your skin, and most skins let you pick a playlist when you customise a menu item or widget. A custom skin helps here.
+
+## 8. Launcher settings
 
 Open **Add-ons → My add-ons → Services → Game Launcher → Configure**.
 

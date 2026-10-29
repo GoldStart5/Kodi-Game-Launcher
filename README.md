@@ -1,83 +1,40 @@
 # Kodi Game Launcher
 
-**Turn Kodi into a console-style frontend for your PC game library.**
+Turn Kodi into a console-style front end for your Windows PC games. Kodi shows your games with descriptions and artwork, and a small service launches the game when you press play.
 
-![Windows](https://img.shields.io/badge/Windows-0078D6?style=for-the-badge&logo=windows&logoColor=white)
-![Kodi](https://img.shields.io/badge/Kodi-17B2E7?style=for-the-badge&logo=kodi&logoColor=white)
-![Playnite](https://img.shields.io/badge/Playnite-001F3E?style=for-the-badge)
+## What's new in 3.0.0
 
-Kodi Game Launcher is now a **native Kodi addon**. It works together with the Playnite Kodi Exporter to bring your Playnite library into Kodi with metadata and artwork, and it launches games straight from Kodi. No AutoHotkey and no external video player are needed.
+**Playnite is no longer needed.** The IGDB + SteamGridDB scraper now fetches all game metadata and artwork straight into Kodi, so there is nothing to export. You also don't need AutoHotkey or a special MPV setup.
 
-## ✨ Features
+See the [changelog](CHANGELOG.md) for details.
 
-- 🎮 Kodi game library integration
-- 📦 Playnite metadata export (posters, fanart, clear logos)
-- 🚀 Launches any Windows shortcut (`.lnk`): Steam, Epic, GOG, emulators, standalone games
-- 🖼️ Fullscreen fanart + logo splash while the game loads
-- 🎬 Optional custom intro videos (`Play.avi`)
-- ⚙️ Settings inside Kodi: trigger name, launch mode, splash on/off, splash timeout
+## How it works
 
-## ⚙️ How It Works
+1. Each game gets a folder with a `Play.avi` file and a shortcut (`.lnk`) to the game.
+2. The **IGDB + SteamGridDB Game Scraper** adds the game to your Kodi library with metadata and artwork.
+3. When you play a game in Kodi, the **Game Launcher** service sees `Play.avi`, shows the game's fanart while it loads, and starts the shortcut.
 
-```
-Playnite → Playnite Kodi Exporter → Kodi game library
-                                          │
-                       you select a game in Kodi
-                                          │
-                            Kodi plays Play.avi
-                                          │
-              Game Launcher addon (Kodi service) detects it
-                                          │
-        stops playback → shows fanart splash → launches Game Name.lnk
-```
+Steam, Epic, GOG, emulators and standalone games all work, because the shortcut decides what runs.
 
-The addon runs as a Kodi service. When the file being played is called `Play.avi` it finds the `.lnk` in the same folder, shows that folder's `fanart` while the game loads, and starts the shortcut. The splash closes when the game (or its launcher) takes the foreground, when the timeout runs out, or when you press Back.
+## Requirements
 
-## 🧩 Requirements
+- Windows
+- Kodi 19 or newer
+- A free [Twitch developer app](https://dev.twitch.tv/console) (for IGDB metadata)
+- A free [SteamGridDB API key](https://www.steamgriddb.com/profile/preferences/api) (for artwork)
 
-| Requirement | Notes |
-| --- | --- |
-| 🪟 Windows | Uses `os.startfile` to launch shortcuts |
-| 📺 Kodi 19 or newer | Addon uses Python 3 |
-| 🎯 Playnite | Game library manager |
-| 📤 Playnite Kodi Exporter | Exports your library to Kodi format |
+## Install
 
-## 🚀 Quick Setup
+Download the repository addon and install it in Kodi with **Add-ons → Install from zip file**:
 
-1. Download `service.gamelauncher-<version>.zip` from the [Releases](../../releases) page.
-2. In Kodi: **Add-ons → Install from zip file** and pick the zip.
-3. Export your Playnite library with Playnite Kodi Exporter.
-4. Add a `Play.avi` and a `Game Name.lnk` to every game folder.
-5. Import the folder into Kodi (see the [Installation Guide](Installation-Guide.md)).
-6. Pick a game in Kodi and play it.
+[repository.kodigamelauncher-1.0.0.zip](https://github.com/GoldStart5/Kodi-Game-Launcher/raw/main/zips/repository.kodigamelauncher/repository.kodigamelauncher-1.0.0.zip)
 
-## 📁 Game Folder Layout
+Then install both addons from the repository. Kodi will keep them updated. Full steps are in the [Installation Guide](Installation-Guide.md), and fixes for common problems are in [Troubleshooting](Troubleshooting.md).
 
-```
-Game Name
-├── Game Name.nfo
-├── poster.jpg
-├── fanart.jpg        ← shown on the splash
-├── clearlogo.png     ← shown on the splash
-├── Play.avi          ← the trigger file
-└── Game Name.lnk     ← launched by the addon
-```
+## Tip
 
-## ⬆️ Upgrading from the AutoHotkey version
+The TV Tunes addon adds theme music to your game pages.
 
-1. Close and remove `KodiGameLauncher.ahk` from your Windows Startup folder.
-2. Remove the MPV rule for `Play.avi` from `playercorefactory.xml` (or delete the file if you only used it for this project). See the [Installation Guide](Installation-Guide.md#4-keep-playavi-out-of-mpv).
-3. Install the addon as above. Your game folders and Kodi library do not change.
+## License
 
-## 🎵 Recommended Addon: TV Tunes
-
-Adds theme music to your Kodi library, which works nicely for games: <https://forum.kodi.tv/showthread.php?tid=347428>
-
-## 📚 Documentation
-
-- 📘 [Installation Guide](Installation-Guide.md)
-- 🛠️ [Troubleshooting](Troubleshooting.md)
-
-## 📄 License
-
-MIT. See [LICENSE](LICENSE).
+MIT

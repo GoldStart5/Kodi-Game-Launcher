@@ -1,0 +1,65 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: service.gamelauncher\n"
+"Language: en_GB\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+
+msgctxt "#30000"
+msgid "General"
+msgstr ""
+
+msgctxt "#30001"
+msgid "Trigger file name"
+msgstr ""
+
+msgctxt "#30002"
+msgid "Launch the game"
+msgstr ""
+
+msgctxt "#30003"
+msgid "Show fanart splash while the game loads"
+msgstr ""
+
+msgctxt "#30004"
+msgid "Splash timeout (seconds)"
+msgstr ""
+
+msgctxt "#30005"
+msgid "Animate the splash (fade and slow zoom)"
+msgstr ""
+
+msgctxt "#30006"
+msgid "Artwork source"
+msgstr ""
+
+msgctxt "#30007"
+msgid "Fanart zoom to hide black bars (%)"
+msgstr ""
+
+msgctxt "#30021"
+msgid "Kodi library first, then local files"
+msgstr ""
+
+msgctxt "#30022"
+msgid "Local files first, then Kodi library"
+msgstr ""
+
+msgctxt "#30023"
+msgid "Local files only"
+msgstr ""
+
+msgctxt "#30011"
+msgid "Immediately (skip the intro video)"
+msgstr ""
+
+msgctxt "#30012"
+msgid "After the intro video finishes"
+msgstr ""
+
+msgctxt "#30100"
+msgid "Launching game... (press Back to dismiss)"
+msgstr ""
+
+msgctxt "#30101"
+msgid "No .lnk shortcut found in the game folder"
+msgstr ""

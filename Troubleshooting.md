@@ -1,70 +1,48 @@
-# Kodi Game Launcher: Troubleshooting
+# Troubleshooting
 
-## First, check the log
+When a game doesn't start, follow the chain and find the step that fails:
 
-The addon writes to Kodi's log with the prefix `[service.gamelauncher]`. The log is at `%APPDATA%\Kodi\kodi.log`. You should see lines such as:
+Kodi plays `Play.avi` → Game Launcher detects it → playback stops → the `.lnk` is found → the shortcut starts.
 
-```
-[service.gamelauncher] Service started
-[service.gamelauncher] Trigger file playing: D:\Games\Game Name\Play.avi
-[service.gamelauncher] Launching D:\Games\Game Name\Game Name.lnk
-```
+Kodi's log (`%APPDATA%\Kodi\kodi.log`) shows each step. Search for `service.gamelauncher`.
 
-Where the sequence stops tells you which step failed.
+## Nothing happens when I press play
 
-## Nothing happens when I play a game
-
-- **No "Service started" line:** the addon isn't installed or isn't enabled. Go to **Add-ons → My add-ons → Services** and check that Game Launcher is listed and enabled, then restart Kodi.
-- **"Service started" but no "Trigger file playing" line:** Kodi isn't playing `Play.avi` with its own player. See the next section.
-- **"Trigger file playing" but no "Launching" line:** the folder has no `.lnk` (a "No .lnk shortcut found" notification will appear), or you are using *After the intro video finishes* mode and the video was stopped before it ended.
-
-## Play.avi opens in MPV (or another external player)
-
-Your `playercorefactory.xml` still sends `.avi` files to an external player.
-
-1. Open `%APPDATA%\Kodi\userdata\playercorefactory.xml`.
-2. Put `<rule filetypes="avi" player="default"/>` as the first rule inside `<rules action="prepend">`.
-3. Remove `avi` from any `filetypes` list that points to an external player.
-4. Restart Kodi.
-
-If you only used the file for this project, delete it instead.
-
-## Play.avi is not detected
-
-- The file name must be `Play.avi` (or match the **Trigger file name** setting).
-- `Play.avi` and the `.lnk` must be in the **same folder**. A subfolder won't work.
-- Kodi must play the real file. Check that the library item points to the game folder and not to a different file.
+- Check that the Game Launcher service is installed and enabled.
+- Check that the folder contains a file named exactly like the trigger name (default `Play.avi`) and that it is a valid video.
+- In the log, look for `Trigger file playing`. If it's missing, the filename or the trigger setting doesn't match.
 
 ## "No .lnk shortcut found"
 
-Add a Windows shortcut to the game folder. It should be named after the folder (`Game Name.lnk`). If no name matches, the first `.lnk` in the folder is used.
+The game folder needs a shortcut next to `Play.avi`. Make sure it ends in `.lnk` and sits in the same folder.
 
-## The shortcut launches the wrong game, or does nothing
+## The wrong game starts
 
-The addon only starts the shortcut, so test it first: double-click the `.lnk` in Windows. Check its target, "Start in" folder, and arguments.
+The launcher only runs the shortcut. Check the shortcut's target path, start-in folder and arguments. If the folder has several shortcuts, the one named after the folder is used.
 
-## The game opens but is behind Kodi
+## The game opens behind Kodi
 
-Enable **Settings → System → Display → Fullscreen Window**. If Windows still keeps Kodi in front, make sure the game or launcher is not set to start minimized.
+Set Kodi's display mode to **Fullscreen Window**.
 
-## The splash closes too early
+## The splash stays on screen
 
-The splash closes when another app takes the foreground. Some launchers show a small window first, which counts. Turn the splash off in the addon settings if that is distracting, or leave it and accept the early close.
+It closes when the game takes focus, when the timeout runs out, or when you press Back. If your game is slow to start, raise the splash timeout in the Game Launcher settings.
 
-## The splash stays too long
+## No splash artwork
 
-It stays until another app gets the foreground, the timeout runs out, or you press Back. Lower **Splash timeout** in the addon settings.
+The splash uses the game's fanart from the Kodi library or the game folder. Change the **Artwork source** setting, or rescan the game so the scraper fetches artwork.
 
-## The video flashes before the game starts
+## A game is missing, or has the wrong info
 
-Use **Immediately** mode with a very short, black `Play.avi`, or switch to **After the intro video finishes** if you want the video to play.
+- Make sure the folder is inside a source set to **Movies** with the IGDB + SteamGridDB scraper.
+- Name the folder after the game as it appears on IGDB. Remove extra text like version numbers.
+- Check that your Twitch and SteamGridDB keys are saved. Enter them in **Add-ons → My add-ons → Information providers → Movie information providers → IGDB + SteamGridDB Game Scraper → Configure**. Keys typed into the Set content dialog are not saved. Without IGDB keys, only artwork is found.
+- To retry a game, remove it from the library and scan again.
 
-## Games don't appear in Kodi
+## Artwork looks blurry
 
-- Check that the folder was scanned and its content type is set to **Movies** with **Local information only**.
-- Confirm the smart playlist path points to your games folder.
-- Make sure each game folder has a valid `.nfo` from the exporter.
+Turn on **Full-resolution art** in the scraper's Configure page and restart Kodi.
 
-## Still stuck
+## An update isn't showing
 
-Run through the chain and find the step that fails: Kodi plays `Play.avi` → addon logs "Trigger file playing" → `.lnk` found → "Launching" → game starts. Include the `[service.gamelauncher]` lines from `kodi.log` when you open an issue.
+Kodi checks about once a day. To check now, go to **Add-ons → My add-ons**, open the repository and choose **Check for updates**.

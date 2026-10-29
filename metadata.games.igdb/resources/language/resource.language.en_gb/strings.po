@@ -1,0 +1,81 @@
+# Kodi Media Center language file
+# Addon Name: IGDB + SteamGridDB Game Scraper
+# Addon id: metadata.games.igdb
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en_GB\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#30000"
+msgid "Accounts"
+msgstr ""
+
+msgctxt "#30001"
+msgid "IGDB (free Twitch developer app: dev.twitch.tv/console)"
+msgstr ""
+
+msgctxt "#30002"
+msgid "Twitch Client ID"
+msgstr ""
+
+msgctxt "#30003"
+msgid "Twitch Client Secret"
+msgstr ""
+
+msgctxt "#30004"
+msgid "SteamGridDB (free key: steamgriddb.com/profile/preferences/api)"
+msgstr ""
+
+msgctxt "#30005"
+msgid "SteamGridDB API key"
+msgstr ""
+
+msgctxt "#30010"
+msgid "Metadata"
+msgstr ""
+
+msgctxt "#30011"
+msgid "Append storyline to the plot"
+msgstr ""
+
+msgctxt "#30012"
+msgid "Add publishers to studios (developers always included)"
+msgstr ""
+
+msgctxt "#30013"
+msgid "Add themes, game modes and perspectives as tags"
+msgstr ""
+
+msgctxt "#30014"
+msgid "Link the YouTube trailer (needs the YouTube add-on)"
+msgstr ""
+
+msgctxt "#30020"
+msgid "Artwork"
+msgstr ""
+
+msgctxt "#30025"
+msgid "Use IGDB images only when SteamGridDB has none"
+msgstr ""
+
+msgctxt "#30026"
+msgid "Max fanart images"
+msgstr ""
+
+msgctxt "#30027"
+msgid "Max images per art type"
+msgstr ""
+
+msgctxt "#30030"
+msgid "Kodi image quality"
+msgstr ""
+
+msgctxt "#30031"
+msgid "Full-resolution art (edits advancedsettings.xml)"
+msgstr ""
+
+msgctxt "#30032"
+msgid "When on, adds avoidtruefalse, imageres and fanartres (9999) to your advancedsettings.xml; when off, removes them. Restart Kodi afterwards. Change this in the add-on's own Configure page (Add-ons > My add-ons > Metadata scrapers), not in the Set content dialog."
+msgstr ""

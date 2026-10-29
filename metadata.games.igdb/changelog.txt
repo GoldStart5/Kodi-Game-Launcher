@@ -1,0 +1,17 @@
+v1.2.1
+- New icon; author GoldStart5
+
+v1.2.0
+- Removed fanart cropping; added advancedsettings.xml toggle
+
+v1.1.0
+- SteamGridDB is the art source; all pages; IGDB search returns the game, not DLC
+
+v1.0.2
+- Fix stale settings; credentials.json fallback
+
+v1.0.1
+- Per-source keys; faster scraping
+
+v1.0.0
+- Initial release

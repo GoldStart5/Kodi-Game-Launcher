@@ -1,134 +1,76 @@
-# Kodi Game Launcher: Installation Guide
+# Installation Guide
 
-Kodi Game Launcher is a Kodi service addon that launches Windows games from Kodi. It combines:
+Playnite is not needed. You need Kodi (19 or newer) on Windows, the two addons from this repository, and a folder for each game.
 
-- **Playnite** to manage games and metadata
-- **Playnite Kodi Exporter** to create a Kodi-compatible local game library
-- **Game Launcher addon** (`service.gamelauncher`) to start games from Kodi
+## 1. Install the repository
 
-No AutoHotkey and no external player are required.
+1. Download [repository.kodigamelauncher-1.0.0.zip](https://github.com/GoldStart5/Kodi-Game-Launcher/raw/main/zips/repository.kodigamelauncher/repository.kodigamelauncher-1.0.0.zip).
+2. In Kodi, go to **Settings → Add-ons → Install from zip file** and pick it. If Kodi asks, allow installs from unknown sources.
 
-## How it works
+## 2. Install the addons
 
-Each game folder contains a `Play.avi` trigger file and a Windows shortcut (`.lnk`).
+Go to **Add-ons → Install from repository → Kodi Game Launcher Repository** and install:
 
-1. You select a game in Kodi and Kodi plays `Play.avi` with its own player.
-2. The addon sees that `Play.avi` is playing.
-3. It stops the video (or waits for the intro to finish, depending on your setting).
-4. It shows the game's fanart and logo full screen.
-5. It launches the `.lnk` found in the same folder.
-6. The splash closes once the game or its launcher comes to the foreground.
+- **Game Launcher** (under Services)
+- **IGDB + SteamGridDB Game Scraper** (under Information providers → Movie information providers)
 
-## Requirements
+## 3. Get your free keys
 
-- Windows PC
-- Kodi 19 or newer
-- Playnite
-- Playnite Kodi Exporter
+- **IGDB:** create an app at [dev.twitch.tv/console](https://dev.twitch.tv/console) to get a Client ID and Client Secret.
+- **SteamGridDB:** create an API key at [steamgriddb.com/profile/preferences/api](https://www.steamgriddb.com/profile/preferences/api).
 
-## 1. Install the addon
+## 4. Enter your keys in the scraper
 
-1. Download `service.gamelauncher-<version>.zip` from the Releases page. Do not unzip it.
-2. In Kodi go to **Settings → Add-ons → Install from zip file**. If asked, allow installs from unknown sources.
-3. Select the zip. Kodi shows a notification when the addon is installed.
+> **Important:** enter the keys in the scraper's own Configure page, **not** in the settings that appear while you set the content of a media source. Keys entered in the Set content dialog are not saved, and the scraper will find no metadata or artwork.
 
-The addon starts automatically with Kodi. Restart Kodi once after installing.
+1. Go to **Add-ons → My add-ons → Information providers → Movie information providers**.
+2. Open **IGDB + SteamGridDB Game Scraper** and choose **Configure**.
+3. Enter your Twitch Client ID, Twitch Client Secret and SteamGridDB API key, then press OK.
 
-## 2. Export your library from Playnite
+Do this before you add your games in step 6.
 
-1. In Playnite, drag the Playnite Kodi Exporter `.pext` file into the window, confirm, and restart Playnite.
-2. Open the Playnite menu → **Kodi → Export Kodi Local Metadata**.
-3. Choose the folder for your Kodi game media.
+## 5. Create a folder for each game
 
-The exporter creates:
+Put every game in its own folder, named after the game:
 
 ```
-KodiGameMedia
-└── Game Name
-    ├── Game Name.nfo
-    ├── poster.jpg/png
-    ├── fanart.jpg/png
-    └── clearlogo.png
+Games\
+  Hades\
+    Play.avi
+    Hades.lnk
+  Celeste\
+    Play.avi
+    Celeste.lnk
 ```
 
-Running the exporter again adds new games and missing artwork without replacing existing files.
+- `Play.avi` is a short video that Kodi plays to start the launch. It must be a valid video file.
+- The `.lnk` shortcut starts the game. Name it after the folder. If a folder has several shortcuts, the one matching the folder name is used.
 
-## 3. Add Play.avi and the shortcut to every game folder
+## 6. Add the games to Kodi
 
-```
-KodiGameMedia
-└── Game Name
-    ├── Game Name.nfo
-    ├── poster.jpg
-    ├── fanart.jpg
-    ├── clearlogo.png
-    ├── Play.avi
-    └── Game Name.lnk
-```
+1. Go to **Videos → Files → Add videos**, browse to your `Games` folder and add it.
+2. Set the content to **Movies** and choose **IGDB + SteamGridDB Game Scraper** as the information provider.
+3. Turn on the folder option (each movie is in its own folder), then confirm and let Kodi scan.
 
-- **`Play.avi`**: the trigger. The file name must be `Play.avi` (not case sensitive) unless you change it in the addon settings. It can be any video: a short intro, or a 1-second black clip if you want no intro.
-- **`Game Name.lnk`**: a Windows shortcut to the game, Steam, Epic, GOG, an emulator, or any launcher. Name it after the folder. If the folder has no matching name, the first `.lnk` found is used.
+Don't enter your keys here. If you skipped step 4, cancel, do it first, then come back.
 
-Each game can have its own `Play.avi`.
+Your games now show up with descriptions and artwork. Add a smart playlist or widget to your home screen if you want them front and centre.
 
-## 4. Keep Play.avi out of MPV
-
-Older versions of this project sent video to MPV through `playercorefactory.xml`. The addon needs Kodi's own player to play `Play.avi`, so make sure no rule sends `.avi` files to an external player.
-
-- **You only had this file for Kodi Game Launcher:** delete `%APPDATA%\Kodi\userdata\playercorefactory.xml` and restart Kodi.
-- **You use it for other things (for example MPV for all other video):** add this rule as the **first** rule inside `<rules action="prepend">`, because the first match wins:
-
-```xml
-<rule filetypes="avi" player="default"/>
-```
-
-and remove `avi` from any `filetypes` list that targets your external player. To limit the exception to the trigger file only, use:
-
-```xml
-<rule filename=".*[\\/]play\.avi" player="default"/>
-```
-
-Restart Kodi after changing the file.
-
-## 5. Set up the Kodi library
-
-1. Open **Settings → Media → Library → Videos**, then add your exported games folder as a source.
-2. Open the context menu on it and choose **Set content**:
-   - This directory contains: **Movies**
-   - Information provider: **Local information only**
-   - Enable **Movies are in separate folders that match the movie title**
-3. Press **OK** and let Kodi scan.
-
-### Smart playlist and home screen
-
-1. Create a Smart Playlist with the rule **Path → contains → your games folder** (for example `D:\Games\`).
-2. Add the playlist to the Kodi home screen. Use a skin that supports custom home menu items, as the default skin has limited customization.
-
-### Display setting
-
-Go to **Settings → System → Display** and enable **Fullscreen Window** so games open on top of Kodi.
-
-## 6. Addon settings
+## 7. Launcher settings
 
 Open **Add-ons → My add-ons → Services → Game Launcher → Configure**.
 
-| Setting | What it does |
-| --- | --- |
-| Trigger file name | The file that starts a launch. Default `play.avi`. |
-| Launch the game | **Immediately** stops the video and launches. **After the intro video finishes** lets `Play.avi` play to the end first. Stopping the video yourself cancels the launch. |
-| Show fanart splash | Shows `fanart` and `clearlogo` full screen while the game loads. |
-| Splash timeout | Longest time the splash stays up (default 30 seconds). |
+- **Trigger file name:** the file that starts a launch (default `Play.avi`).
+- **Launch the game:** immediately, or after the intro video finishes.
+- **Fanart splash:** shown while the game loads, with a timeout and optional animation.
+- **Artwork source:** Kodi library first, local files first, or local files only.
 
-The splash closes earlier if another application takes the foreground, or if you press Back.
+If games open behind Kodi, set Kodi's display mode to **Fullscreen Window** in the display settings.
 
-## Custom intro videos
+## Optional: sharper artwork
 
-Put a different `Play.avi` in each game folder for a unique intro per game. Use **After the intro video finishes** in the settings to play intros in full before the game starts.
+In the scraper's Configure page (see step 4), turn on **Full-resolution art** and restart Kodi. This edits `advancedsettings.xml` to stop Kodi downscaling images.
 
-## Notes and limits
+## Updates
 
-- Works with local drives and Windows network (UNC) paths. Kodi-only sources such as `smb://` can't be launched, because Windows needs a real path.
-- In **Immediately** mode the video may flash for a moment before it is stopped. A very short black `Play.avi` hides this.
-- The addon detects the game by watching which window is in front. It can't see inside the game itself.
-
-Problems? See [Troubleshooting](Troubleshooting.md).
+Kodi checks the repository by itself and updates both addons. You don't need to download anything again.

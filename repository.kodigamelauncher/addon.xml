@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon id="repository.kodigamelauncher" name="Kodi Game Launcher Repository" version="1.0.0" provider-name="GoldStart5">
+  <requires>
+    <import addon="xbmc.addon" version="17.0.0"/>
+  </requires>
+  <extension point="xbmc.addon.repository" name="Kodi Game Launcher Repository">
+    <dir>
+      <info compressed="false">https://raw.githubusercontent.com/GoldStart5/Kodi-Game-Launcher/main/zips/addons.xml</info>
+      <checksum>https://raw.githubusercontent.com/GoldStart5/Kodi-Game-Launcher/main/zips/addons.xml.md5</checksum>
+      <datadir zip="true">https://raw.githubusercontent.com/GoldStart5/Kodi-Game-Launcher/main/zips/</datadir>
+    </dir>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <summary lang="en_GB">Kodi Game Launcher addons</summary>
+    <description lang="en_GB">Repository for the IGDB + SteamGridDB game scraper and the Game Launcher service.</description>
+    <platform>all</platform>
+  </extension>
+</addon>

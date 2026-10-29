@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="metadata.games.igdb"
+       name="IGDB + SteamGridDB Game Scraper"
+       version="1.2.1"
+       provider-name="GoldStart5">
+  <requires>
+    <import addon="xbmc.metadata" version="2.1.0"/>
+    <import addon="xbmc.python" version="3.0.0"/>
+    <import addon="script.module.requests" version="2.31.0"/>
+  </requires>
+  <extension point="xbmc.metadata.scraper.movies"
+             library="python/scraper.py"/>
+  <extension point="xbmc.service"
+             library="python/service.py"/>
+  <extension point="xbmc.addon.metadata">
+    <reuselanguageinvoker>true</reuselanguageinvoker>
+    <news>v1.2.1
+- New icon; author is now GoldStart5
+
+v1.2.0
+- Removed the fanart crop/convert feature; fanart is used exactly as SteamGridDB serves it (no image downloads or processing, Pillow no longer needed)
+- New toggle "Full-resolution art": adds/removes avoidtruefalse, imageres and fanartres (9999) in advancedsettings.xml (restart Kodi afterwards)
+
+v1.1.0
+- All artwork now comes from SteamGridDB (poster, keyart, landscape, thumb, banner, fanart, clearlogo, icon); IGDB supplies metadata only
+- Every SteamGridDB image is listed: all pages, humor/epilepsy art included, no per-type dimension filtering, animated .webm skipped
+- IGDB images are used only for an art type SteamGridDB has nothing for (can be switched off)
+- Fix: IGDB search now returns the actual game instead of DLC/skins (filters on game type, ranks by name similarity)
+
+v1.0.2
+- Fix: settings were read from a stale object, so keys saved after the first scrape were never seen
+- Keys are remembered in credentials.json (add-on data folder); the file can also be written by hand
+
+v1.0.1
+- Read IGDB/SteamGridDB keys from per-source scraper settings as well as global settings
+- Much faster: parallel SteamGridDB lookups, capped and cheaper image conversion
+- Warn when IGDB keys are missing instead of silently using SteamGridDB only
+
+v1.0.0
+- Initial release: IGDB metadata, SteamGridDB artwork fallback, 16:9 fanart processing</news>
+    <platform>all</platform>
+    <license>GPL-2.0-or-later</license>
+    <assets>
+      <icon>resources/icon.png</icon>
+    </assets>
+    <summary lang="en_GB">IGDB + SteamGridDB game scraper</summary>
+    <description lang="en_GB">Scrapes video game metadata from IGDB and all artwork from SteamGridDB (IGDB images only as a fallback). Games are added to the Kodi library as movies. Requires a free Twitch developer app (for IGDB) and a free SteamGridDB API key.</description>
+    <disclaimer lang="en_GB">This add-on is not affiliated with or endorsed by IGDB, Twitch or SteamGridDB.</disclaimer>
+  </extension>
+</addon>

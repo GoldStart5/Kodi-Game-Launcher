@@ -39,6 +39,8 @@ class Config(object):
         self.volume = max(0, min(100, gi('volume')))
         self.fade_in_ms = max(0, gi('fade_in_ms'))
         self.fade_out_ms = max(0, gi('fade_out_ms'))
+        self.switch_fade_in_ms = max(200, min(5000, gi('switch_fade_in_ms')))
+        self.switch_fade_out_ms = max(200, min(5000, gi('switch_fade_out_ms')))
 
         self.selection_mode = gi('selection_mode')
         self.loop = gb('loop_theme')

@@ -69,6 +69,22 @@
             <dependency type="enable" setting="show_splash">true</dependency>
           </dependencies>
         </setting>
+        <setting id="zoom_mode" type="integer" label="30030">
+          <level>0</level>
+          <default>2</default>
+          <constraints>
+            <options>
+              <option label="30031">0</option>
+              <option label="30032">1</option>
+              <option label="30033">2</option>
+            </options>
+          </constraints>
+          <control type="spinner" format="string"/>
+          <dependencies>
+            <dependency type="enable" setting="show_splash">true</dependency>
+            <dependency type="enable" setting="animate_splash">true</dependency>
+          </dependencies>
+        </setting>
         <setting id="splash_timeout" type="integer" label="30004">
           <level>0</level>
           <default>30</default>

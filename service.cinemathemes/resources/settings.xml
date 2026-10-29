@@ -72,7 +72,7 @@
             <popup>false</popup>
           </control>
         </setting>
-        <setting id="fade_in_ms" type="integer" label="30107">
+        <setting id="fade_in_ms" type="integer" label="30107" help="30133">
           <level>0</level>
           <default>1500</default>
           <constraints>
@@ -84,13 +84,37 @@
             <popup>false</popup>
           </control>
         </setting>
-        <setting id="fade_out_ms" type="integer" label="30108">
+        <setting id="fade_out_ms" type="integer" label="30108" help="30133">
           <level>0</level>
           <default>1000</default>
           <constraints>
             <minimum>0</minimum>
             <step>100</step>
             <maximum>8000</maximum>
+          </constraints>
+          <control type="slider" format="integer">
+            <popup>false</popup>
+          </control>
+        </setting>
+        <setting id="switch_fade_out_ms" type="integer" label="30128" help="30130">
+          <level>0</level>
+          <default>1000</default>
+          <constraints>
+            <minimum>200</minimum>
+            <step>100</step>
+            <maximum>5000</maximum>
+          </constraints>
+          <control type="slider" format="integer">
+            <popup>false</popup>
+          </control>
+        </setting>
+        <setting id="switch_fade_in_ms" type="integer" label="30129" help="30130">
+          <level>0</level>
+          <default>1000</default>
+          <constraints>
+            <minimum>200</minimum>
+            <step>100</step>
+            <maximum>5000</maximum>
           </constraints>
           <control type="slider" format="integer">
             <popup>false</popup>

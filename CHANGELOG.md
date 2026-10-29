@@ -2,6 +2,8 @@
 
 ## Addon updates since 3.0.0
 
+- **Game Launcher 1.6.1:** new "Splash zoom style" setting (zoom in then out, zoom out then in, or random).
+- **Cinema Themes 1.1.0:** separate fades when one theme switches to another, a hovered movie or show plays its own theme when there is no root theme, and a movie keeps its theme after its info dialog closes.
 - **Cinema Themes 1.0.4** added to the repository: theme music for movie and show folders, played with mpv.
 - **Repository 1.0.1:** new icon, and Cinema Themes is listed.
 - **IGDB + SteamGridDB Game Scraper 1.3.0:** new "SteamGridDB fanart size" setting (3840x1240 by default, 1920x620 or both), with IGDB images used when no hero matches. Optionally mix IGDB artworks and screenshots into the fanart list, with reserved slots.

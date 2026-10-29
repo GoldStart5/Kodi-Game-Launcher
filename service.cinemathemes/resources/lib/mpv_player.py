@@ -247,6 +247,7 @@ class MpvThemePlayer(threading.Thread):
         self._vol = 0.0
         self._count = 0
         self._applied_loop = None
+        self._switch_in = False   # next fade-in belongs to a theme-to-theme switch
         self._load_time = 0.0
         self._idle_hits = 0
         self._next_poll = 0.0
@@ -264,7 +265,11 @@ class MpvThemePlayer(threading.Thread):
         if key != self._key:
             audible = self._loaded and not self._finished and not self._paused and self._vol > 0.05
             if audible:
-                self._fade_to(0.0, cfg, dt)       # fade the old theme out first
+                # Fade the old theme out first. When another theme follows, the
+                # "switch" fades are used; fading to silence uses the normal fade-out.
+                switching = key is not None
+                self._switch_in = switching
+                self._fade_to(0.0, cfg, dt, cfg.switch_fade_out_ms if switching else cfg.fade_out_ms)
                 return True
             self._swap(key, files, active, cfg, now)
 
@@ -275,6 +280,8 @@ class MpvThemePlayer(threading.Thread):
 
         target = float(cfg.volume) if (active and playable) else 0.0
         moved = self._fade_to(target, cfg, dt)
+        if abs(target - self._vol) < 0.01:
+            self._switch_in = False
 
         if self._loaded and not active and not self._paused and self._vol <= 0.05:
             self._ok(self.command('set_property', 'pause', True))
@@ -288,6 +295,8 @@ class MpvThemePlayer(threading.Thread):
         """Replace whatever is loaded with the requested theme (mpv is silent here)."""
         if self._vol > 0:
             self._set_volume(0.0)
+        if not active:
+            self._switch_in = False     # it will be resumed later with the normal fade-in
         self._key = key
         self._finished = False
         if not files:
@@ -320,11 +329,15 @@ class MpvThemePlayer(threading.Thread):
         self._last_error = None
         self._log('Playing theme (%d file%s): %s' % (len(ordered), '' if len(ordered) == 1 else 's', ordered[0]))
 
-    def _fade_to(self, target, cfg, dt):
+    def _fade_to(self, target, cfg, dt, ms=None):
         cur = self._vol
         if abs(cur - target) < 0.01:
             return False
-        ms = cfg.fade_in_ms if target > cur else cfg.fade_out_ms
+        if ms is None:
+            if target > cur:
+                ms = cfg.switch_fade_in_ms if self._switch_in else cfg.fade_in_ms
+            else:
+                ms = cfg.fade_out_ms
         if ms <= 0:
             new = target
         else:

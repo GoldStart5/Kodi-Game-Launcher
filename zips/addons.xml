@@ -73,7 +73,7 @@ v1.0.0
     </assets>
   </extension>
 </addon>
-<addon id="service.cinemathemes" name="Cinema Themes" version="1.0.4" provider-name="GoldStart5">
+<addon id="service.cinemathemes" name="Cinema Themes" version="1.1.0" provider-name="GoldStart5">
   <requires>
     <import addon="xbmc.python" version="3.0.1"/>
   </requires>
@@ -87,14 +87,15 @@ v1.0.0
       <icon>icon.png</icon>
     </assets>
     <license>GPL-2.0-or-later</license>
-    <news>1.0.4: new icon
+    <news>1.1.0: separate fades when switching themes, hovered movie or show plays its own theme when there is no root theme, a movie keeps its theme after closing its info dialog
+1.0.4: new icon
 1.0.3: added addon icon
 1.0.2: addon ID changed to service.cinemathemes
 1.0.1: renamed to Cinema Themes, finds the root theme when Kodi reports no video sources
 1.0.0: first release</news>
   </extension>
 </addon>
-<addon id="service.gamelauncher" name="Game Launcher" version="1.5.0" provider-name="GoldStart5">
+<addon id="service.gamelauncher" name="Game Launcher" version="1.6.1" provider-name="GoldStart5">
   <requires>
     <import addon="xbmc.python" version="3.0.0"/>
   </requires>

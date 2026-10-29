@@ -14,6 +14,7 @@ its launcher), when the timeout expires, or when the user presses Back.
 """
 import json
 import os
+import random
 import time
 
 import xbmc
@@ -200,7 +201,7 @@ def black_texture():
 
 
 class Splash(xbmcgui.WindowDialog):
-    def __init__(self, fanart, logo, title, animate=True, black_delay_ms=3000):
+    def __init__(self, fanart, logo, title, animate=True, black_delay_ms=3000, zoom_mode=0):
         super(Splash, self).__init__()
         self.closed_by_user = False
         w, h = self.getWidth(), self.getHeight()
@@ -238,13 +239,21 @@ class Splash(xbmcgui.WindowDialog):
         art_anims, mark_anims, status_anims = [], [], []
         if animate:
             bg.setAnimations([("WindowOpen", fade_in % 600), ("WindowClose", fade_out)])
+            # zoom_mode: 0 = zoom in then out, 1 = zoom out then in, 2 = random
+            if zoom_mode == 2:
+                zoom_mode = random.choice((0, 1))
+            # Never go below 100% (that would show black edges around the art).
+            # A pulse runs start -> end -> start, so swapping them flips the direction.
+            # (Kodi's pulse plays this the opposite way round on screen, so the values are
+            # deliberately swapped: mode 0 = in then out, mode 1 = out then in.)
+            z_start, z_end = (100, 112) if zoom_mode == 1 else (112, 100)
             art_anims += [
                 ("WindowOpen", fade_in % 900),
                 ("WindowClose", fade_out),
-                # slow "Ken Burns" push-in that eases back out, repeating
+                # slow "Ken Burns" zoom that eases back the other way, repeating
                 ("Conditional",
-                 "effect=zoom start=100 end=112 center=auto time=14000 "
-                 "tween=sine easing=inout pulse=true condition=true"),
+                 "effect=zoom start=%d end=%d center=auto time=14000 "
+                 "tween=sine easing=inout pulse=true condition=true" % (z_start, z_end)),
             ]
             # logo / title appears a moment after the fanart, with a small rise
             mark_anims += [
@@ -322,6 +331,7 @@ class GamePlayer(xbmc.Player):
             "splash": a.getSetting("show_splash") != "false",
             "timeout": int(a.getSetting("splash_timeout") or 30),
             "animate": a.getSetting("animate_splash") != "false",
+            "zoom_mode": min(2, max(0, int(a.getSetting("zoom_mode") or 2))),
             "art_source": int(a.getSetting("art_source") or 0),
             "track": a.getSetting("track_lastplayed") != "false",
             "splash_time": min(7, max(1, int(a.getSetting("splash_time") or 3))),
@@ -449,7 +459,8 @@ def launch(player, path, from_intro=False):
         log("Splash art: fanart=%s logo=%s" % (fanart or "-", logo or "-"))
         if not logo:
             log("No clearlogo found (library or local) - showing the game title instead")
-        splash = Splash(fanart, logo, title, cfg["animate"], cfg["splash_time"] * 1000)
+        splash = Splash(fanart, logo, title, cfg["animate"], cfg["splash_time"] * 1000,
+                        cfg["zoom_mode"])
         splash.show()
         shown_at = _now()
 

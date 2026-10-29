@@ -23,6 +23,9 @@ OTHER = UI('other', '', '', '', 0)
 
 KEEP = object()   # "do not change the theme"
 
+# A movie whose info dialog was opened keeps its own theme in the list until another item is focused.
+Sticky = namedtuple('Sticky', 'dbid key files')
+
 
 def _to_int(text):
     try:
@@ -73,6 +76,7 @@ class ThemeService(object):
         self._target = (None, [])
         self._last_root = {}
         self._last_browse = None   # (media, dbtype, dbid) of the last focused library item
+        self._sticky = None
 
     # ------------------------------------------------------------------ main loop
     def run(self):
@@ -101,6 +105,7 @@ class ThemeService(object):
         self.finder.clear()
         self.library.clear()
         self._last_root.clear()
+        self._sticky = None
         self._committed_sig = None          # force the theme to be resolved again
         log('Settings reloaded')
 
@@ -181,7 +186,22 @@ class ThemeService(object):
         return UI('browse', media, content, dbtype if has_item else '', dbid if has_item else 0)
 
     # ------------------------------------------------------------------ choosing the theme
+    def _resolve_sticky(self, ui):
+        """Return the sticky movie theme while it still applies, otherwise forget it."""
+        sticky = self._sticky
+        if not sticky:
+            return None
+        same_movie = ui.dbtype == 'movie' and ui.dbid == sticky.dbid
+        no_item = ui.kind == 'browse' and ui.media == 'movies' and not ui.dbtype
+        if same_movie or no_item:
+            return (sticky.key, sticky.files)
+        self._sticky = None
+        return None
+
     def _resolve(self, ui):
+        sticky = self._resolve_sticky(ui)
+        if sticky:
+            return sticky
         cfg = self.cfg
         in_show = ui.media == 'tvshows' and (ui.dbtype in ('season', 'episode') or ui.content in ('seasons', 'episodes'))
         item_scope = ui.kind == 'info' and ui.dbtype in ('movie', 'tvshow', 'season', 'episode') or in_show
@@ -197,7 +217,11 @@ class ThemeService(object):
         if item_scope and info and info.folder:
             files = self.finder.find(info.folder, cfg.keyword)
             if files:
-                return self._finish(paths.norm(info.folder), files)
+                result = self._finish(paths.norm(info.folder), files)
+                is_root_folder = bool(info.source) and paths.norm(info.folder) == paths.norm(info.source)
+                if ui.kind == 'info' and ui.dbtype == 'movie' and result[0] is not None and not is_root_folder:
+                    self._sticky = Sticky(ui.dbid, result[0], result[1])
+                return result
 
         # 2. the root theme of the source folder the item lives in
         root = info.source if info else None
@@ -218,6 +242,12 @@ class ThemeService(object):
         fallback = self._fallback(media)
         if fallback:
             return self._finish(*fallback)
+
+        # 4. no root theme at all: the focused movie or show plays its own theme
+        if ui.kind == 'browse' and info and info.folder and ui.dbtype in ('movie', 'tvshow'):
+            files = self.finder.find(info.folder, cfg.keyword)
+            if files:
+                return self._finish(paths.norm(info.folder), files)
 
         return (None, [])
 

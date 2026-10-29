@@ -67,11 +67,11 @@ msgid "Volume"
 msgstr ""
 
 msgctxt "#30107"
-msgid "Fade-in duration (ms)"
+msgid "Normal fade-in (ms)"
 msgstr ""
 
 msgctxt "#30108"
-msgid "Fade-out duration (ms)"
+msgid "Normal fade-out (ms)"
 msgstr ""
 
 msgctxt "#30109"
@@ -148,4 +148,20 @@ msgstr ""
 
 msgctxt "#30127"
 msgid "Optional. Played when a source folder has no theme file of its own. Pick a file or leave empty."
+msgstr ""
+
+msgctxt "#30128"
+msgid "Switch fade-out (ms)"
+msgstr ""
+
+msgctxt "#30129"
+msgid "Switch fade-in (ms)"
+msgstr ""
+
+msgctxt "#30130"
+msgid "Used when one theme changes to another: the old theme fades out and the new one fades in with these times. If there is no theme to switch to, the normal fade-out is used."
+msgstr ""
+
+msgctxt "#30133"
+msgid "Used when a theme starts from silence, fades out to silence, and when Kodi loses focus, plays media or leaves the video library."
 msgstr ""

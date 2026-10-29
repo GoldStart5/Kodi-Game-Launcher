@@ -60,6 +60,22 @@ msgctxt "#30012"
 msgid "After the intro video finishes"
 msgstr ""
 
+msgctxt "#30030"
+msgid "Splash zoom style"
+msgstr ""
+
+msgctxt "#30031"
+msgid "Zoom in, then out"
+msgstr ""
+
+msgctxt "#30032"
+msgid "Zoom out, then in"
+msgstr ""
+
+msgctxt "#30033"
+msgid "Random"
+msgstr ""
+
 msgctxt "#30100"
 msgid "Launching game... (press Back to dismiss)"
 msgstr ""

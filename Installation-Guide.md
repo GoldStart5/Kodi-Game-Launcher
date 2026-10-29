@@ -67,6 +67,7 @@ Open **Add-ons → My add-ons → Services → Game Launcher → Configure**.
 - **Show splash before launching the game (seconds):** how long the splash shows before the game starts (1 to 7 seconds).
 - **Longest wait for the game to open (seconds):** the splash closes after this time at the latest.
 - **Update Last played:** records the launch in Kodi's "Last played" while keeping the game unwatched.
+- **Splash zoom style:** zoom in then out, zoom out then in, or random.
 - **Artwork source:** Kodi library first, local files first, or local files only.
 
 If games open behind Kodi, set Kodi's display mode to **Fullscreen Window** in the display settings.

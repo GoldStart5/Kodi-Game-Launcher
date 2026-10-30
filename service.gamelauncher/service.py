@@ -16,6 +16,7 @@ import json
 import os
 import random
 import time
+import traceback
 
 import xbmc
 import xbmcaddon
@@ -107,6 +108,31 @@ def library_item_playing():
     return {}
 
 
+def playing_item_quick():
+    """Info about the video playing now, read from Kodi's info labels.
+
+    Instant (no JSON-RPC), so the start of a launch is never held up by a library
+    request. Returns {id, type, playcount, art}; `id` is missing for non-library items.
+    """
+    gi = xbmc.getInfoLabel
+    art = {}
+    for key in ("fanart", "clearlogo", "logo"):
+        value = gi("Player.Art(%s)" % key)
+        if value:
+            art[key] = value
+    try:
+        dbid = int(gi("VideoPlayer.DBID") or 0)
+    except ValueError:
+        dbid = 0
+    if not dbid or not xbmc.getCondVisibility("VideoPlayer.Content(movies)"):
+        return {"art": art}
+    try:
+        playcount = int(gi("VideoPlayer.PlayCount") or 0)
+    except ValueError:
+        playcount = 0
+    return {"id": dbid, "type": "movie", "playcount": playcount, "art": art}
+
+
 def _rpc_list(method):
     try:
         raw = xbmc.executeJSONRPC(json.dumps(
@@ -147,7 +173,7 @@ def mark_played(movie_id, original_playcount):
         return
     d = _rpc("VideoLibrary.GetMovieDetails",
              {"movieid": movie_id, "properties": ["playcount"]}).get("moviedetails", {})
-    if (d.get("playcount") or 0) > original_playcount:
+    if original_playcount is not None and (d.get("playcount") or 0) > original_playcount:
         _rpc("VideoLibrary.SetMovieDetails",
              {"movieid": movie_id, "playcount": original_playcount})
     _rpc("VideoLibrary.SetMovieDetails",
@@ -321,6 +347,8 @@ class GamePlayer(xbmc.Player):
         self.pending_intro = False  # True when the launch comes at the end of the intro video
         self._armed_for = None    # trigger file seen playing (for "after intro" mode)
         self.item = {}            # library item that started the launch
+        self._triggered_at = None  # when the trigger file started playing (for timing logs)
+        self.deferred_marks = []  # (due_time, movie_id, original_playcount): written by service_tick
 
     @staticmethod
     def _settings():
@@ -357,7 +385,8 @@ class GamePlayer(xbmc.Player):
             return
         cfg = self._settings()
         log("Trigger file playing: %s" % path)
-        self.item = library_item_playing()
+        self._triggered_at = _now()
+        self.item = playing_item_quick()   # no JSON-RPC here: stop the video as fast as possible
         if cfg["mode"] == 0:      # launch immediately
             self.pending_intro = False
             self.pending = path
@@ -397,37 +426,37 @@ class GamePlayer(xbmc.Player):
         self._armed_for = None
 
 
-def _resolve_item(player, folder, need_art):
-    """Library item for the game being launched: {id, playcount, art} or {}."""
-    item = player.item if (player.item.get("type") == "movie"
-                           and player.item.get("id") is not None) else {}
-    if not item or (need_art and not _art_pair(item.get("art"))[0]):
-        m = library_movie_for_folder(folder)
-        if m:
-            if not item:
-                item = {"id": m.get("movieid"), "playcount": m.get("playcount") or 0,
-                        "art": m.get("art") or {}}
-            else:
-                item = dict(item, art=m.get("art") or item.get("art") or {})
-    return item
-
-
 def launch(player, path, from_intro=False):
     """Launch the game for `path`.
 
     from_intro=False: stop the video, show the fanart splash, then fade to black and launch.
     from_intro=True : the intro is paused on its last frame; fade black over it (no splash),
                       launch, then stop the video once the game has the foreground.
+
+    Nothing slow runs before the splash is on screen: library requests are either avoided
+    (info labels) or done while the splash is already showing, and the last-played update
+    is written only after the game is in front.
     """
     cfg = player._settings()
     folder = os.path.dirname(path)
+    triggered_at = player._triggered_at
 
     def release_video():
         if from_intro and player.isPlaying():
             player.stop()
 
+    item = dict(player.item or {})
+    want_art = cfg["splash"] and cfg["art_source"] != 2 and not from_intro
+    # Slow path, only when Kodi's info labels told us nothing about the item: ask the
+    # library now, because the item is gone once the video has been stopped.
+    if (want_art or cfg["track"]) and item.get("id") is None and player.isPlaying():
+        rpc_item = library_item_playing()
+        if rpc_item.get("type") == "movie" and rpc_item.get("id") is not None:
+            item = rpc_item
+
     if player.isPlaying() and not from_intro:
         player.stop()
+    stopped_at = _now()
 
     lnk = find_lnk(folder)
     if not lnk:
@@ -438,14 +467,8 @@ def launch(player, path, from_intro=False):
         return
 
     title = os.path.splitext(os.path.basename(lnk))[0]
-    need_art = cfg["splash"] and cfg["art_source"] != 2 and not from_intro
-    item = {}
-    if need_art or cfg["track"]:
-        item = _resolve_item(player, folder, need_art)
-    movie_id = item.get("id") if item else None
-    original_playcount = item.get("playcount") or 0 if item else 0
-    if cfg["track"] and movie_id is None:
-        log("Game is not in the Kodi library - last played not updated")
+    movie_id = item.get("id")
+    original_playcount = item.get("playcount") if movie_id is not None else None
 
     splash = None
     shown_at = None
@@ -463,8 +486,22 @@ def launch(player, path, from_intro=False):
                         cfg["zoom_mode"])
         splash.show()
         shown_at = _now()
+        if triggered_at is not None:
+            log("Launch timing: video stopped %.2f s after it started, splash shown %.2f s later"
+                % (stopped_at - triggered_at, shown_at - stopped_at))
 
     monitor = xbmc.Monitor()
+
+    def find_movie_late():
+        """Look the game up by folder (only when we still have no library id)."""
+        m = library_movie_for_folder(folder)
+        if m:
+            return m.get("movieid"), m.get("playcount") or 0
+        log("Game is not in the Kodi library - last played not updated")
+        return None, None
+
+    if cfg["track"] and movie_id is None and splash:
+        movie_id, original_playcount = find_movie_late()   # the splash is already showing
 
     # Splash time, then the black layer fades in over the splash (Kodi animates it),
     # then the game starts from the black screen. Back skips the rest of the wait.
@@ -473,6 +510,13 @@ def launch(player, path, from_intro=False):
         launch_at = shown_at + hold + FADE_SECONDS + 0.1
         while (_now() < launch_at and not monitor.abortRequested()
                and not splash.closed_by_user):
+            if player.pending:
+                # Play.avi was started again while this launch is already under way:
+                # stop that stray video at once instead of letting it play.
+                player.pending, player.pending_intro = None, False
+                if player.isPlaying():
+                    player.stop()
+                log("Play pressed again during launch - ignored")
             monitor.waitForAbort(0.05)
         if monitor.abortRequested():
             release_video()
@@ -490,39 +534,38 @@ def launch(player, path, from_intro=False):
         if splash:
             splash.close()
         return
-
-    tracked = cfg["track"] and movie_id is not None
-    if tracked:
-        mark_played(movie_id, original_playcount)   # now
-    final_pass_at = 2.5   # again shortly after, in case Kodi's own "watched" update lands late
-    final_done = not tracked
+    launched_at = _now()
 
     if splash:
         waited = 0.0
         grace = 2.0    # give the new app time to take focus before we check
         step = 0.25
-        while waited < cfg["timeout"] and not monitor.abortRequested() and not splash.closed_by_user:
-            monitor.waitForAbort(step)
-            waited += step
-            if not final_done and waited >= final_pass_at:
-                mark_played(movie_id, original_playcount)
-                final_done = True
-            if waited > grace and not foreground_is_kodi():
-                log("Another app has the foreground - closing splash")
-                break
+        next_check = 0.0
+        while (waited < cfg["timeout"] and not monitor.abortRequested()
+               and not splash.closed_by_user and not player.pending):
+            monitor.waitForAbort(0.05)     # short slices: a new Play.avi must be noticed fast
+            waited += 0.05
+            if waited >= next_check:
+                next_check += step
+                if waited > grace and not foreground_is_kodi():
+                    log("Another app has the foreground - closing splash")
+                    break
         release_video()   # intro mode: stop the (paused) video only now, behind the black layer
         splash.close()
         if cfg["animate"] and not from_intro:
-            monitor.waitForAbort(0.6)   # let the close animation finish
+            end = _now() + 0.6   # let the close animation finish, unless a new launch is waiting
+            while _now() < end and not monitor.abortRequested() and not player.pending:
+                monitor.waitForAbort(0.05)
         del splash
-    elif not final_done:
-        monitor.waitForAbort(final_pass_at)
-        mark_played(movie_id, original_playcount)
-        final_done = True
+    elif cfg["track"] and movie_id is None:
+        movie_id, original_playcount = find_movie_late()
 
-    if not final_done:   # splash ended before the second pass
-        monitor.waitForAbort(max(0.0, final_pass_at - 1.0))
-        mark_played(movie_id, original_playcount)
+    # Last: queue the library update. It must NOT be waited for here: this function blocks the
+    # service loop, and a new Play.avi started meanwhile would keep playing until we return.
+    # service_tick() writes it once Kodi's own save after the video stop is long finished.
+    if cfg["track"] and movie_id is not None:
+        player.deferred_marks = [m for m in player.deferred_marks if m[1] != movie_id]
+        player.deferred_marks.append((launched_at + 2.5, movie_id, original_playcount))
 
 
 def service_tick(player):
@@ -531,9 +574,18 @@ def service_tick(player):
         player.pending, player.pending_intro = None, False
         try:
             launch(player, path, from_intro)
-        except Exception as exc:  # never let the service die
-            log("Unexpected error: %s" % exc, xbmc.LOGERROR)
+        except Exception:  # never let the service die
+            log("Unexpected error:\n%s" % traceback.format_exc(), xbmc.LOGERROR)
     player.poll_intro_end()
+    # Library writes run only when no launch is waiting, so they never delay stopping a video.
+    if player.deferred_marks and not player.pending:
+        due = [m for m in player.deferred_marks if _now() >= m[0]]
+        for m in due:
+            player.deferred_marks.remove(m)
+            try:
+                mark_played(m[1], m[2])
+            except Exception:
+                log("Last played update failed:\n%s" % traceback.format_exc(), xbmc.LOGERROR)
 
 
 def main():
@@ -542,8 +594,8 @@ def main():
     log("Service started")
     while not monitor.abortRequested():
         service_tick(player)
-        # poll quickly while waiting for the end of an intro video
-        if monitor.waitForAbort(0.05 if player._armed_for else 0.2):
+        # check often: the video must be stopped the moment the trigger file starts
+        if monitor.waitForAbort(0.05):
             break
     log("Service stopped")
 

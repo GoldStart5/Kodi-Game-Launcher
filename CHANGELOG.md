@@ -2,6 +2,7 @@
 
 ## Addon updates since 3.0.0
 
+- **IGDB + SteamGridDB Game Scraper 1.3.1:** new defaults. IGDB artworks and screenshots are now added to the fanart list, with 25 slots reserved for them and a maximum of 50 fanart images.
 - **Game Launcher 1.6.3:** faster start of a launch. The splash appears sooner because slow library lookups no longer run before it is on screen.
 - **Game Launcher 1.6.1:** new "Splash zoom style" setting (zoom in then out, zoom out then in, or random).
 - **Cinema Themes 1.1.0:** separate fades when one theme switches to another, a hovered movie or show plays its own theme when there is no root theme, and a movie keeps its theme after its info dialog closes.

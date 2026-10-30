@@ -31,7 +31,7 @@ DEFAULT_HERO_SIZE = '3840x1240'
 
 # IGDB images mixed into the fanart list alongside the heroes (setting "fanart_igdb")
 IGDB_NONE, IGDB_ARTWORKS, IGDB_BOTH = 'none', 'artworks', 'both'
-DEFAULT_IGDB_SLOTS = 5
+DEFAULT_IGDB_SLOTS = 25
 
 
 def classify_grid(width, height):
@@ -101,7 +101,7 @@ def _fetch_sgdb(name, steam, sgdb_game_id, sgdb, log, warnings):
 def collect(name, game, steam, sgdb_game_id, sgdb, settings, log):
     """Return {'art': {type: [{'url','preview'}]}, 'fanart': [...], 'warnings': [...]}."""
     max_art = settings.get_int('max_art', 30) or 30
-    max_fanart = settings.get_int('max_fanart', 15) or 15
+    max_fanart = settings.get_int('max_fanart', 50) or 50
     sizes = HERO_SIZES.get(settings.get_str('hero_size', DEFAULT_HERO_SIZE), HERO_SIZES[DEFAULT_HERO_SIZE])
 
     art = {kind: [] for kind in ART_TYPES}
@@ -159,7 +159,7 @@ def _fanart_list(heroes, game, settings, max_fanart):
     if not heroes:
         return _igdb_images(game, include_screenshots=True)[:max_fanart]
 
-    mode = settings.get_str('fanart_igdb', IGDB_NONE)
+    mode = settings.get_str('fanart_igdb', IGDB_BOTH)
     if mode not in (IGDB_ARTWORKS, IGDB_BOTH):
         return heroes[:max_fanart]
     extra = _igdb_images(game, include_screenshots=(mode == IGDB_BOTH))

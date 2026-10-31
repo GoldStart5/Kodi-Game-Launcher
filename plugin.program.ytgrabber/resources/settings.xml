@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings version="1">
+  <section id="plugin.program.ytgrabber">
+    <category id="tools" label="30000" help="">
+      <group id="ytdlp" label="30001">
+        <setting id="ytdlp_status" type="string" label="30002" help="">
+          <level>0</level>
+          <default>Not installed</default>
+          <constraints><allowempty>true</allowempty></constraints>
+          <dependencies>
+            <dependency type="enable"><condition on="property" name="InfoBool">false</condition></dependency>
+          </dependencies>
+          <control type="edit" format="string"><heading>30002</heading></control>
+        </setting>
+        <setting id="ytdlp_channel" type="string" label="30003" help="">
+          <level>0</level>
+          <default>stable</default>
+          <constraints>
+            <options>
+              <option label="30004">stable</option>
+              <option label="30005">nightly</option>
+            </options>
+          </constraints>
+          <control type="spinner" format="string"/>
+        </setting>
+        <setting id="ytdlp_mode" type="string" label="30008" help="">
+          <level>0</level>
+          <default>auto</default>
+          <constraints>
+            <options>
+              <option label="30009">auto</option>
+              <option label="30012">python</option>
+              <option label="30013">binary</option>
+            </options>
+          </constraints>
+          <control type="spinner" format="string"/>
+        </setting>
+        <setting id="btn_ytdlp" type="action" label="30006" help="">
+          <level>0</level>
+          <data>RunScript(plugin.program.ytgrabber,install_ytdlp)</data>
+          <control type="button" format="action"><close>false</close></control>
+        </setting>
+        <setting id="btn_ytdlp_force" type="action" label="30007" help="">
+          <level>0</level>
+          <data>RunScript(plugin.program.ytgrabber,force_ytdlp)</data>
+          <control type="button" format="action"><close>false</close></control>
+        </setting>
+      </group>
+      <group id="ffmpeg" label="30010">
+        <setting id="ffmpeg_status" type="string" label="30002" help="">
+          <level>0</level>
+          <default>Not installed</default>
+          <constraints><allowempty>true</allowempty></constraints>
+          <dependencies>
+            <dependency type="enable"><condition on="property" name="InfoBool">false</condition></dependency>
+          </dependencies>
+          <control type="edit" format="string"><heading>30002</heading></control>
+        </setting>
+        <setting id="btn_ffmpeg" type="action" label="30011" help="">
+          <level>0</level>
+          <data>RunScript(plugin.program.ytgrabber,install_ffmpeg)</data>
+          <control type="button" format="action"><close>false</close></control>
+        </setting>
+      </group>
+      <group id="jsrt" label="30020">
+        <setting id="js_status" type="string" label="30002" help="">
+          <level>0</level>
+          <default>Not installed</default>
+          <constraints><allowempty>true</allowempty></constraints>
+          <dependencies>
+            <dependency type="enable"><condition on="property" name="InfoBool">false</condition></dependency>
+          </dependencies>
+          <control type="edit" format="string"><heading>30002</heading></control>
+        </setting>
+        <setting id="btn_js" type="action" label="30021" help="">
+          <level>0</level>
+          <data>RunScript(plugin.program.ytgrabber,install_js)</data>
+          <control type="button" format="action"><close>false</close></control>
+        </setting>
+        <setting id="btn_diag" type="action" label="30023" help="">
+          <level>0</level>
+          <data>RunScript(plugin.program.ytgrabber,diagnostics)</data>
+          <control type="button" format="action"><close>false</close></control>
+        </setting>
+        <setting id="btn_refresh" type="action" label="30022" help="">
+          <level>0</level>
+          <data>RunScript(plugin.program.ytgrabber,refresh)</data>
+          <control type="button" format="action"><close>false</close></control>
+        </setting>
+      </group>
+    </category>
+    <category id="quality" label="30030" help="">
+      <group id="q1" label="30030">
+        <setting id="video_height" type="integer" label="30031" help="">
+          <level>0</level>
+          <default>1080</default>
+          <constraints>
+            <options>
+              <option label="480p">480</option>
+              <option label="720p">720</option>
+              <option label="1080p">1080</option>
+              <option label="1440p">1440</option>
+              <option label="2160p (4K)">2160</option>
+            </options>
+          </constraints>
+          <control type="spinner" format="string"/>
+        </setting>
+        <setting id="audio_bitrate" type="integer" label="30032" help="">
+          <level>0</level>
+          <default>192</default>
+          <constraints>
+            <options>
+              <option label="128 kbps">128</option>
+              <option label="192 kbps">192</option>
+              <option label="256 kbps">256</option>
+              <option label="320 kbps">320</option>
+            </options>
+          </constraints>
+          <control type="spinner" format="string"/>
+        </setting>
+      </group>
+    </category>
+    <category id="advanced" label="30040" help="">
+      <group id="a1" label="30040">
+        <setting id="ffmpeg_custom" type="path" label="30041" help="">
+          <level>0</level>
+          <default></default>
+          <constraints><writable>false</writable><allowempty>true</allowempty></constraints>
+          <control type="button" format="file"><heading>30041</heading></control>
+        </setting>
+        <setting id="js_custom" type="path" label="30042" help="">
+          <level>0</level>
+          <default></default>
+          <constraints><writable>false</writable><allowempty>true</allowempty></constraints>
+          <control type="button" format="file"><heading>30042</heading></control>
+        </setting>
+        <setting id="cookies_file" type="path" label="30043" help="">
+          <level>0</level>
+          <default></default>
+          <constraints><writable>false</writable><allowempty>true</allowempty></constraints>
+          <control type="button" format="file"><heading>30043</heading></control>
+        </setting>
+        <setting id="proxy" type="string" label="30044" help="">
+          <level>0</level>
+          <default></default>
+          <constraints><allowempty>true</allowempty></constraints>
+          <control type="edit" format="string"><heading>30044</heading></control>
+        </setting>
+      </group>
+    </category>
+  </section>
+</settings>

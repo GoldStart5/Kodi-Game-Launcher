@@ -1,0 +1,117 @@
+# Kodi Media Center language file
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Language: en_GB\n"
+
+msgctxt "#30000"
+msgid "Tools"
+msgstr ""
+
+msgctxt "#30001"
+msgid "yt-dlp"
+msgstr ""
+
+msgctxt "#30002"
+msgid "Installed version"
+msgstr ""
+
+msgctxt "#30003"
+msgid "Update channel"
+msgstr ""
+
+msgctxt "#30004"
+msgid "Stable"
+msgstr ""
+
+msgctxt "#30005"
+msgid "Nightly"
+msgstr ""
+
+msgctxt "#30006"
+msgid "Install / update yt-dlp"
+msgstr ""
+
+msgctxt "#30007"
+msgid "Re-download yt-dlp (force)"
+msgstr ""
+
+msgctxt "#30010"
+msgid "ffmpeg (needed for mp3 and HD trailers)"
+msgstr ""
+
+msgctxt "#30011"
+msgid "Download ffmpeg"
+msgstr ""
+
+msgctxt "#30020"
+msgid "JavaScript runtime (needed by YouTube)"
+msgstr ""
+
+msgctxt "#30021"
+msgid "Download Deno"
+msgstr ""
+
+msgctxt "#30022"
+msgid "Refresh status"
+msgstr ""
+
+msgctxt "#30030"
+msgid "Quality"
+msgstr ""
+
+msgctxt "#30031"
+msgid "Maximum trailer resolution"
+msgstr ""
+
+msgctxt "#30032"
+msgid "Theme audio bitrate"
+msgstr ""
+
+msgctxt "#30040"
+msgid "Advanced"
+msgstr ""
+
+msgctxt "#30041"
+msgid "Custom ffmpeg path (optional)"
+msgstr ""
+
+msgctxt "#30042"
+msgid "Custom JavaScript runtime path (optional)"
+msgstr ""
+
+msgctxt "#30043"
+msgid "Cookies file (optional)"
+msgstr ""
+
+msgctxt "#30044"
+msgid "Proxy (optional)"
+msgstr ""
+
+msgctxt "#30023"
+msgid "Show diagnostics"
+msgstr ""
+
+msgctxt "#30008"
+msgid "Run yt-dlp with"
+msgstr ""
+
+msgctxt "#30009"
+msgid "Automatic (Kodi Python if possible, else its own Python)"
+msgstr ""
+
+msgctxt "#30012"
+msgid "Kodi Python"
+msgstr ""
+
+msgctxt "#30013"
+msgid "Standalone (yt-dlp brings its own Python)"
+msgstr ""
+
+msgctxt "#30050"
+msgid "Download theme / trailer"
+msgstr ""
+
+msgctxt "#30051"
+msgid "Download trailer (Grabber)"
+msgstr ""

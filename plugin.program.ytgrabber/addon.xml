@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.program.ytgrabber"
+       name="Theme &amp; Trailer Grabber"
+       version="1.0.5"
+       provider-name="GoldStart5">
+  <requires>
+    <import addon="xbmc.python" version="3.0.1"/>
+    <import addon="script.module.certifi"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="default.py">
+    <provides>video executable</provides>
+  </extension>
+  <extension point="kodi.context.item">
+    <menu id="kodi.core.main">
+      <item library="context.py">
+        <label>30050</label>
+        <visible>[String.IsEqual(ListItem.DBType,movie) | String.IsEqual(ListItem.DBType,tvshow)] + !String.IsEmpty(ListItem.DBID)</visible>
+      </item>
+    </menu>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <summary lang="en_GB">Download themes and trailers for your library with yt-dlp</summary>
+    <description lang="en_GB">Pick a movie or TV show from your Kodi library, search YouTube for its soundtrack (theme.mp3) or trailer (name-trailer.mp4), preview the results and download them straight into the title's folder. yt-dlp, ffmpeg and a JavaScript runtime can be installed and updated from the add-on settings.</description>
+    <platform>all</platform>
+    <assets>
+      <icon>icon.png</icon>
+      <fanart>fanart.jpg</fanart>
+    </assets>
+    <license>GPL-3.0-or-later</license>
+    <news>1.0.5 - New icon, single context entry, faster searches (cache + parallel), audio preview for themes</news>
+  </extension>
+</addon>

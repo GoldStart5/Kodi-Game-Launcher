@@ -2,6 +2,7 @@
 
 ## Addon updates since 3.0.0
 
+- **Theme & Trailer Grabber 1.0.5** added to the repository: search YouTube for a movie or show's theme or trailer and download it into the title's folder.
 - **Cinema Themes 1.1.1:** a show keeps its theme after you leave its seasons or episodes, until another show is focused.
 - **IGDB + SteamGridDB Game Scraper 1.3.1:** new defaults. IGDB artworks and screenshots are now added to the fanart list, with 25 slots reserved for them and a maximum of 50 fanart images.
 - **Game Launcher 1.6.3:** faster start of a launch. The splash appears sooner because slow library lookups no longer run before it is on screen.

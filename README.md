@@ -48,6 +48,7 @@ Games\
 | **IGDB + SteamGridDB Game Scraper** `metadata.games.igdb` | Fetches game metadata from IGDB and all artwork from SteamGridDB into the Kodi library. |
 | **Game Launcher** `service.gamelauncher` | Detects `Play.avi`, shows a fanart splash and launches the game's shortcut. Windows only. |
 | **Cinema Themes** `service.cinemathemes` | *Optional.* Plays theme music for your movie, show and game pages through `mpv`. |
+| **Theme & Trailer Grabber** `plugin.program.ytgrabber` | *Optional.* Finds and downloads themes and trailers for your library with yt-dlp. |
 
 ## 🚀 Install
 

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon id="resource.uisounds.playstation2" version="1.0.0" name="Playstation 2 UI Sounds" provider-name="Monogravity">
+  <requires>
+    <import addon="kodi.resource" version="1.0.0"/>
+  </requires>
+  <extension point="kodi.resource.uisounds"/>
+  <extension point="kodi.addon.metadata">
+    <summary lang="en">Playstation 2 GUI sounds</summary>
+    <description lang="en">Playstation 2 UI Sounds</description>
+    <platform>all</platform>
+    <assets>
+      <icon>icon.png</icon>
+    </assets>
+  </extension>
+</addon>

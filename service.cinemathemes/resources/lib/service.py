@@ -23,8 +23,9 @@ OTHER = UI('other', '', '', '', 0)
 
 KEEP = object()   # "do not change the theme"
 
-# A movie whose info dialog was opened keeps its own theme in the list until another item is focused.
-Sticky = namedtuple('Sticky', 'dbid key files')
+# A movie whose info dialog was opened, or a show whose seasons/episodes were entered, keeps its own
+# theme in the list until another item is focused. dbtype is 'movie' or 'tvshow'.
+Sticky = namedtuple('Sticky', 'dbtype dbid key files')
 
 
 def _to_int(text):
@@ -187,13 +188,14 @@ class ThemeService(object):
 
     # ------------------------------------------------------------------ choosing the theme
     def _resolve_sticky(self, ui):
-        """Return the sticky movie theme while it still applies, otherwise forget it."""
+        """Return the sticky theme while it still applies, otherwise forget it."""
         sticky = self._sticky
         if not sticky:
             return None
-        same_movie = ui.dbtype == 'movie' and ui.dbid == sticky.dbid
-        no_item = ui.kind == 'browse' and ui.media == 'movies' and not ui.dbtype
-        if same_movie or no_item:
+        media = 'movies' if sticky.dbtype == 'movie' else 'tvshows'
+        same_item = ui.dbtype == sticky.dbtype and ui.dbid == sticky.dbid
+        no_item = ui.kind == 'browse' and ui.media == media and not ui.dbtype
+        if same_item or no_item:
             return (sticky.key, sticky.files)
         self._sticky = None
         return None
@@ -219,8 +221,12 @@ class ThemeService(object):
             if files:
                 result = self._finish(paths.norm(info.folder), files)
                 is_root_folder = bool(info.source) and paths.norm(info.folder) == paths.norm(info.source)
-                if ui.kind == 'info' and ui.dbtype == 'movie' and result[0] is not None and not is_root_folder:
-                    self._sticky = Sticky(ui.dbid, result[0], result[1])
+                if result[0] is not None and not is_root_folder:
+                    if ui.kind == 'info' and ui.dbtype == 'movie':
+                        self._sticky = Sticky('movie', ui.dbid, result[0], result[1])
+                    elif in_show and info.show_id > 0:
+                        # inside the show: remember it, so leaving to the show list keeps its theme
+                        self._sticky = Sticky('tvshow', info.show_id, result[0], result[1])
                 return result
 
         # 2. the root theme of the source folder the item lives in

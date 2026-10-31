@@ -19,6 +19,9 @@ Browse your library with descriptions and artwork, press play, and the game star
 
 ---
 
+> [!NOTE]
+> **Playnite is no longer needed.** Game metadata and artwork now come straight into Kodi, with no export step, no AutoHotkey and no special MPV setup.
+
 ## ✨ Highlights
 
 | | |

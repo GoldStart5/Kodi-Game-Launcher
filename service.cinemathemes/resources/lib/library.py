@@ -9,7 +9,7 @@ import xbmc
 from . import paths
 from .common import debug
 
-ItemInfo = namedtuple('ItemInfo', 'media folder source')
+ItemInfo = namedtuple('ItemInfo', 'media folder source show_id')
 
 _IGNORED_SCHEMES = ('plugin://', 'addons://', 'upnp://', 'videodb://', 'library://', 'sources://')
 _SOURCES_TTL = 60.0
@@ -71,13 +71,13 @@ class Library(object):
     def _lookup(self, dbtype, dbid):
         media = None
         folder = None
+        show_id = 0
         if dbtype == 'movie':
             res = self._rpc('VideoLibrary.GetMovieDetails', {'movieid': dbid, 'properties': ['file']})
             details = (res or {}).get('moviedetails') or {}
             if details.get('file'):
                 media, folder = 'movies', paths.movie_folder(details['file'])
         else:
-            show_id = None
             if dbtype == 'tvshow':
                 show_id = dbid
             elif dbtype == 'season':
@@ -95,4 +95,4 @@ class Library(object):
             return None
         source = self.source_for(folder)
         debug('%s %s -> folder=%s source=%s' % (dbtype, dbid, folder, source))
-        return ItemInfo(media, folder, source)
+        return ItemInfo(media, folder, source, show_id if media == 'tvshows' else 0)

@@ -5,7 +5,7 @@ By GoldStart5. Theme music for your video library, played by a portable mpv, wit
 ## Setup
 
 1. Download a Windows build of mpv and unzip it anywhere (a portable folder is fine).
-2. In Kodi: Add-ons > Install from zip file > `service.cinemathemes-1.2.2.zip`
+2. In Kodi: Add-ons > Install from zip file > `service.cinemathemes-1.2.3.zip`
    (allow "Unknown sources" if Kodi asks).
 3. Add-on settings: set **Location of mpv.exe**.
 4. Put theme files in your folders:
@@ -29,6 +29,16 @@ Any audio file whose name contains the word `theme` counts (`theme.mp3`, `Main T
 | Kodi loses focus / Kodi plays media | Fades out and pauses, then fades in and resumes |
 
 Fades: **Normal fade-in/out** are used when a theme starts from silence, fades out to silence, and for focus, media and library changes. **Switch fade-out/in** (200 to 5000 ms, default 1000) are used when one theme changes to another.
+
+## Library theme toggles (Behaviour tab)
+
+While browsing a list, the first of these that applies plays:
+
+1. **Use the root theme** (on): the theme in the source folder. If it is off or no root theme is found, go to the next.
+2. **Global theme replaces the root theme** (on): the global theme takes the root theme's place. Needs the global theme enabled with a folder set.
+3. **Hovering plays each movie or show's own theme** (on): used only when 1 and 2 do not cover the lists. Off means nothing plays while hovering, only inside info dialogs, seasons and episodes.
+
+Info dialogs, seasons and episodes always play the item's own theme first. A theme made sticky by an info dialog (movies) or by entering a show keeps playing in the list until you focus another item, whatever these toggles are set to. Then the chain above applies, and if nothing applies the theme fades out to silence.
 
 ## Global theme
 

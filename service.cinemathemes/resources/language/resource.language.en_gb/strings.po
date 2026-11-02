@@ -217,3 +217,31 @@ msgstr ""
 msgctxt "#30152"
 msgid "When off, the global theme is ignored and the add-on works as if no global folder was set: the library theme fades out and pauses outside the library, and nothing plays when no library theme applies."
 msgstr ""
+
+msgctxt "#30017"
+msgid "Library themes"
+msgstr ""
+
+msgctxt "#30160"
+msgid "Use the root theme"
+msgstr ""
+
+msgctxt "#30161"
+msgid "Global theme replaces the root theme"
+msgstr ""
+
+msgctxt "#30162"
+msgid "Hovering plays each movie or show's own theme"
+msgstr ""
+
+msgctxt "#30163"
+msgid "The theme in the root of each video source folder, played while browsing. Off: it never plays. A source with no root theme is treated the same as off."
+msgstr ""
+
+msgctxt "#30164"
+msgid "When the root theme is off or not found, the global theme takes its place in the library: in lists, and in info, seasons and episodes that have no theme of their own. Needs the global theme to be on with a folder set."
+msgstr ""
+
+msgctxt "#30165"
+msgid "Used when neither the root theme nor the global theme covers the lists. On: the movie or show you are on plays its own theme. Off: nothing plays while hovering, only in info, seasons and episodes."
+msgstr ""

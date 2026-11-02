@@ -51,6 +51,10 @@ class Config(object):
         self.fade_outside_library = gb('fade_outside_library')
         self.switch_delay = max(0, gi('switch_delay_ms')) / 1000.0
 
+        self.use_root = gb('use_root_theme')
+        self.global_replaces_root = gb('global_replaces_root')
+        self.hover_own = gb('hover_own_theme')
+
         self.global_enabled = gb('global_enabled')
         self.global_folder = gs('global_folder').strip()
         self.global_selection_mode = gi('global_selection_mode')

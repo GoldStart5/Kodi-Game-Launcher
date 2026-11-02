@@ -124,6 +124,23 @@
     </category>
 
     <category id="behaviour" label="30001">
+      <group id="library_themes" label="30017">
+        <setting id="use_root_theme" type="boolean" label="30160" help="30163">
+          <level>0</level>
+          <default>true</default>
+          <control type="toggle"/>
+        </setting>
+        <setting id="global_replaces_root" type="boolean" label="30161" help="30164">
+          <level>0</level>
+          <default>true</default>
+          <control type="toggle"/>
+        </setting>
+        <setting id="hover_own_theme" type="boolean" label="30162" help="30165">
+          <level>0</level>
+          <default>true</default>
+          <control type="toggle"/>
+        </setting>
+      </group>
       <group id="focus" label="30013">
         <setting id="pause_on_focus_loss" type="boolean" label="30114" help="30123">
           <level>0</level>

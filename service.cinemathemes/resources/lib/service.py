@@ -148,20 +148,18 @@ class ThemeService(object):
                     self.player.set_target(glob[0], glob[1], audible, True)
                     return
             key, files = self._target
-            self.player.set_target(key, files, audible and not cfg.fade_outside_library)
+            self.player.set_target(key, files, audible and not cfg.fade_outside_library, self._is_global_key(key))
             return
 
         if self._committed_kind not in ('browse', 'info'):
             return      # the selection has not settled yet: keep whatever is playing
 
         key, files = self._target
-        is_global = False
-        if key is None:
-            # nothing in the library applies here: the global theme fills in
-            glob = self._global_target()
-            if glob:
-                key, files, is_global = glob[0], glob[1], True
-        self.player.set_target(key, files, audible, is_global)
+        self.player.set_target(key, files, audible, self._is_global_key(key))
+
+    @staticmethod
+    def _is_global_key(key):
+        return bool(key) and key.startswith('global:')
 
     def _global_target(self):
         """(key, files) of the global theme folder, or None when it is not set or empty."""
@@ -268,23 +266,33 @@ class ThemeService(object):
                         self._sticky = Sticky('tvshow', info.show_id, result[0], result[1])
                 return result
 
-        # 2. the root theme of the source folder the item lives in
-        root = info.source if info else None
-        if info and not root:
-            root = self._guess_root(info.folder)
-        if root:
-            files = self.finder.find(root, cfg.keyword)
-            if files:
-                self._last_root[media] = (paths.norm(root), files)
-                return self._finish(paths.norm(root), files)
-        else:
-            # no usable item under the cursor: reuse the last root we found
-            last = self._last_root.get(media)
-            if last:
-                return self._finish(last[0], last[1])
+        # 2. the root theme of the source folder the item lives in (when it is switched on).
+        #    A missing root theme is treated the same as the switch being off.
+        if cfg.use_root:
+            root = info.source if info else None
+            if info and not root:
+                root = self._guess_root(info.folder)
+            if root:
+                files = self.finder.find(root, cfg.keyword)
+                if files:
+                    self._last_root[media] = (paths.norm(root), files)
+                    return self._finish(paths.norm(root), files)
+            else:
+                # no usable item under the cursor: reuse the last root we found
+                last = self._last_root.get(media)
+                if last:
+                    return self._finish(last[0], last[1])
 
-        # 3. no root theme at all: the focused movie or show plays its own theme
-        if ui.kind == 'browse' and info and info.folder and ui.dbtype in ('movie', 'tvshow'):
+        # 3. no root theme: the global theme takes its place, when that is switched on
+        if cfg.global_replaces_root:
+            glob = self._global_target()
+            if glob:
+                return glob
+
+        # 4. nothing above covers the lists: the focused movie or show plays its own theme
+        #    while hovering (when switched on); otherwise nothing plays until an info
+        #    dialog, seasons or episodes are opened
+        if cfg.hover_own and ui.kind == 'browse' and info and info.folder and ui.dbtype in ('movie', 'tvshow'):
             files = self.finder.find(info.folder, cfg.keyword)
             if files:
                 return self._finish(paths.norm(info.folder), files)

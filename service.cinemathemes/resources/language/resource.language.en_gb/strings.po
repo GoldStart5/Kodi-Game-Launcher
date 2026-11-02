@@ -35,7 +35,7 @@ msgid "When to play"
 msgstr ""
 
 msgctxt "#30014"
-msgid "Fallback root themes and logging"
+msgid "Logging"
 msgstr ""
 
 msgctxt "#30100"
@@ -103,19 +103,11 @@ msgid "Fade out and pause while Kodi is playing media"
 msgstr ""
 
 msgctxt "#30116"
-msgid "Fade out and pause outside the video library"
+msgid "Fade out and pause outside the video library (when there is no global theme)"
 msgstr ""
 
 msgctxt "#30117"
 msgid "Delay before switching themes (ms)"
-msgstr ""
-
-msgctxt "#30118"
-msgid "Movies fallback root theme"
-msgstr ""
-
-msgctxt "#30119"
-msgid "TV shows fallback root theme"
 msgstr ""
 
 msgctxt "#30120"
@@ -139,15 +131,11 @@ msgid "Also covers trailers and music played by Kodi itself. The theme resumes w
 msgstr ""
 
 msgctxt "#30125"
-msgid "On the home screen, in settings and so on. The theme resumes when you return to the library."
+msgid "On the home screen, in settings and so on, when no global theme is set. With a global theme, it plays there instead. The theme resumes when you return to the library."
 msgstr ""
 
 msgctxt "#30126"
 msgid "How long the selection must stay put before the theme changes. Prevents restarts while scrolling."
-msgstr ""
-
-msgctxt "#30127"
-msgid "Optional. Played when a source folder has no theme file of its own. Pick a file or leave empty."
 msgstr ""
 
 msgctxt "#30128"
@@ -164,4 +152,68 @@ msgstr ""
 
 msgctxt "#30133"
 msgid "Used when a theme starts from silence, fades out to silence, and when Kodi loses focus, plays media or leaves the video library."
+msgstr ""
+
+msgctxt "#30003"
+msgid "Global theme"
+msgstr ""
+
+msgctxt "#30015"
+msgid "Global theme"
+msgstr ""
+
+msgctxt "#30016"
+msgid "Playback"
+msgstr ""
+
+msgctxt "#30140"
+msgid "Global theme folder"
+msgstr ""
+
+msgctxt "#30141"
+msgid "Every audio file in this folder is part of the global theme. It plays outside the video library, and inside it when no other theme applies. Going to the global theme and fading it out to silence use the normal fades; going from it to a library theme uses the switch fades. Leave empty for no global theme."
+msgstr ""
+
+msgctxt "#30142"
+msgid "Global theme order"
+msgstr ""
+
+msgctxt "#30143"
+msgid "Loop global theme"
+msgstr ""
+
+msgctxt "#30144"
+msgid "Start global theme at a random position"
+msgstr ""
+
+msgctxt "#30145"
+msgid "When returning to the global theme"
+msgstr ""
+
+msgctxt "#30146"
+msgid "Resume where it left off"
+msgstr ""
+
+msgctxt "#30147"
+msgid "Start a new track"
+msgstr ""
+
+msgctxt "#30148"
+msgid "Random shuffles the files in the folder, In order plays them alphabetically."
+msgstr ""
+
+msgctxt "#30149"
+msgid "Repeat all tracks when the last one ends. Recommended, otherwise the background goes silent."
+msgstr ""
+
+msgctxt "#30150"
+msgid "After the library or a pause took over, continue the same track from the same point, or pick a new track."
+msgstr ""
+
+msgctxt "#30151"
+msgid "Enable global theme"
+msgstr ""
+
+msgctxt "#30152"
+msgid "When off, the global theme is ignored and the add-on works as if no global folder was set: the library theme fades out and pauses outside the library, and nothing plays when no library theme applies."
 msgstr ""

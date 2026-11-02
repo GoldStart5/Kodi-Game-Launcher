@@ -172,6 +172,7 @@ class MpvThemePlayer(threading.Thread):
         self._want_key = None
         self._want_files = []
         self._want_active = False
+        self._want_global = False
 
         self._proc = None
         self._tr = None
@@ -189,13 +190,18 @@ class MpvThemePlayer(threading.Thread):
         self._reset_state()
 
     # ------------------------------------------------------------------ public API
-    def set_target(self, key, files, active):
-        """Tell the player which theme should play and whether it should be audible."""
+    def set_target(self, key, files, active, is_global=False):
+        """Tell the player which theme should play and whether it should be audible.
+
+        ``is_global`` marks the global theme: it has its own loop/order/start settings, and
+        going *to* it uses the normal fades (a library theme following it uses the switch fades).
+        """
         with self._lock:
             changed = key != self._want_key or bool(active) != self._want_active
             self._want_key = key
             self._want_files = list(files) if key is not None else []
             self._want_active = bool(active)
+            self._want_global = bool(is_global) and key is not None
         if changed:
             self._wake.set()
 
@@ -248,6 +254,10 @@ class MpvThemePlayer(threading.Thread):
         self._count = 0
         self._applied_loop = None
         self._switch_in = False   # next fade-in belongs to a theme-to-theme switch
+        self._cur_global = False  # the loaded theme is the global theme
+        self._cur_full = []       # full play order of the loaded global theme
+        self._cur_offset = 0      # index in _cur_full where the loaded playlist starts
+        self._resume = None       # (key, full order, index, seconds) saved when leaving the global theme
         self._load_time = 0.0
         self._idle_hits = 0
         self._next_poll = 0.0
@@ -256,6 +266,7 @@ class MpvThemePlayer(threading.Thread):
         cfg = self._get_cfg()
         with self._lock:
             key, files, active = self._want_key, self._want_files, self._want_active
+            want_global = self._want_global
 
         if key is None and self._proc is None:
             return False
@@ -265,13 +276,14 @@ class MpvThemePlayer(threading.Thread):
         if key != self._key:
             audible = self._loaded and not self._finished and not self._paused and self._vol > 0.05
             if audible:
-                # Fade the old theme out first. When another theme follows, the
-                # "switch" fades are used; fading to silence uses the normal fade-out.
-                switching = key is not None
+                # Fade the old theme out first. The "switch" fades are used whenever a library
+                # theme follows (library to library, and global to library). Fading to silence,
+                # and going to the global theme, use the normal fades.
+                switching = key is not None and not want_global
                 self._switch_in = switching
                 self._fade_to(0.0, cfg, dt, cfg.switch_fade_out_ms if switching else cfg.fade_out_ms)
                 return True
-            self._swap(key, files, active, cfg, now)
+            self._swap(key, files, active, cfg, now, want_global)
 
         playable = self._loaded and not self._finished
         if active and playable and self._paused:
@@ -286,29 +298,76 @@ class MpvThemePlayer(threading.Thread):
         if self._loaded and not active and not self._paused and self._vol <= 0.05:
             self._ok(self.command('set_property', 'pause', True))
             self._paused = True
-        if self._loaded and self._applied_loop != cfg.loop:
+        if self._loaded and self._applied_loop != self._loop_wanted(cfg):
             self._apply_loop(cfg)
         self._poll_end(now)
         return moved or abs(target - self._vol) > 0.01
 
-    def _swap(self, key, files, active, cfg, now):
+    def _loop_wanted(self, cfg):
+        return cfg.global_loop if self._cur_global else cfg.loop
+
+    def _save_resume(self):
+        """Remember where the global theme is, so it can continue when we come back to it."""
+        self._resume = None
+        if not (self._cur_global and self._cur_full and self._loaded and not self._finished):
+            return
+        pos = self.command('get_property', 'time-pos')
+        idx = self.command('get_property', 'playlist-pos')
+        if not (self._ok(pos) and self._ok(idx)):
+            return
+        seconds, index = pos.get('data'), idx.get('data')
+        if not isinstance(seconds, (int, float)) or isinstance(index, bool) or not isinstance(index, int):
+            return
+        full_index = (self._cur_offset + index) % len(self._cur_full)
+        self._resume = (self._key, list(self._cur_full), full_index, float(seconds))
+
+    def _take_resume(self, key, files, cfg):
+        saved, self._resume = self._resume, None
+        if cfg.global_resume_mode != 0 or not saved:
+            return None
+        saved_key, full, index, seconds = saved
+        if saved_key != key or sorted(full) != sorted(files):
+            return None
+        return list(full), index, seconds
+
+    def _swap(self, key, files, active, cfg, now, is_global=False):
         """Replace whatever is loaded with the requested theme (mpv is silent here)."""
+        if self._cur_global and self._loaded:
+            self._save_resume()         # leaving the global theme: remember its position
         if self._vol > 0:
             self._set_volume(0.0)
         if not active:
             self._switch_in = False     # it will be resumed later with the normal fade-in
         self._key = key
         self._finished = False
+        self._cur_global = bool(is_global) and bool(files)
+        self._cur_full = []
+        self._cur_offset = 0
         if not files:
             if self._loaded:
                 self.command('stop')
             self._loaded = False
             return
 
-        ordered = list(files)
-        if cfg.selection_mode == SELECT_RANDOM:
-            random.shuffle(ordered)
-        start = 'start=%d%%' % random.randint(5, 70) if cfg.random_start else None
+        full = list(files)
+        index = 0
+        start = None
+        resumed = self._take_resume(key, full, cfg) if is_global else None
+        if resumed:
+            full, index, seconds = resumed
+            start = 'start=%.2f' % seconds
+        else:
+            mode = cfg.global_selection_mode if is_global else cfg.selection_mode
+            if mode == SELECT_RANDOM:
+                random.shuffle(full)
+            if cfg.global_random_start if is_global else cfg.random_start:
+                start = 'start=%d%%' % random.randint(5, 70)
+        # The part of the order that follows the start point is queued; with looping the
+        # tracks before it are queued after it, so the whole set repeats.
+        loop = cfg.global_loop if is_global else cfg.loop
+        ordered = full[index:] + (full[:index] if loop else [])
+        self._cur_full = full if is_global else []
+        self._cur_offset = index
 
         if not self._loadfile(ordered[0], 'replace', start):
             self._log('mpv could not load %s' % ordered[0])
@@ -353,9 +412,10 @@ class MpvThemePlayer(threading.Thread):
 
     def _apply_loop(self, cfg):
         single = self._count <= 1
-        self._ok(self.command('set_property', 'loop-file', 'inf' if (single and cfg.loop) else 'no'))
-        self._ok(self.command('set_property', 'loop-playlist', 'inf' if (not single and cfg.loop) else 'no'))
-        self._applied_loop = cfg.loop
+        loop = self._loop_wanted(cfg)
+        self._ok(self.command('set_property', 'loop-file', 'inf' if (single and loop) else 'no'))
+        self._ok(self.command('set_property', 'loop-playlist', 'inf' if (not single and loop) else 'no'))
+        self._applied_loop = loop
 
     def _poll_end(self, now):
         if not self._loaded or self._finished or self._paused or now < self._next_poll:

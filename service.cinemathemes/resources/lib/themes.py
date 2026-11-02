@@ -9,6 +9,7 @@ from . import paths
 from .common import debug, log
 
 _CACHE_TTL = 60.0
+ANY_AUDIO = '*'
 
 
 def natural_key(text):
@@ -48,7 +49,8 @@ class ThemeFinder(object):
         except Exception as exc:
             debug('Cannot list %s: %s' % (real, exc))
             return []
-        hits = [n for n in names if kw in n.lower() and n.lower().endswith(paths.AUDIO_EXTENSIONS)]
+        # kw == ANY_AUDIO matches every audio file (used for the global theme folder)
+        hits = [n for n in names if (kw == ANY_AUDIO or kw in n.lower()) and n.lower().endswith(paths.AUDIO_EXTENSIONS)]
         hits.sort(key=natural_key)
         found = [paths.join(real, n) for n in hits]
         debug('Theme scan %s -> %d file(s)' % (real, len(found)))

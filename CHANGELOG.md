@@ -2,6 +2,10 @@
 
 ## Addon updates since 3.0.0
 
+- **Home Waves Overlay 1.1.0** added to the repository: a transparent animated overlay for the Kodi home screen with several styles and colour palettes.
+- **Cinema Themes 1.2.2:** on/off switch for the global theme.
+- **Cinema Themes 1.2.1:** going from the global theme to a library theme uses the switch fades.
+- **Cinema Themes 1.2.0:** a global theme folder replaces the old fallback root theme settings. It plays outside the library and whenever no other theme applies, with its own order, loop, random start and resume options. If you used the old root theme settings, set up the global theme folder instead.
 - **Theme & Trailer Grabber 1.0.5** added to the repository: search YouTube for a movie or show's theme or trailer and download it into the title's folder.
 - **Cinema Themes 1.1.1:** a show keeps its theme after you leave its seasons or episodes, until another show is focused.
 - **IGDB + SteamGridDB Game Scraper 1.3.1:** new defaults. IGDB artworks and screenshots are now added to the fanart list, with 25 slots reserved for them and a maximum of 50 fanart images.

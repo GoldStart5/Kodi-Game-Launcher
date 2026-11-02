@@ -51,7 +51,11 @@ class Config(object):
         self.fade_outside_library = gb('fade_outside_library')
         self.switch_delay = max(0, gi('switch_delay_ms')) / 1000.0
 
-        self.root_movies = gs('root_movies').strip()
-        self.root_tvshows = gs('root_tvshows').strip()
+        self.global_enabled = gb('global_enabled')
+        self.global_folder = gs('global_folder').strip()
+        self.global_selection_mode = gi('global_selection_mode')
+        self.global_loop = gb('global_loop')
+        self.global_random_start = gb('global_random_start')
+        self.global_resume_mode = gi('global_resume_mode')   # 0 = resume, 1 = new track
 
         self.debug = gb('debug_logging')

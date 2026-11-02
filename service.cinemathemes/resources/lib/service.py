@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 """The Kodi side: watches what the user is looking at and tells the player what to do."""
-import os
 import time
 import traceback
 from collections import namedtuple
@@ -13,7 +12,7 @@ from .common import ADDON_ID, Config, debug, log, set_debug
 from .focus import FocusWatcher
 from .library import Library
 from .mpv_player import MpvThemePlayer
-from .themes import ThemeFinder, make_playable
+from .themes import ANY_AUDIO, ThemeFinder, make_playable
 
 TICK = 0.15
 
@@ -78,6 +77,7 @@ class ThemeService(object):
         self._last_root = {}
         self._last_browse = None   # (media, dbtype, dbid) of the last focused library item
         self._sticky = None
+        self._global_cache = None   # (timestamp, (key, files) or None)
 
     # ------------------------------------------------------------------ main loop
     def run(self):
@@ -107,6 +107,7 @@ class ThemeService(object):
         self.library.clear()
         self._last_root.clear()
         self._sticky = None
+        self._global_cache = None
         self._committed_sig = None          # force the theme to be resolved again
         log('Settings reloaded')
 
@@ -136,13 +137,51 @@ class ThemeService(object):
 
         focused = self.focus.has_focus() if cfg.pause_on_focus_loss else True
         playing = cfg.fade_on_playback and xbmc.getCondVisibility('Player.HasMedia')
+        audible = bool(focused and not playing)
+
         if ui.kind == 'other':
-            context_ok = not cfg.fade_outside_library
-        else:
-            context_ok = self._committed_kind in ('browse', 'info')
+            # Outside the video library. Once that has settled, the global theme (if there is
+            # one) plays here; without it the library theme fades out and pauses.
+            if self._committed_kind == 'other':
+                glob = self._global_target()
+                if glob:
+                    self.player.set_target(glob[0], glob[1], audible, True)
+                    return
+            key, files = self._target
+            self.player.set_target(key, files, audible and not cfg.fade_outside_library)
+            return
+
+        if self._committed_kind not in ('browse', 'info'):
+            return      # the selection has not settled yet: keep whatever is playing
 
         key, files = self._target
-        self.player.set_target(key, files, bool(focused and not playing and context_ok))
+        is_global = False
+        if key is None:
+            # nothing in the library applies here: the global theme fills in
+            glob = self._global_target()
+            if glob:
+                key, files, is_global = glob[0], glob[1], True
+        self.player.set_target(key, files, audible, is_global)
+
+    def _global_target(self):
+        """(key, files) of the global theme folder, or None when it is not set or empty."""
+        now = time.monotonic()
+        cached = self._global_cache
+        if cached and now - cached[0] < 30.0:
+            return cached[1]
+        result = None
+        folder = self.cfg.global_folder
+        if folder and self.cfg.global_enabled:
+            real = paths.translate(folder)
+            files = self.finder.find(real, ANY_AUDIO)
+            if files:
+                key, playable = self._finish('global:' + paths.norm(real), files)
+                if key is not None:
+                    result = (key, playable)
+            else:
+                debug('Global theme folder has no audio files: %s' % real)
+        self._global_cache = (now, result)
+        return result
 
     def _commit(self, sig, ui):
         self._committed_sig = sig
@@ -244,12 +283,7 @@ class ThemeService(object):
             if last:
                 return self._finish(last[0], last[1])
 
-        # 3. optional fallback from the settings
-        fallback = self._fallback(media)
-        if fallback:
-            return self._finish(*fallback)
-
-        # 4. no root theme at all: the focused movie or show plays its own theme
+        # 3. no root theme at all: the focused movie or show plays its own theme
         if ui.kind == 'browse' and info and info.folder and ui.dbtype in ('movie', 'tvshow'):
             files = self.finder.find(info.folder, cfg.keyword)
             if files:
@@ -277,15 +311,3 @@ class ThemeService(object):
         if not playable:
             return (None, [])
         return (key, playable)
-
-    def _fallback(self, media):
-        configured = self.cfg.root_movies if media == 'movies' else self.cfg.root_tvshows
-        if not configured:
-            return None
-        real = paths.translate(configured)
-        if real.lower().endswith(paths.AUDIO_EXTENSIONS):
-            if os.path.isfile(real) or '://' in real:
-                return (paths.norm(real), [real])
-            return None
-        files = self.finder.find(real, self.cfg.keyword)
-        return (paths.norm(real), files) if files else None

@@ -237,21 +237,6 @@ v1.0.0
     </assets>
   </extension>
 </addon>
-<addon id="script.service.homewaves" name="Home Waves Overlay" version="1.1.0" provider-name="you">
-    <requires>
-        <import addon="xbmc.python" version="3.0.0"/>
-    </requires>
-    <extension point="xbmc.service" library="service.py" start="login"/>
-    <extension point="xbmc.addon.metadata">
-        <summary lang="en_GB">Transparent animated overlay for the Kodi home screen</summary>
-        <description lang="en_GB">Adds a smooth, transparent, PlayStation-style animation on top of the Home screen: waves, silky ribbons, bokeh, aurora, glow orbs, light rays or stardust, in single or multi-colour palettes, with millisecond-controlled fade in/out. Does not steal focus or input and rebuilds itself after skin changes.</description>
-        <platform>all</platform>
-        <license>MIT</license>
-        <assets>
-            <icon>icon.png</icon>
-        </assets>
-    </extension>
-</addon>
 <addon id="script.service.homewaves" name="Home Waves Overlay" version="1.1.1" provider-name="GoldStart5">
     <requires>
         <import addon="xbmc.python" version="3.0.0"/>

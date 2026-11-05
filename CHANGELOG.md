@@ -3,7 +3,6 @@
 ## Addon updates since 3.0.0
 
 - **Cinema Themes 1.2.3:** new toggles for the root theme, for the global theme replacing a missing root theme, and for hovering an item to play its own theme.
-- **Home Waves Overlay 1.1.1** added to the repository: a transparent animated overlay for the Kodi home screen with several styles and colour palettes.
 - **Cinema Themes 1.2.2:** on/off switch for the global theme.
 - **Cinema Themes 1.2.1:** going from the global theme to a library theme uses the switch fades.
 - **Cinema Themes 1.2.0:** a global theme folder replaces the old fallback root theme settings. It plays outside the library and whenever no other theme applies, with its own order, loop, random start and resume options. If you used the old root theme settings, set up the global theme folder instead.

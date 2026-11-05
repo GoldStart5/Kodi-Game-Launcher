@@ -49,7 +49,6 @@ Games\
 | **Game Launcher** `service.gamelauncher` | Detects `Play.avi`, shows a fanart splash and launches the game's shortcut. Windows only. |
 | **Cinema Themes** `service.cinemathemes` | *Optional.* Plays theme music for your movie, show and game pages through `mpv`. |
 | **Theme & Trailer Grabber** `plugin.program.ytgrabber` | *Optional.* Finds and downloads themes and trailers for your library with yt-dlp. |
-| **Home Waves Overlay** `script.service.homewaves` | *Optional.* Adds a transparent animated overlay, such as waves, ribbons, bokeh or aurora, on top of the Kodi home screen. |
 
 ## 🚀 Install
 

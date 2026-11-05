@@ -49,6 +49,7 @@ Games\
 | **Game Launcher** `service.gamelauncher` | Detects `Play.avi`, shows a fanart splash and launches the game's shortcut. Windows only. |
 | **Cinema Themes** `service.cinemathemes` | *Optional.* Plays theme music for your movie, show and game pages through `mpv`. |
 | **Theme & Trailer Grabber** `plugin.program.ytgrabber` | *Optional.* Finds and downloads themes and trailers for your library with yt-dlp. |
+| **PS2 Overlays** `script.service.ps2overlays` | *Optional.* Adds transparent PlayStation 2 style animations to the Kodi home screen: a crystal clock, floating cubes and orbiting rings. |
 
 ## 🚀 Install
 

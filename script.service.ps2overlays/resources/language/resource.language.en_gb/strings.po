@@ -1,0 +1,237 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Language: en_GB\n"
+
+msgctxt "#30003"
+msgid "Colour"
+msgstr ""
+
+msgctxt "#30004"
+msgid "Opacity"
+msgstr ""
+
+msgctxt "#30005"
+msgid "Animation speed"
+msgstr ""
+
+msgctxt "#30006"
+msgid "Fading"
+msgstr ""
+
+msgctxt "#30007"
+msgid "Fade in (milliseconds)"
+msgstr ""
+
+msgctxt "#30008"
+msgid "Fade out (milliseconds)"
+msgstr ""
+
+msgctxt "#30009"
+msgid "Position"
+msgstr ""
+
+msgctxt "#30010"
+msgid "Enable clock animation"
+msgstr ""
+
+msgctxt "#30011"
+msgid "Enable cubes animation"
+msgstr ""
+
+msgctxt "#30012"
+msgid "Enable rings animation"
+msgstr ""
+
+msgctxt "#30020"
+msgid "Clock"
+msgstr ""
+
+msgctxt "#30021"
+msgid "Cubes"
+msgstr ""
+
+msgctxt "#30022"
+msgid "Rings"
+msgstr ""
+
+msgctxt "#30030"
+msgid "Clock size"
+msgstr ""
+
+msgctxt "#30032"
+msgid "Dark backdrop behind the clock"
+msgstr ""
+
+msgctxt "#30033"
+msgid "Horizontal position (0 = left, 100 = right)"
+msgstr ""
+
+msgctxt "#30034"
+msgid "Vertical position (0 = top, 100 = bottom)"
+msgstr ""
+
+msgctxt "#30040"
+msgid "Number of cubes"
+msgstr ""
+
+msgctxt "#30041"
+msgid "Cube size"
+msgstr ""
+
+msgctxt "#30050"
+msgid "Ring size"
+msgstr ""
+
+msgctxt "#30100"
+msgid "PS2 original (purple to cyan)"
+msgstr ""
+
+msgctxt "#30101"
+msgid "PlayStation blue"
+msgstr ""
+
+msgctxt "#30102"
+msgid "White"
+msgstr ""
+
+msgctxt "#30103"
+msgid "Purple"
+msgstr ""
+
+msgctxt "#30104"
+msgid "Teal"
+msgstr ""
+
+msgctxt "#30105"
+msgid "Gold"
+msgstr ""
+
+msgctxt "#30106"
+msgid "Pink"
+msgstr ""
+
+msgctxt "#30107"
+msgid "Green"
+msgstr ""
+
+msgctxt "#30108"
+msgid "Orange"
+msgstr ""
+
+msgctxt "#30109"
+msgid "Red"
+msgstr ""
+
+msgctxt "#30110"
+msgid "Ice"
+msgstr ""
+
+msgctxt "#30200"
+msgid "PS2 blue + white"
+msgstr ""
+
+msgctxt "#30201"
+msgid "PlayStation blue"
+msgstr ""
+
+msgctxt "#30202"
+msgid "White"
+msgstr ""
+
+msgctxt "#30203"
+msgid "Purple"
+msgstr ""
+
+msgctxt "#30204"
+msgid "Teal"
+msgstr ""
+
+msgctxt "#30205"
+msgid "Gold"
+msgstr ""
+
+msgctxt "#30206"
+msgid "Pink"
+msgstr ""
+
+msgctxt "#30207"
+msgid "Green"
+msgstr ""
+
+msgctxt "#30208"
+msgid "Orange"
+msgstr ""
+
+msgctxt "#30209"
+msgid "Red"
+msgstr ""
+
+msgctxt "#30210"
+msgid "Multi: Aurora"
+msgstr ""
+
+msgctxt "#30211"
+msgid "Multi: Sunset"
+msgstr ""
+
+msgctxt "#30212"
+msgid "Multi: Neon"
+msgstr ""
+
+msgctxt "#30300"
+msgid "PlayStation blue"
+msgstr ""
+
+msgctxt "#30301"
+msgid "White"
+msgstr ""
+
+msgctxt "#30302"
+msgid "Purple"
+msgstr ""
+
+msgctxt "#30303"
+msgid "Teal"
+msgstr ""
+
+msgctxt "#30304"
+msgid "Gold"
+msgstr ""
+
+msgctxt "#30305"
+msgid "Pink"
+msgstr ""
+
+msgctxt "#30306"
+msgid "Green"
+msgstr ""
+
+msgctxt "#30307"
+msgid "Orange"
+msgstr ""
+
+msgctxt "#30308"
+msgid "Red"
+msgstr ""
+
+msgctxt "#30309"
+msgid "Ice"
+msgstr ""
+
+msgctxt "#30310"
+msgid "Multi: PS2 blue + white"
+msgstr ""
+
+msgctxt "#30311"
+msgid "Multi: Aurora"
+msgstr ""
+
+msgctxt "#30312"
+msgid "Multi: Sunset"
+msgstr ""
+
+msgctxt "#30313"
+msgid "Multi: Neon"
+msgstr ""
+

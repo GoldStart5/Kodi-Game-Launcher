@@ -1,0 +1,315 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings version="1">
+    <section id="script.service.ps2overlays">
+        <category id="clock" label="30020" help="">
+            <group id="1">
+                <setting id="clock_enabled" type="boolean" label="30010" help="">
+                    <level>0</level>
+                    <default>true</default>
+                    <control type="toggle"/>
+                </setting>
+                <setting id="clock_color" type="integer" label="30003" help="">
+                    <level>0</level>
+                    <default>0</default>
+                    <constraints>
+                        <options>
+                            <option label="30100">0</option>
+                            <option label="30101">1</option>
+                            <option label="30102">2</option>
+                            <option label="30103">3</option>
+                            <option label="30104">4</option>
+                            <option label="30105">5</option>
+                            <option label="30106">6</option>
+                            <option label="30107">7</option>
+                            <option label="30108">8</option>
+                            <option label="30109">9</option>
+                            <option label="30110">10</option>
+                        </options>
+                    </constraints>
+                    <control type="list" format="string">
+                        <heading>30003</heading>
+                    </control>
+                </setting>
+                <setting id="clock_opacity" type="integer" label="30004" help="">
+                    <level>0</level>
+                    <default>100</default>
+                    <constraints>
+                        <minimum>10</minimum>
+                        <step>5</step>
+                        <maximum>100</maximum>
+                    </constraints>
+                    <control type="slider" format="percentage">
+                        <popup>false</popup>
+                    </control>
+                </setting>
+                <setting id="clock_speed" type="integer" label="30005" help="">
+                    <level>0</level>
+                    <default>100</default>
+                    <constraints>
+                        <minimum>25</minimum>
+                        <step>25</step>
+                        <maximum>300</maximum>
+                    </constraints>
+                    <control type="slider" format="percentage">
+                        <popup>false</popup>
+                    </control>
+                </setting>
+                <setting id="clock_size" type="integer" label="30030" help="">
+                    <level>0</level>
+                    <default>80</default>
+                    <constraints>
+                        <minimum>30</minimum>
+                        <step>5</step>
+                        <maximum>150</maximum>
+                    </constraints>
+                    <control type="slider" format="percentage">
+                        <popup>false</popup>
+                    </control>
+                </setting>
+                <setting id="clock_shade" type="integer" label="30032" help="">
+                    <level>0</level>
+                    <default>45</default>
+                    <constraints>
+                        <minimum>0</minimum>
+                        <step>5</step>
+                        <maximum>100</maximum>
+                    </constraints>
+                    <control type="slider" format="percentage">
+                        <popup>false</popup>
+                    </control>
+                </setting>
+            </group>
+            <group id="2" label="30009">
+                <setting id="clock_pos_x" type="integer" label="30033" help="">
+                    <level>0</level>
+                    <default>50</default>
+                    <constraints>
+                        <minimum>0</minimum>
+                        <step>1</step>
+                        <maximum>100</maximum>
+                    </constraints>
+                    <control type="slider" format="percentage">
+                        <popup>false</popup>
+                    </control>
+                </setting>
+                <setting id="clock_pos_y" type="integer" label="30034" help="">
+                    <level>0</level>
+                    <default>50</default>
+                    <constraints>
+                        <minimum>0</minimum>
+                        <step>1</step>
+                        <maximum>100</maximum>
+                    </constraints>
+                    <control type="slider" format="percentage">
+                        <popup>false</popup>
+                    </control>
+                </setting>
+            </group>
+        </category>
+        <category id="cubes" label="30021" help="">
+            <group id="1">
+                <setting id="cubes_enabled" type="boolean" label="30011" help="">
+                    <level>0</level>
+                    <default>true</default>
+                    <control type="toggle"/>
+                </setting>
+                <setting id="cubes_color" type="integer" label="30003" help="">
+                    <level>0</level>
+                    <default>0</default>
+                    <constraints>
+                        <options>
+                            <option label="30200">0</option>
+                            <option label="30201">1</option>
+                            <option label="30202">2</option>
+                            <option label="30203">3</option>
+                            <option label="30204">4</option>
+                            <option label="30205">5</option>
+                            <option label="30206">6</option>
+                            <option label="30207">7</option>
+                            <option label="30208">8</option>
+                            <option label="30209">9</option>
+                            <option label="30210">10</option>
+                            <option label="30211">11</option>
+                            <option label="30212">12</option>
+                        </options>
+                    </constraints>
+                    <control type="list" format="string">
+                        <heading>30003</heading>
+                    </control>
+                </setting>
+                <setting id="cubes_count" type="integer" label="30040" help="">
+                    <level>0</level>
+                    <default>16</default>
+                    <constraints>
+                        <minimum>3</minimum>
+                        <step>1</step>
+                        <maximum>40</maximum>
+                    </constraints>
+                    <control type="slider" format="integer">
+                        <popup>false</popup>
+                    </control>
+                </setting>
+                <setting id="cubes_size" type="integer" label="30041" help="">
+                    <level>0</level>
+                    <default>100</default>
+                    <constraints>
+                        <minimum>30</minimum>
+                        <step>10</step>
+                        <maximum>250</maximum>
+                    </constraints>
+                    <control type="slider" format="percentage">
+                        <popup>false</popup>
+                    </control>
+                </setting>
+                <setting id="cubes_opacity" type="integer" label="30004" help="">
+                    <level>0</level>
+                    <default>100</default>
+                    <constraints>
+                        <minimum>10</minimum>
+                        <step>5</step>
+                        <maximum>100</maximum>
+                    </constraints>
+                    <control type="slider" format="percentage">
+                        <popup>false</popup>
+                    </control>
+                </setting>
+                <setting id="cubes_speed" type="integer" label="30005" help="">
+                    <level>0</level>
+                    <default>100</default>
+                    <constraints>
+                        <minimum>25</minimum>
+                        <step>25</step>
+                        <maximum>300</maximum>
+                    </constraints>
+                    <control type="slider" format="percentage">
+                        <popup>false</popup>
+                    </control>
+                </setting>
+            </group>
+        </category>
+        <category id="rings" label="30022" help="">
+            <group id="1">
+                <setting id="rings_enabled" type="boolean" label="30012" help="">
+                    <level>0</level>
+                    <default>true</default>
+                    <control type="toggle"/>
+                </setting>
+                <setting id="rings_color" type="integer" label="30003" help="">
+                    <level>0</level>
+                    <default>0</default>
+                    <constraints>
+                        <options>
+                            <option label="30300">0</option>
+                            <option label="30301">1</option>
+                            <option label="30302">2</option>
+                            <option label="30303">3</option>
+                            <option label="30304">4</option>
+                            <option label="30305">5</option>
+                            <option label="30306">6</option>
+                            <option label="30307">7</option>
+                            <option label="30308">8</option>
+                            <option label="30309">9</option>
+                            <option label="30310">10</option>
+                            <option label="30311">11</option>
+                            <option label="30312">12</option>
+                            <option label="30313">13</option>
+                        </options>
+                    </constraints>
+                    <control type="list" format="string">
+                        <heading>30003</heading>
+                    </control>
+                </setting>
+                <setting id="rings_opacity" type="integer" label="30004" help="">
+                    <level>0</level>
+                    <default>100</default>
+                    <constraints>
+                        <minimum>10</minimum>
+                        <step>5</step>
+                        <maximum>100</maximum>
+                    </constraints>
+                    <control type="slider" format="percentage">
+                        <popup>false</popup>
+                    </control>
+                </setting>
+                <setting id="rings_speed" type="integer" label="30005" help="">
+                    <level>0</level>
+                    <default>100</default>
+                    <constraints>
+                        <minimum>25</minimum>
+                        <step>25</step>
+                        <maximum>300</maximum>
+                    </constraints>
+                    <control type="slider" format="percentage">
+                        <popup>false</popup>
+                    </control>
+                </setting>
+                <setting id="rings_size" type="integer" label="30050" help="">
+                    <level>0</level>
+                    <default>30</default>
+                    <constraints>
+                        <minimum>30</minimum>
+                        <step>5</step>
+                        <maximum>150</maximum>
+                    </constraints>
+                    <control type="slider" format="percentage">
+                        <popup>false</popup>
+                    </control>
+                </setting>
+            </group>
+            <group id="2" label="30009">
+                <setting id="rings_pos_x" type="integer" label="30033" help="">
+                    <level>0</level>
+                    <default>50</default>
+                    <constraints>
+                        <minimum>0</minimum>
+                        <step>1</step>
+                        <maximum>100</maximum>
+                    </constraints>
+                    <control type="slider" format="percentage">
+                        <popup>false</popup>
+                    </control>
+                </setting>
+                <setting id="rings_pos_y" type="integer" label="30034" help="">
+                    <level>0</level>
+                    <default>50</default>
+                    <constraints>
+                        <minimum>0</minimum>
+                        <step>1</step>
+                        <maximum>100</maximum>
+                    </constraints>
+                    <control type="slider" format="percentage">
+                        <popup>false</popup>
+                    </control>
+                </setting>
+            </group>
+        </category>
+        <category id="fading" label="30006" help="">
+            <group id="1">
+                <setting id="fade_in" type="integer" label="30007" help="">
+                    <level>0</level>
+                    <default>1000</default>
+                    <constraints>
+                        <minimum>0</minimum>
+                        <step>250</step>
+                        <maximum>10000</maximum>
+                    </constraints>
+                    <control type="slider" format="integer">
+                        <popup>false</popup>
+                    </control>
+                </setting>
+                <setting id="fade_out" type="integer" label="30008" help="">
+                    <level>0</level>
+                    <default>500</default>
+                    <constraints>
+                        <minimum>0</minimum>
+                        <step>250</step>
+                        <maximum>10000</maximum>
+                    </constraints>
+                    <control type="slider" format="integer">
+                        <popup>false</popup>
+                    </control>
+                </setting>
+            </group>
+        </category>
+    </section>
+</settings>

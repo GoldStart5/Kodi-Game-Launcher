@@ -43,6 +43,10 @@ msgctxt "#30012"
 msgid "Enable rings animation"
 msgstr ""
 
+msgctxt "#30013"
+msgid "Enable light sweep animation"
+msgstr ""
+
 msgctxt "#30020"
 msgid "Clock"
 msgstr ""
@@ -53,6 +57,10 @@ msgstr ""
 
 msgctxt "#30022"
 msgid "Rings"
+msgstr ""
+
+msgctxt "#30023"
+msgid "Light sweep"
 msgstr ""
 
 msgctxt "#30030"
@@ -71,6 +79,10 @@ msgctxt "#30034"
 msgid "Vertical position (0 = top, 100 = bottom)"
 msgstr ""
 
+msgctxt "#30035"
+msgid "Shine the bar of the current hour"
+msgstr ""
+
 msgctxt "#30040"
 msgid "Number of cubes"
 msgstr ""
@@ -81,6 +93,22 @@ msgstr ""
 
 msgctxt "#30050"
 msgid "Ring size"
+msgstr ""
+
+msgctxt "#30051"
+msgid "Streak size"
+msgstr ""
+
+msgctxt "#30052"
+msgid "Top streak height (0 = top edge, 100 = bottom edge)"
+msgstr ""
+
+msgctxt "#30053"
+msgid "Bottom streak height (0 = top edge, 100 = bottom edge)"
+msgstr ""
+
+msgctxt "#30054"
+msgid "Drift towards the corner (percent of screen height)"
 msgstr ""
 
 msgctxt "#30100"
@@ -233,5 +261,37 @@ msgstr ""
 
 msgctxt "#30313"
 msgid "Multi: Neon"
+msgstr ""
+
+msgctxt "#30400"
+msgid "Ice white"
+msgstr ""
+
+msgctxt "#30401"
+msgid "PlayStation blue"
+msgstr ""
+
+msgctxt "#30402"
+msgid "Purple"
+msgstr ""
+
+msgctxt "#30403"
+msgid "Teal"
+msgstr ""
+
+msgctxt "#30404"
+msgid "Gold"
+msgstr ""
+
+msgctxt "#30405"
+msgid "Pink"
+msgstr ""
+
+msgctxt "#30406"
+msgid "Orange"
+msgstr ""
+
+msgctxt "#30407"
+msgid "Green"
 msgstr ""
 

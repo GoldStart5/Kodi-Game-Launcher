@@ -252,6 +252,21 @@ v1.0.0
         </assets>
     </extension>
 </addon>
+<addon id="script.service.ps2overlays" name="PS2 Overlays" version="1.1.2" provider-name="GoldStart5">
+    <requires>
+        <import addon="xbmc.python" version="3.0.0"/>
+    </requires>
+    <extension point="xbmc.service" library="service.py" start="login"/>
+    <extension point="xbmc.addon.metadata">
+        <summary lang="en_GB">PlayStation 2 style clock, cubes and rings overlays for the Kodi home screen</summary>
+        <description lang="en_GB">Transparent PlayStation 2 style animations: the crystal clock (the current hour bar shines), floating glass cubes, orbiting rings and a cinematic double light sweep. Each animation with its own on/off switch and settings (clock with hour shine, cubes, rings, light sweep). Fade in/out times are global. Does not steal focus or input.</description>
+        <platform>all</platform>
+        <license>MIT</license>
+        <assets>
+            <icon>icon.png</icon>
+        </assets>
+    </extension>
+</addon>
 <addon id="service.cinemathemes" name="Cinema Themes" version="1.0.4" provider-name="GoldStart5">
   <requires>
     <import addon="xbmc.python" version="3.0.1"/>

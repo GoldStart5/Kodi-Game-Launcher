@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """PS2 Overlays - PlayStation 2 style clock, cubes and rings in one service.
 
-Three independent transparent overlays are drawn on the Kodi Home window
+Independent transparent overlays are drawn on the Kodi Home window
 (Window 10000) as non-focusable image controls, so input is never affected:
 
   * Clock - twelve translucent crystal bars that tip in 3D and shift from
@@ -9,6 +9,13 @@ Three independent transparent overlays are drawn on the Kodi Home window
   * Cubes - translucent glass cubes crossing the whole screen from random
             directions.
   * Rings - glowing dots circling in orbiting rings.
+  * Light sweep - two slow anamorphic light streaks (top / bottom, opposite
+            directions) drifting behind the others.
+  * Backdrop - the dark shade behind the clock; its own bottom layer.
+
+Layer order (bottom to top): backdrop, light sweep, clock, rings, cubes. When an
+overlay is rebuilt, everything above it is rebuilt too, so the order holds.
+The clock lights the bar of the current hour (12 o'clock = top bar).
 
 Every overlay has its own on/off switch and its own settings (setting ids are
 prefixed clock_ / cubes_ / rings_). Fade in / out times are global. There is no
@@ -31,6 +38,7 @@ ADDON_PATH = ADDON.getAddonInfo('path')
 MEDIA = os.path.join(ADDON_PATH, 'resources', 'media')
 HOME_WINDOW_ID = 10000
 CLOSE_FADE_CAP_MS = 400
+PROP_HOUR = 'ps2overlays.hour'      # 0-11, 0 = 12 o'clock = top bar
 
 
 def log(msg):
@@ -46,6 +54,17 @@ def clamp(v, lo, hi):
     return max(lo, min(hi, v))
 
 
+def set_hour_property():
+    """Publish the current hour (0-11) for the clock's shine layers."""
+    try:
+        h = str(time.localtime().tm_hour % 12)
+        win = xbmcgui.Window(HOME_WINDOW_ID)
+        if win.getProperty(PROP_HOUR) != h:
+            win.setProperty(PROP_HOUR, h)
+    except Exception:
+        pass
+
+
 def skin_signature():
     return (xbmc.getSkinDir(),
             xbmc.getInfoLabel('Skin.CurrentTheme'),
@@ -58,9 +77,11 @@ def skin_signature():
 class Overlay(object):
     """Base class: control life-cycle, fading and settings handling."""
 
-    PREFIX = ''          # 'clock', 'cubes', 'rings'
+    PREFIX = ''          # 'clock', 'cubes', 'rings', ...
     # (key, default, min, max) integer settings, read as <PREFIX>_<key>
     INTS = []
+    # (key, default) boolean settings, read as <PREFIX>_<key>
+    BOOLS = []
     PALETTES = []        # (label, value) - value interpreted by subclass
 
     def __init__(self, mon):
@@ -98,6 +119,11 @@ class Overlay(object):
             except Exception:
                 v = default
             cfg[key] = clamp(v, lo, hi)
+        for key, default in self.BOOLS:
+            try:
+                cfg[key] = a.getSettingBool(p + key)
+            except Exception:
+                cfg[key] = default
         return cfg
 
     def settings_differ(self):
@@ -181,13 +207,14 @@ class Overlay(object):
                       % min(fout, CLOSE_FADE_CAP_MS)))
         return a
 
-    def add(self, image, x, y, w, h, alpha_pct, colour, anims):
+    def add(self, image, x, y, w, h, alpha_pct, colour, anims, extra_cond=None):
         ctrl = xbmcgui.ControlImage(
             int(x), int(y), max(1, int(w)), max(1, int(h)),
             os.path.join(MEDIA, image), 0,
             argb(clamp(alpha_pct, 0, 100), colour))
         self.win.addControl(ctrl)
-        ctrl.setVisibleCondition(self.visible_cond)
+        ctrl.setVisibleCondition(
+            self.visible_cond + (' + ' + extra_cond if extra_cond else ''))
         ctrl.setAnimations(self.fade_anims() +
                            [('conditional', a) for a in anims])
         self.controls.append(ctrl)
@@ -243,11 +270,14 @@ class Overlay(object):
 # ----------------------------------------------------------------------
 class Clock(Overlay):
     PREFIX = 'clock'
-    INTS = [('size', 90, 30, 150), ('shade', 45, 0, 100),
+    INTS = [('size', 80, 30, 150),
             ('pos_x', 50, 0, 100), ('pos_y', 50, 0, 100)]
+    BOOLS = [('shine', True)]
 
     UNITS = 1300.0          # layout units of the artwork (see bars.json)
     LOOP_S = 23.0           # one purple -> cyan -> purple cycle
+    SHINE_TINT = 'F2FAFF'
+    GLEAMS = 4              # gleam bands per bar, travelling inner -> outer end
     PURPLE = '7C7FF0'
     CYAN = '63B5E0'
 
@@ -286,16 +316,11 @@ class Clock(Overlay):
         cx = int(W * c['pos_x'] / 100.0)
         cy = int(H * c['pos_y'] / 100.0)
 
-        # dark backdrop behind the clock
-        if c['shade'] > 0:
-            sd = d * 1.9
-            self.add('shade.png', cx - sd / 2, cy - sd / 2, sd, sd,
-                     c['shade'], '000000', [])
-
         # crystal bars (two colour sets crossfade for the original palette)
         colour = self.PALETTES[c['color']][1]
         sets = ([(self.PURPLE, 100, 0), (self.CYAN, 0, 100)] if colour is None
                 else [(colour, None, None)])
+        zooms = {}
         for tint, f0, f1 in sets:
             for b in self.bars:
                 w = b['w'] * k
@@ -309,9 +334,115 @@ class Clock(Overlay):
                 if f0 is not None:
                     anims.append(self.a_fade(f0, f1, self.LOOP_S / 2))
                 # bar lengths swing between the two sides of the clock
-                anims.append(self.a_zoom(int(100 - 34 * s), int(100 + 34 * s),
-                                         ix, iy, self.LOOP_S * 1.1))
+                zoom = self.a_zoom(int(100 - 34 * s), int(100 + 34 * s),
+                                   ix, iy, self.LOOP_S * 1.1)
+                zooms[b['f']] = (zoom, x, y, w, h)
+                anims.append(zoom)
                 self.add(b['f'], x, y, w, h, op, tint, anims)
+
+        # shine on the bar of the current hour. One set of layers per bar is
+        # built; only the one matching the Home window property is visible
+        # (the service updates it), so hour changes cross-fade smoothly.
+        if c['shine']:
+            set_hour_property()
+            for hour, b in enumerate(self.bars):
+                zoom, x, y, w, h = zooms[b['f']]
+                cond = 'String.IsEqual(Window(Home).Property(%s),%d)' % (PROP_HOUR, hour)
+                # glossy glass, breathing slowly
+                self.add('shine_%02d.png' % hour, x, y, w, h, op * 0.8,
+                         self.SHINE_TINT, [zoom, self.a_fade(55, 100, 2.0)], cond)
+                # sharp gleam running along the bar every ~4 s; the cubic
+                # ease-in pulse makes each band flash briefly, and the
+                # staggered delays turn the bands into a sweep
+                for k in range(self.GLEAMS):
+                    gleam = ('effect=fade start=0 end=100 time=%d tween=cubic '
+                             'easing=in pulse=true condition=true delay=%d'
+                             % (self.dur(2.0), self.dur(0.28 * k)))
+                    self.add('gleam_%02d_%d.png' % (hour, k), x, y, w, h, op,
+                             'FFFFFF', [zoom, gleam], cond)
+
+
+# ----------------------------------------------------------------------
+class Backdrop(Overlay):
+    """Dark shade behind the clock. Own layer, always built first so it sits
+    behind every other overlay. Uses the clock's size / position / darkness
+    settings and follows the clock's on/off switch."""
+    PREFIX = 'backdrop'
+
+    def read(self):
+        a = xbmcaddon.Addon()
+
+        def gi(key, default, lo, hi):
+            try:
+                return clamp(a.getSettingInt(key), lo, hi)
+            except Exception:
+                return default
+        try:
+            on = a.getSettingBool('clock_enabled')
+        except Exception:
+            on = True
+        cfg = {'shade': gi('clock_shade', 45, 0, 100),
+               'size': gi('clock_size', 80, 30, 150),
+               'pos_x': gi('clock_pos_x', 50, 0, 100),
+               'pos_y': gi('clock_pos_y', 50, 0, 100),
+               'fade_in': gi('fade_in', 1000, 0, 10000),
+               'fade_out': gi('fade_out', 500, 0, 10000),
+               'speed': 100}
+        cfg['enabled'] = on and cfg['shade'] > 0
+        return cfg
+
+    def build_content(self, W, H):
+        c = self.cfg
+        d = min(W, H) * c['size'] / 100.0
+        cx = int(W * c['pos_x'] / 100.0)
+        cy = int(H * c['pos_y'] / 100.0)
+        sd = d * 1.9
+        self.add('shade.png', cx - sd / 2, cy - sd / 2, sd, sd,
+                 c['shade'], '000000', [])
+
+
+# ----------------------------------------------------------------------
+class Sweep(Overlay):
+    """Two anamorphic light streaks (top and bottom) gliding across the screen
+    in opposite directions, each off-screen for roughly half of its pass."""
+    PREFIX = 'sweep'
+    INTS = [('size', 100, 30, 200), ('top_y', 8, 0, 100),
+            ('bottom_y', 92, 0, 100), ('drift', 6, 0, 30)]
+    PERIOD_S = 40.0
+    PALETTES = [
+        ('Ice white', 'D6F2FF'),
+        ('PlayStation blue', '4FA3FF'),
+        ('Purple', 'B07CFF'),
+        ('Teal', '3FE0C8'),
+        ('Gold', 'FFC24A'),
+        ('Pink', 'FF6B8A'),
+        ('Orange', 'FF8A3D'),
+        ('Green', '5CE05C'),
+    ]
+
+    def build_content(self, W, H):
+        c = self.cfg
+        op = c['opacity']
+        colour = self.PALETTES[c['color']][1]
+        sw = int(W * 0.9 * c['size'] / 100.0)        # streak width
+        sh = max(8, int(sw * 112 / 1600.0))          # keeps the artwork's ratio
+        g = int(sw * 0.16)                           # hot core of the flare
+        run = W + 3 * sw                             # path length, fully off-screen both ends
+        drift = int(H * c['drift'] / 100.0)
+        # (start x, y, dx, dy, delay in seconds)
+        #   top streak:    left -> right, drifting up towards the top-right corner
+        #   bottom streak: right -> left, drifting down towards the bottom-left corner
+        # The bottom one runs half a cycle later so they never peak together.
+        paths = [(-2 * sw, int(H * c['top_y'] / 100.0), run, -drift, 0.0),
+                 (W + sw, int(H * c['bottom_y'] / 100.0), -run, drift, self.PERIOD_S / 2)]
+        for x0, y0, dx, dy, delay in paths:
+            slide = ('effect=slide start=0,0 end=%d,%d time=%d delay=%d tween=linear '
+                     'loop=true condition=true'
+                     % (dx, dy, self.dur(self.PERIOD_S), self.dur(delay) if delay else 0))
+            self.add('sweep_streak.png', x0, y0 - sh / 2.0, sw, sh, op, colour,
+                     [slide, self.a_fade(70, 100, 3.0)])
+            self.add('glow.png', x0 + sw / 2.0 - g / 2.0, y0 - g / 2.0, g, g,
+                     op * 0.8, colour, [slide, self.a_fade(60, 100, 2.5)])
 
 
 # ----------------------------------------------------------------------
@@ -459,7 +590,8 @@ class Watcher(xbmc.Monitor):
 
 def main():
     mon = Watcher()
-    overlays = [Clock(mon), Rings(mon), Cubes(mon)]
+    # bottom -> top; a rebuilt overlay also rebuilds everything above it
+    overlays = [Backdrop(mon), Sweep(mon), Clock(mon), Rings(mon), Cubes(mon)]
     if mon.waitForAbort(3):
         return
     for ov in overlays:
@@ -478,6 +610,7 @@ def main():
                     ov.need = True
                     ov.settings_changed = True
 
+        set_hour_property()
         sig = skin_signature()
         for ov in overlays:
             if ov.sig is not None and sig != ov.sig:
@@ -496,6 +629,12 @@ def main():
                     ov.clear_now()
                     ov.need = True
                 if ov.need:
+                    if ov.read()['enabled']:
+                        # keep the layer order: redraw everything above too
+                        for upper in overlays[overlays.index(ov) + 1:]:
+                            if upper.built:
+                                upper.need = True
+                                upper.settings_changed = True
                     try:
                         if ov.settings_changed:
                             ov.fade_out_and_clear()

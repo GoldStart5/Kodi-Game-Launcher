@@ -148,18 +148,23 @@ class ThemeService(object):
                     self.player.set_target(glob[0], glob[1], audible, True)
                     return
             key, files = self._target
-            self.player.set_target(key, files, audible and not cfg.fade_outside_library, self._is_global_key(key))
+            self.player.set_target(key, files, audible and not cfg.fade_outside_library,
+                                   self._is_global_key(key), self._is_root_key(key))
             return
 
         if self._committed_kind not in ('browse', 'info'):
             return      # the selection has not settled yet: keep whatever is playing
 
         key, files = self._target
-        self.player.set_target(key, files, audible, self._is_global_key(key))
+        self.player.set_target(key, files, audible, self._is_global_key(key), self._is_root_key(key))
 
     @staticmethod
     def _is_global_key(key):
         return bool(key) and key.startswith('global:')
+
+    @staticmethod
+    def _is_root_key(key):
+        return bool(key) and key.startswith('root:')
 
     def _global_target(self):
         """(key, files) of the global theme folder, or None when it is not set or empty."""
@@ -256,8 +261,13 @@ class ThemeService(object):
         if item_scope and info and info.folder:
             files = self.finder.find(info.folder, cfg.keyword)
             if files:
-                result = self._finish(paths.norm(info.folder), files)
                 is_root_folder = bool(info.source) and paths.norm(info.folder) == paths.norm(info.source)
+                folder_key = 'root:' + paths.norm(info.folder)
+                if is_root_folder or any(v[0] == folder_key for v in self._last_root.values()):
+                    is_root_folder = True        # a movie sitting in the root folder: same theme as the root
+                    result = self._finish(folder_key, files)
+                else:
+                    result = self._finish(paths.norm(info.folder), files)
                 if result[0] is not None and not is_root_folder:
                     if ui.kind == 'info' and ui.dbtype == 'movie':
                         self._sticky = Sticky('movie', ui.dbid, result[0], result[1])
@@ -275,8 +285,9 @@ class ThemeService(object):
             if root:
                 files = self.finder.find(root, cfg.keyword)
                 if files:
-                    self._last_root[media] = (paths.norm(root), files)
-                    return self._finish(paths.norm(root), files)
+                    root_key = 'root:' + paths.norm(root)
+                    self._last_root[media] = (root_key, files)
+                    return self._finish(root_key, files)
             else:
                 # no usable item under the cursor: reuse the last root we found
                 last = self._last_root.get(media)

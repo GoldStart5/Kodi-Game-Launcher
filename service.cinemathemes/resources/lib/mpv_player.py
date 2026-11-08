@@ -173,6 +173,7 @@ class MpvThemePlayer(threading.Thread):
         self._want_files = []
         self._want_active = False
         self._want_global = False
+        self._want_root = False
 
         self._proc = None
         self._tr = None
@@ -190,7 +191,7 @@ class MpvThemePlayer(threading.Thread):
         self._reset_state()
 
     # ------------------------------------------------------------------ public API
-    def set_target(self, key, files, active, is_global=False):
+    def set_target(self, key, files, active, is_global=False, is_root=False):
         """Tell the player which theme should play and whether it should be audible.
 
         ``is_global`` marks the global theme: it has its own loop/order/start settings, and
@@ -202,6 +203,7 @@ class MpvThemePlayer(threading.Thread):
             self._want_files = list(files) if key is not None else []
             self._want_active = bool(active)
             self._want_global = bool(is_global) and key is not None
+            self._want_root = bool(is_root) and not is_global and key is not None
         if changed:
             self._wake.set()
 
@@ -255,6 +257,7 @@ class MpvThemePlayer(threading.Thread):
         self._applied_loop = None
         self._switch_in = False   # next fade-in belongs to a theme-to-theme switch
         self._cur_global = False  # the loaded theme is the global theme
+        self._cur_root = False    # the loaded theme is a root theme
         self._cur_full = []       # full play order of the loaded global theme
         self._cur_offset = 0      # index in _cur_full where the loaded playlist starts
         self._resume = None       # (key, full order, index, seconds) saved when leaving the global theme
@@ -267,6 +270,7 @@ class MpvThemePlayer(threading.Thread):
         with self._lock:
             key, files, active = self._want_key, self._want_files, self._want_active
             want_global = self._want_global
+            want_root = self._want_root
 
         if key is None and self._proc is None:
             return False
@@ -283,7 +287,7 @@ class MpvThemePlayer(threading.Thread):
                 self._switch_in = switching
                 self._fade_to(0.0, cfg, dt, cfg.switch_fade_out_ms if switching else cfg.fade_out_ms)
                 return True
-            self._swap(key, files, active, cfg, now, want_global)
+            self._swap(key, files, active, cfg, now, want_global, want_root)
 
         playable = self._loaded and not self._finished
         if active and playable and self._paused:
@@ -304,7 +308,9 @@ class MpvThemePlayer(threading.Thread):
         return moved or abs(target - self._vol) > 0.01
 
     def _loop_wanted(self, cfg):
-        return cfg.global_loop if self._cur_global else cfg.loop
+        if self._cur_global:
+            return cfg.global_loop
+        return cfg.root_loop if self._cur_root else cfg.loop
 
     def _save_resume(self):
         """Remember where the global theme is, so it can continue when we come back to it."""
@@ -330,7 +336,7 @@ class MpvThemePlayer(threading.Thread):
             return None
         return list(full), index, seconds
 
-    def _swap(self, key, files, active, cfg, now, is_global=False):
+    def _swap(self, key, files, active, cfg, now, is_global=False, is_root=False):
         """Replace whatever is loaded with the requested theme (mpv is silent here)."""
         if self._cur_global and self._loaded:
             self._save_resume()         # leaving the global theme: remember its position
@@ -341,6 +347,7 @@ class MpvThemePlayer(threading.Thread):
         self._key = key
         self._finished = False
         self._cur_global = bool(is_global) and bool(files)
+        self._cur_root = bool(is_root) and not is_global and bool(files)
         self._cur_full = []
         self._cur_offset = 0
         if not files:
@@ -357,14 +364,19 @@ class MpvThemePlayer(threading.Thread):
             full, index, seconds = resumed
             start = 'start=%.2f' % seconds
         else:
-            mode = cfg.global_selection_mode if is_global else cfg.selection_mode
+            if is_global:
+                mode, random_start = cfg.global_selection_mode, cfg.global_random_start
+            elif is_root:
+                mode, random_start = cfg.root_selection_mode, cfg.root_random_start
+            else:
+                mode, random_start = cfg.selection_mode, cfg.random_start
             if mode == SELECT_RANDOM:
                 random.shuffle(full)
-            if cfg.global_random_start if is_global else cfg.random_start:
+            if random_start:
                 start = 'start=%d%%' % random.randint(5, 70)
         # The part of the order that follows the start point is queued; with looping the
         # tracks before it are queued after it, so the whole set repeats.
-        loop = cfg.global_loop if is_global else cfg.loop
+        loop = self._loop_wanted(cfg)
         ordered = full[index:] + (full[:index] if loop else [])
         self._cur_full = full if is_global else []
         self._cur_offset = index

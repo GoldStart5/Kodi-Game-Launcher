@@ -2,6 +2,7 @@
 
 ## Addon updates since 3.0.0
 
+- **Cinema Themes 1.2.4:** root themes now have their own order, loop and random start settings, and every setting has a description.
 - **PS2 Overlays 1.1.2:** new light sweep animation with its own on/off switch and settings (colour, opacity, speed, size, position and drift), and an option to make the current hour bar of the clock shine.
 - **PS2 Overlays 1.0.2** added to the repository: transparent PlayStation 2 style clock, cubes and rings overlays for the Kodi home screen, each with its own on/off switch and settings.
 - **Cinema Themes 1.2.3:** new toggles for the root theme, for the global theme replacing a missing root theme, and for hovering an item to play its own theme.

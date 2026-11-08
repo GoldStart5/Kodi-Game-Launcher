@@ -5,7 +5,7 @@ By GoldStart5. Theme music for your video library, played by a portable mpv, wit
 ## Setup
 
 1. Download a Windows build of mpv and unzip it anywhere (a portable folder is fine).
-2. In Kodi: Add-ons > Install from zip file > `service.cinemathemes-1.2.3.zip`
+2. In Kodi: Add-ons > Install from zip file > `service.cinemathemes-1.2.4.zip`
    (allow "Unknown sources" if Kodi asks).
 3. Add-on settings: set **Location of mpv.exe**.
 4. Put theme files in your folders:
@@ -53,3 +53,9 @@ Several themes in one folder are queued: random shuffles them, in order plays th
   for example `--audio-device=wasapi/{device-id}` (list devices with `mpv --audio-device=help`).
 - mpv is tied to Kodi with a Windows job object, so it closes with Kodi even if Kodi crashes.
 - Turn on **Enable debug logging** (Advanced) and check `kodi.log` for lines starting with `[service.cinemathemes]`.
+
+## Root themes and settings help
+
+Root themes (the theme file in your movie or show source folder) have their own **order**, **loop** and **random start** settings under *Player and fades > Root themes*. They are independent from the settings for movie and show themes.
+
+Every setting has a short description that Kodi shows at the bottom of the settings window when the setting is highlighted.

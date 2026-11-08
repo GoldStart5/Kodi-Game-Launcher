@@ -18,6 +18,10 @@ msgctxt "#30002"
 msgid "Advanced"
 msgstr ""
 
+msgctxt "#30003"
+msgid "Global theme"
+msgstr ""
+
 msgctxt "#30010"
 msgid "mpv"
 msgstr ""
@@ -38,28 +42,32 @@ msgctxt "#30014"
 msgid "Logging"
 msgstr ""
 
-msgctxt "#30100"
-msgid "Location of mpv.exe"
+msgctxt "#30015"
+msgid "Global theme"
 msgstr ""
 
-msgctxt "#30101"
-msgid "Full path to your portable mpv.exe (or the folder that contains it). special:// paths work too. Leave empty to use mpv from the system PATH."
+msgctxt "#30016"
+msgid "Playback"
+msgstr ""
+
+msgctxt "#30017"
+msgid "Library themes"
+msgstr ""
+
+msgctxt "#30018"
+msgid "Root themes"
+msgstr ""
+
+msgctxt "#30100"
+msgid "Location of mpv.exe"
 msgstr ""
 
 msgctxt "#30102"
 msgid "Extra mpv arguments"
 msgstr ""
 
-msgctxt "#30103"
-msgid "Optional, for example --audio-device=wasapi/{device-id}. mpv.conf is not read, so use this to pick an audio device."
-msgstr ""
-
 msgctxt "#30104"
 msgid "Theme file keyword"
-msgstr ""
-
-msgctxt "#30105"
-msgid "Any audio file whose name contains this word counts as a theme (theme.mp3, Main Theme.flac, ...)."
 msgstr ""
 
 msgctxt "#30106"
@@ -75,7 +83,7 @@ msgid "Normal fade-out (ms)"
 msgstr ""
 
 msgctxt "#30109"
-msgid "When a folder has several themes"
+msgid "Movie and show themes: order"
 msgstr ""
 
 msgctxt "#30110"
@@ -87,11 +95,11 @@ msgid "In order (by file name)"
 msgstr ""
 
 msgctxt "#30112"
-msgid "Loop theme"
+msgid "Loop movie and show themes"
 msgstr ""
 
 msgctxt "#30113"
-msgid "Start at a random position"
+msgid "Start movie and show themes at a random position"
 msgstr ""
 
 msgctxt "#30114"
@@ -114,30 +122,6 @@ msgctxt "#30120"
 msgid "Enable debug logging"
 msgstr ""
 
-msgctxt "#30121"
-msgid "All themes found in a folder are queued. Random shuffles them, In order plays them alphabetically."
-msgstr ""
-
-msgctxt "#30122"
-msgid "Starts the first theme somewhere between 5% and 70% of its length."
-msgstr ""
-
-msgctxt "#30123"
-msgid "Uses the Windows foreground window to tell whether Kodi is the active application."
-msgstr ""
-
-msgctxt "#30124"
-msgid "Also covers trailers and music played by Kodi itself. The theme resumes when playback ends."
-msgstr ""
-
-msgctxt "#30125"
-msgid "On the home screen, in settings and so on, when no global theme is set. With a global theme, it plays there instead. The theme resumes when you return to the library."
-msgstr ""
-
-msgctxt "#30126"
-msgid "How long the selection must stay put before the theme changes. Prevents restarts while scrolling."
-msgstr ""
-
 msgctxt "#30128"
 msgid "Switch fade-out (ms)"
 msgstr ""
@@ -146,32 +130,8 @@ msgctxt "#30129"
 msgid "Switch fade-in (ms)"
 msgstr ""
 
-msgctxt "#30130"
-msgid "Used when one theme changes to another: the old theme fades out and the new one fades in with these times. If there is no theme to switch to, the normal fade-out is used."
-msgstr ""
-
-msgctxt "#30133"
-msgid "Used when a theme starts from silence, fades out to silence, and when Kodi loses focus, plays media or leaves the video library."
-msgstr ""
-
-msgctxt "#30003"
-msgid "Global theme"
-msgstr ""
-
-msgctxt "#30015"
-msgid "Global theme"
-msgstr ""
-
-msgctxt "#30016"
-msgid "Playback"
-msgstr ""
-
 msgctxt "#30140"
 msgid "Global theme folder"
-msgstr ""
-
-msgctxt "#30141"
-msgid "Every audio file in this folder is part of the global theme. It plays outside the video library, and inside it when no other theme applies. Going to the global theme and fading it out to silence use the normal fades; going from it to a library theme uses the switch fades. Leave empty for no global theme."
 msgstr ""
 
 msgctxt "#30142"
@@ -198,28 +158,8 @@ msgctxt "#30147"
 msgid "Start a new track"
 msgstr ""
 
-msgctxt "#30148"
-msgid "Random shuffles the files in the folder, In order plays them alphabetically."
-msgstr ""
-
-msgctxt "#30149"
-msgid "Repeat all tracks when the last one ends. Recommended, otherwise the background goes silent."
-msgstr ""
-
-msgctxt "#30150"
-msgid "After the library or a pause took over, continue the same track from the same point, or pick a new track."
-msgstr ""
-
 msgctxt "#30151"
 msgid "Enable global theme"
-msgstr ""
-
-msgctxt "#30152"
-msgid "When off, the global theme is ignored and the add-on works as if no global folder was set: the library theme fades out and pauses outside the library, and nothing plays when no library theme applies."
-msgstr ""
-
-msgctxt "#30017"
-msgid "Library themes"
 msgstr ""
 
 msgctxt "#30160"
@@ -234,14 +174,126 @@ msgctxt "#30162"
 msgid "Hovering plays each movie or show's own theme"
 msgstr ""
 
-msgctxt "#30163"
-msgid "The theme in the root of each video source folder, played while browsing. Off: it never plays. A source with no root theme is treated the same as off."
+msgctxt "#30170"
+msgid "Root themes: order"
 msgstr ""
 
-msgctxt "#30164"
-msgid "When the root theme is off or not found, the global theme takes its place in the library: in lists, and in info, seasons and episodes that have no theme of their own. Needs the global theme to be on with a folder set."
+msgctxt "#30171"
+msgid "Loop root themes"
 msgstr ""
 
-msgctxt "#30165"
-msgid "Used when neither the root theme nor the global theme covers the lists. On: the movie or show you are on plays its own theme. Off: nothing plays while hovering, only in info, seasons and episodes."
+msgctxt "#30172"
+msgid "Start root themes at a random position"
+msgstr ""
+
+msgctxt "#30201"
+msgid "Full path to your portable mpv.exe, or to the folder that contains it. special:// paths also work. Leave empty to use mpv from the system PATH. Without mpv, no theme can play."
+msgstr ""
+
+msgctxt "#30202"
+msgid "Optional extra command-line options for mpv, for example --audio-device=wasapi/{device-id} to pick the audio output. mpv's own config file is not read, so use this field instead. Leave empty if unsure."
+msgstr ""
+
+msgctxt "#30203"
+msgid "Any audio file whose name contains this word is a theme, for example theme.mp3 or Main Theme.flac. Used for root, movie and show themes. The global theme folder uses every audio file in it."
+msgstr ""
+
+msgctxt "#30204"
+msgid "Movie and show themes: when an item's folder holds several theme files, Random order shuffles them and In order plays them alphabetically (theme 2 before theme 10)."
+msgstr ""
+
+msgctxt "#30205"
+msgid "Movie and show themes: repeat when finished. Off: the theme plays once and then stays silent until another theme starts."
+msgstr ""
+
+msgctxt "#30206"
+msgid "Movie and show themes: start the first track at a random point (between 5% and 70% of its length) instead of the beginning."
+msgstr ""
+
+msgctxt "#30207"
+msgid "Root themes: when the source folder holds several theme files, Random order shuffles them and In order plays them alphabetically (theme 2 before theme 10)."
+msgstr ""
+
+msgctxt "#30208"
+msgid "Root themes: repeat when finished. Off: the root theme plays once and then stays silent until another theme starts."
+msgstr ""
+
+msgctxt "#30209"
+msgid "Root themes: start the first track at a random point (between 5% and 70% of its length) instead of the beginning."
+msgstr ""
+
+msgctxt "#30210"
+msgid "Playback volume of all themes, from 0 to 100. Fade times are measured from silence to this level."
+msgstr ""
+
+msgctxt "#30211"
+msgid "How long a theme takes to fade in when it starts from silence: the first theme, after a pause (Kodi back in focus, playback ended, back in the library), and when the global theme follows a library theme. Milliseconds; 0 means no fade."
+msgstr ""
+
+msgctxt "#30212"
+msgid "How long a theme takes to fade out to silence: Kodi loses focus, Kodi plays media, you leave the library with no global theme, nothing applies, or a library theme hands over to the global theme. Milliseconds; 0 means no fade."
+msgstr ""
+
+msgctxt "#30213"
+msgid "Fade-out of the old theme when another library theme follows it, or when the global theme is followed by a library theme. Between 200 and 5000 milliseconds."
+msgstr ""
+
+msgctxt "#30214"
+msgid "Fade-in of the new theme in those same changes (library theme to library theme, global theme to library theme). Between 200 and 5000 milliseconds."
+msgstr ""
+
+msgctxt "#30215"
+msgid "Play the root theme (the theme file in the root of each video source folder) while browsing. Off: it never plays. A source with no root theme counts the same as off."
+msgstr ""
+
+msgctxt "#30216"
+msgid "When the root theme is off or not found, the global theme takes its place in the library: in lists, and in info, seasons and episodes that have no theme of their own. Needs the global theme to be enabled with a folder set."
+msgstr ""
+
+msgctxt "#30217"
+msgid "Only used when neither the root theme nor the global theme covers the lists. On: the movie or show you are on plays its own theme. Off: nothing plays while hovering, only in info dialogs, seasons and episodes."
+msgstr ""
+
+msgctxt "#30218"
+msgid "Fade out and pause when another window is in front of Kodi, then fade in and continue when Kodi is in front again. Uses the Windows foreground window."
+msgstr ""
+
+msgctxt "#30219"
+msgid "Fade out and pause while Kodi plays a video, trailer or music, then continue when playback ends."
+msgstr ""
+
+msgctxt "#30220"
+msgid "Only used when there is no global theme. On: the theme fades out and pauses outside the video library (home screen, settings...). Off: it keeps playing there. With a global theme set, the global theme plays there instead."
+msgstr ""
+
+msgctxt "#30221"
+msgid "How long the selection must stay on an item before the theme changes, in milliseconds. Stops themes restarting while you scroll quickly. 0 changes at once."
+msgstr ""
+
+msgctxt "#30222"
+msgid "Master switch for the global theme. Off: it is ignored, as if no folder was set."
+msgstr ""
+
+msgctxt "#30223"
+msgid "A folder of audio files, for example theme 1, theme 2, theme 3. Every audio file in it belongs to the global theme. It plays outside the video library, and in the library when 'Global theme replaces the root theme' applies."
+msgstr ""
+
+msgctxt "#30224"
+msgid "Random order shuffles the files in the global theme folder, In order plays them alphabetically (theme 2 before theme 10)."
+msgstr ""
+
+msgctxt "#30225"
+msgid "Repeat all tracks when the last one ends. Recommended, otherwise the global theme ends and the background goes silent."
+msgstr ""
+
+msgctxt "#30226"
+msgid "Start the first track of the global theme at a random point (between 5% and 70% of its length). When the theme is resumed, it continues from where it stopped instead."
+msgstr ""
+
+msgctxt "#30227"
+msgid "When the global theme comes back after a library theme or a pause took over: continue the same track from the same point, or start a new track."
+msgstr ""
+
+msgctxt "#30228"
+msgid "Write detailed lines to kodi.log, starting with [service.cinemathemes]. Turn this on when reporting a problem."
 msgstr ""

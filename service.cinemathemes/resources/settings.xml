@@ -4,7 +4,7 @@
 
     <category id="player" label="30000">
       <group id="mpv" label="30010">
-        <setting id="mpv_path" type="path" label="30100" help="30101">
+        <setting id="mpv_path" type="path" label="30100" help="30201">
           <level>0</level>
           <default></default>
           <constraints>
@@ -15,7 +15,7 @@
             <heading>30100</heading>
           </control>
         </setting>
-        <setting id="mpv_extra_args" type="string" label="30102" help="30103">
+        <setting id="mpv_extra_args" type="string" label="30102" help="30202">
           <level>1</level>
           <default></default>
           <constraints>
@@ -27,7 +27,7 @@
         </setting>
       </group>
       <group id="theme_files" label="30011">
-        <setting id="theme_keyword" type="string" label="30104" help="30105">
+        <setting id="theme_keyword" type="string" label="30104" help="30203">
           <level>0</level>
           <default>theme</default>
           <constraints>
@@ -37,7 +37,7 @@
             <heading>30104</heading>
           </control>
         </setting>
-        <setting id="selection_mode" type="integer" label="30109" help="30121">
+        <setting id="selection_mode" type="integer" label="30109" help="30204">
           <level>0</level>
           <default>0</default>
           <constraints>
@@ -48,19 +48,42 @@
           </constraints>
           <control type="spinner" format="string"/>
         </setting>
-        <setting id="loop_theme" type="boolean" label="30112">
+        <setting id="loop_theme" type="boolean" label="30112" help="30205">
           <level>0</level>
           <default>false</default>
           <control type="toggle"/>
         </setting>
-        <setting id="random_start" type="boolean" label="30113" help="30122">
+        <setting id="random_start" type="boolean" label="30113" help="30206">
+          <level>0</level>
+          <default>false</default>
+          <control type="toggle"/>
+        </setting>
+      </group>
+      <group id="root_themes" label="30018">
+        <setting id="root_selection_mode" type="integer" label="30170" help="30207">
+          <level>0</level>
+          <default>0</default>
+          <constraints>
+            <options>
+              <option label="30110">0</option>
+              <option label="30111">1</option>
+            </options>
+          </constraints>
+          <control type="spinner" format="string"/>
+        </setting>
+        <setting id="root_loop" type="boolean" label="30171" help="30208">
+          <level>0</level>
+          <default>false</default>
+          <control type="toggle"/>
+        </setting>
+        <setting id="root_random_start" type="boolean" label="30172" help="30209">
           <level>0</level>
           <default>false</default>
           <control type="toggle"/>
         </setting>
       </group>
       <group id="volume" label="30012">
-        <setting id="volume" type="integer" label="30106">
+        <setting id="volume" type="integer" label="30106" help="30210">
           <level>0</level>
           <default>60</default>
           <constraints>
@@ -72,7 +95,7 @@
             <popup>false</popup>
           </control>
         </setting>
-        <setting id="fade_in_ms" type="integer" label="30107" help="30133">
+        <setting id="fade_in_ms" type="integer" label="30107" help="30211">
           <level>0</level>
           <default>1500</default>
           <constraints>
@@ -84,7 +107,7 @@
             <popup>false</popup>
           </control>
         </setting>
-        <setting id="fade_out_ms" type="integer" label="30108" help="30133">
+        <setting id="fade_out_ms" type="integer" label="30108" help="30212">
           <level>0</level>
           <default>1000</default>
           <constraints>
@@ -96,7 +119,7 @@
             <popup>false</popup>
           </control>
         </setting>
-        <setting id="switch_fade_out_ms" type="integer" label="30128" help="30130">
+        <setting id="switch_fade_out_ms" type="integer" label="30128" help="30213">
           <level>0</level>
           <default>1000</default>
           <constraints>
@@ -108,7 +131,7 @@
             <popup>false</popup>
           </control>
         </setting>
-        <setting id="switch_fade_in_ms" type="integer" label="30129" help="30130">
+        <setting id="switch_fade_in_ms" type="integer" label="30129" help="30214">
           <level>0</level>
           <default>1000</default>
           <constraints>
@@ -125,39 +148,39 @@
 
     <category id="behaviour" label="30001">
       <group id="library_themes" label="30017">
-        <setting id="use_root_theme" type="boolean" label="30160" help="30163">
+        <setting id="use_root_theme" type="boolean" label="30160" help="30215">
           <level>0</level>
           <default>true</default>
           <control type="toggle"/>
         </setting>
-        <setting id="global_replaces_root" type="boolean" label="30161" help="30164">
+        <setting id="global_replaces_root" type="boolean" label="30161" help="30216">
           <level>0</level>
           <default>true</default>
           <control type="toggle"/>
         </setting>
-        <setting id="hover_own_theme" type="boolean" label="30162" help="30165">
+        <setting id="hover_own_theme" type="boolean" label="30162" help="30217">
           <level>0</level>
           <default>true</default>
           <control type="toggle"/>
         </setting>
       </group>
       <group id="focus" label="30013">
-        <setting id="pause_on_focus_loss" type="boolean" label="30114" help="30123">
+        <setting id="pause_on_focus_loss" type="boolean" label="30114" help="30218">
           <level>0</level>
           <default>true</default>
           <control type="toggle"/>
         </setting>
-        <setting id="fade_on_playback" type="boolean" label="30115" help="30124">
+        <setting id="fade_on_playback" type="boolean" label="30115" help="30219">
           <level>0</level>
           <default>true</default>
           <control type="toggle"/>
         </setting>
-        <setting id="fade_outside_library" type="boolean" label="30116" help="30125">
+        <setting id="fade_outside_library" type="boolean" label="30116" help="30220">
           <level>0</level>
           <default>true</default>
           <control type="toggle"/>
         </setting>
-        <setting id="switch_delay_ms" type="integer" label="30117" help="30126">
+        <setting id="switch_delay_ms" type="integer" label="30117" help="30221">
           <level>1</level>
           <default>400</default>
           <constraints>
@@ -174,12 +197,12 @@
 
     <category id="global" label="30003">
       <group id="global_folder_group" label="30015">
-        <setting id="global_enabled" type="boolean" label="30151" help="30152">
+        <setting id="global_enabled" type="boolean" label="30151" help="30222">
           <level>0</level>
           <default>true</default>
           <control type="toggle"/>
         </setting>
-        <setting id="global_folder" type="path" label="30140" help="30141">
+        <setting id="global_folder" type="path" label="30140" help="30223">
           <level>0</level>
           <default></default>
           <constraints>
@@ -195,7 +218,7 @@
         </setting>
       </group>
       <group id="global_playback" label="30016">
-        <setting id="global_selection_mode" type="integer" label="30142" help="30148">
+        <setting id="global_selection_mode" type="integer" label="30142" help="30224">
           <level>0</level>
           <default>0</default>
           <constraints>
@@ -209,7 +232,7 @@
           </dependencies>
           <control type="spinner" format="string"/>
         </setting>
-        <setting id="global_loop" type="boolean" label="30143" help="30149">
+        <setting id="global_loop" type="boolean" label="30143" help="30225">
           <level>0</level>
           <default>true</default>
           <dependencies>
@@ -217,7 +240,7 @@
           </dependencies>
           <control type="toggle"/>
         </setting>
-        <setting id="global_random_start" type="boolean" label="30144" help="30122">
+        <setting id="global_random_start" type="boolean" label="30144" help="30226">
           <level>0</level>
           <default>false</default>
           <dependencies>
@@ -225,7 +248,7 @@
           </dependencies>
           <control type="toggle"/>
         </setting>
-        <setting id="global_resume_mode" type="integer" label="30145" help="30150">
+        <setting id="global_resume_mode" type="integer" label="30145" help="30227">
           <level>0</level>
           <default>0</default>
           <constraints>
@@ -244,7 +267,7 @@
 
     <category id="advanced" label="30002">
       <group id="logging" label="30014">
-        <setting id="debug_logging" type="boolean" label="30120">
+        <setting id="debug_logging" type="boolean" label="30120" help="30228">
           <level>1</level>
           <default>false</default>
           <control type="toggle"/>

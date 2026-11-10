@@ -5,7 +5,7 @@ By GoldStart5. Theme music for your video library, played by a portable mpv, wit
 ## Setup
 
 1. Download a Windows build of mpv and unzip it anywhere (a portable folder is fine).
-2. In Kodi: Add-ons > Install from zip file > `service.cinemathemes-1.2.4.zip`
+2. In Kodi: Add-ons > Install from zip file > `service.cinemathemes-1.2.5.zip`
    (allow "Unknown sources" if Kodi asks).
 3. Add-on settings: set **Location of mpv.exe**.
 4. Put theme files in your folders:

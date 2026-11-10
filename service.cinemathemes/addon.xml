@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="service.cinemathemes" name="Cinema Themes" version="1.2.4" provider-name="GoldStart5">
+<addon id="service.cinemathemes" name="Cinema Themes" version="1.2.5" provider-name="GoldStart5">
   <requires>
     <import addon="xbmc.python" version="3.0.1"/>
   </requires>
@@ -13,7 +13,8 @@
       <icon>icon.png</icon>
     </assets>
     <license>GPL-2.0-or-later</license>
-    <news>1.2.4: root themes have their own order, loop and random start setting; every setting now has a description
+    <news>1.2.5: normal fade-in and fade-out can now go up to 10000 ms (switch fades stay at 5000 ms)
+1.2.4: root themes have their own order, loop and random start setting; every setting now has a description
 1.2.3: toggles for the root theme, the global theme replacing a missing root theme, and hovering playing each item's own theme
 1.2.2: on/off switch for the global theme
 1.2.1: going from the global theme to a library theme uses the switch fades

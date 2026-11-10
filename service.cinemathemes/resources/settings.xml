@@ -101,7 +101,7 @@
           <constraints>
             <minimum>0</minimum>
             <step>100</step>
-            <maximum>8000</maximum>
+            <maximum>10000</maximum>
           </constraints>
           <control type="slider" format="integer">
             <popup>false</popup>
@@ -113,7 +113,7 @@
           <constraints>
             <minimum>0</minimum>
             <step>100</step>
-            <maximum>8000</maximum>
+            <maximum>10000</maximum>
           </constraints>
           <control type="slider" format="integer">
             <popup>false</popup>

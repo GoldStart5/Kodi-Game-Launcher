@@ -213,6 +213,87 @@ def foreground_is_kodi():
         return True
 
 
+def _enum_windows(match):
+    """Handles of visible top-level windows whose (hwnd, pid, owner) satisfy match()."""
+    import ctypes
+    from ctypes import wintypes
+    user32 = ctypes.windll.user32
+    found = []
+
+    @ctypes.WINFUNCTYPE(wintypes.BOOL, wintypes.HWND, wintypes.LPARAM)
+    def enum_cb(hwnd, _lparam):
+        pid = wintypes.DWORD(0)
+        user32.GetWindowThreadProcessId(hwnd, ctypes.byref(pid))
+        if user32.IsWindowVisible(hwnd) and match(hwnd, pid.value, user32.GetWindow(hwnd, 4)):
+            found.append(hwnd)     # GW_OWNER = 4
+        return True
+
+    user32.EnumWindows(enum_cb, 0)
+    return found
+
+
+def _kodi_windows():
+    me = os.getpid()
+    return _enum_windows(lambda hwnd, pid, owner: pid == me and not owner)
+
+
+def minimize_kodi_window():
+    """Minimise Kodi's own main window (Windows). Returns True if a window was minimised."""
+    try:
+        import ctypes
+        found = _kodi_windows()
+        for hwnd in found:
+            ctypes.windll.user32.ShowWindow(hwnd, 6)      # SW_MINIMIZE
+        return bool(found)
+    except Exception as exc:
+        log("Minimise failed: %s" % exc, xbmc.LOGWARNING)
+        return False
+
+
+def restore_kodi_window():
+    """Bring Kodi's window back and give it focus (Windows)."""
+    try:
+        import ctypes
+        user32 = ctypes.windll.user32
+        # A synthetic Alt key press lets SetForegroundWindow through Windows' focus lock.
+        user32.keybd_event(0x12, 0, 0, 0)
+        user32.keybd_event(0x12, 0, 2, 0)
+        for hwnd in _kodi_windows():
+            user32.ShowWindow(hwnd, 9)                    # SW_RESTORE
+            user32.SetForegroundWindow(hwnd)
+        return True
+    except Exception as exc:
+        log("Restore failed: %s" % exc, xbmc.LOGWARNING)
+        return False
+
+
+_SHELL_CLASSES = ("Progman", "WorkerW", "Shell_TrayWnd", "Shell_SecondaryTrayWnd")
+
+
+def foreground_app():
+    """(pid, is_shell) of the foreground window. pid is 0 when there is none."""
+    try:
+        import ctypes
+        user32 = ctypes.windll.user32
+        hwnd = user32.GetForegroundWindow()
+        if not hwnd:
+            return 0, True
+        pid = ctypes.c_ulong(0)
+        user32.GetWindowThreadProcessId(hwnd, ctypes.byref(pid))
+        buf = ctypes.create_unicode_buffer(64)
+        user32.GetClassNameW(hwnd, buf, 64)
+        return pid.value, buf.value in _SHELL_CLASSES
+    except Exception:
+        return 0, False
+
+
+def app_has_windows(pid):
+    """True while the process still has a visible top-level window."""
+    try:
+        return bool(_enum_windows(lambda hwnd, p, owner: p == pid and not owner))
+    except Exception:
+        return True    # cannot tell -> assume it is still running
+
 # --------------------------------------------------------------------------
 # Splash window
 # --------------------------------------------------------------------------
@@ -588,12 +669,83 @@ def service_tick(player):
                 log("Last played update failed:\n%s" % traceback.format_exc(), xbmc.LOGERROR)
 
 
+class FocusMinimizer(object):
+    """Minimise Kodi once it has been out of focus for `delay` seconds (to save GPU),
+    and bring it back when the app that had the focus (the game) closes.
+
+    Restore rule: the app in the foreground when Kodi was minimised is tracked. When all
+    its windows are gone, Kodi is restored if focus fell to the desktop/taskbar (or nothing).
+    If focus lands on another normal app instead (a launcher handing over to the game, or
+    the game closing into a browser), that app is tracked from then on, so Kodi never
+    jumps in front of something you are using. Restoring it yourself from the taskbar
+    always works.
+    """
+
+    CHECK_EVERY = 0.5
+    GONE_GRACE = 1.5      # seconds the tracked app must be gone before Kodi is restored
+
+    def __init__(self):
+        self._reset()
+        self._next_check = 0.0
+
+    def _reset(self):
+        self.lost_at = None
+        self.done = False         # already minimised for this focus loss
+        self.tracked_pid = None   # app to wait for before restoring Kodi
+        self.gone_since = None
+
+    def tick(self):
+        now = _now()
+        if now < self._next_check:
+            return
+        self._next_check = now + self.CHECK_EVERY
+        a = xbmcaddon.Addon()
+        if a.getSetting("minimize_unfocused") != "true":
+            self._reset()
+            return
+        if foreground_is_kodi():
+            self._reset()
+            return
+        if self.done:
+            self._follow_game(now, a.getSetting("restore_on_exit") != "false")
+            return
+        if self.lost_at is None:
+            self.lost_at = now
+        delay = min(60, max(1, int(a.getSetting("minimize_delay") or 5)))
+        if now - self.lost_at >= delay:
+            self.done = True
+            pid, is_shell = foreground_app()
+            self.tracked_pid = None if (is_shell or not pid) else pid
+            if minimize_kodi_window():
+                log("Kodi out of focus for %d s - minimised (tracking pid %s)"
+                    % (delay, self.tracked_pid))
+
+    def _follow_game(self, now, restore):
+        if not restore or not self.tracked_pid:
+            return
+        if app_has_windows(self.tracked_pid):
+            self.gone_since = None
+            return
+        pid, is_shell = foreground_app()
+        if not is_shell and pid and pid != self.tracked_pid:
+            self.tracked_pid, self.gone_since = pid, None     # handed over to another app
+            return
+        if self.gone_since is None:
+            self.gone_since = now
+        if now - self.gone_since >= self.GONE_GRACE:
+            log("App that had the focus has closed - restoring Kodi")
+            restore_kodi_window()
+            self._reset()
+
+
 def main():
     monitor = xbmc.Monitor()
     player = GamePlayer()
+    minimizer = FocusMinimizer()
     log("Service started")
     while not monitor.abortRequested():
         service_tick(player)
+        minimizer.tick()
         # check often: the video must be stopped the moment the trigger file starts
         if monitor.waitForAbort(0.05):
             break

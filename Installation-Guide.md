@@ -87,6 +87,8 @@ Open **Add-ons → My add-ons → Services → Game Launcher → Configure**.
 - **Longest wait for the game to open (seconds):** the splash closes after this time at the latest.
 - **Update Last played:** records the launch in Kodi's "Last played" while keeping the game unwatched.
 - **Splash zoom style:** zoom in then out, zoom out then in, or random.
+- **Minimise Kodi when it loses focus (saves GPU):** off by default. When it is on, Kodi minimises after it has been out of focus for a set time (1 to 60 seconds, default 5), so it stops drawing while a game runs.
+- **Bring Kodi back when the game closes:** brings Kodi back to the front when you quit the game (on by default, only used with the option above).
 - **Artwork source:** Kodi library first, local files first, or local files only.
 
 If games open behind Kodi, set Kodi's display mode to **Fullscreen Window** in the display settings.

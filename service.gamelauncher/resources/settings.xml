@@ -100,6 +100,34 @@
             <dependency type="enable" setting="show_splash">true</dependency>
           </dependencies>
         </setting>
+        <setting id="minimize_unfocused" type="boolean" label="30040">
+          <level>0</level>
+          <default>false</default>
+          <control type="toggle"/>
+        </setting>
+        <setting id="minimize_delay" type="integer" label="30041">
+          <level>0</level>
+          <default>5</default>
+          <constraints>
+            <minimum>1</minimum>
+            <step>1</step>
+            <maximum>60</maximum>
+          </constraints>
+          <control type="slider" format="integer">
+            <popup>false</popup>
+          </control>
+          <dependencies>
+            <dependency type="enable" setting="minimize_unfocused">true</dependency>
+          </dependencies>
+        </setting>
+        <setting id="restore_on_exit" type="boolean" label="30042">
+          <level>0</level>
+          <default>true</default>
+          <control type="toggle"/>
+          <dependencies>
+            <dependency type="enable" setting="minimize_unfocused">true</dependency>
+          </dependencies>
+        </setting>
       </group>
     </category>
   </section>

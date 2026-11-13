@@ -83,3 +83,15 @@ msgstr ""
 msgctxt "#30101"
 msgid "No .lnk shortcut found in the game folder"
 msgstr ""
+
+msgctxt "#30040"
+msgid "Minimise Kodi when it loses focus (saves GPU)"
+msgstr ""
+
+msgctxt "#30041"
+msgid "Minimise after Kodi has been out of focus for (seconds)"
+msgstr ""
+
+msgctxt "#30042"
+msgid "Bring Kodi back when the game closes"
+msgstr ""

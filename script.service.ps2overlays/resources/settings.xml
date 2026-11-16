@@ -1,6 +1,21 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <settings version="1">
     <section id="script.service.ps2overlays">
+        <category id="general" label="30026" help="">
+            <group id="1">
+                <setting id="skin_patch" type="boolean" label="30080" help="">
+                    <level>0</level>
+                    <default>true</default>
+                    <control type="toggle"/>
+                </setting>
+                <setting id="skin_unpatch" type="action" label="30081" help="">
+                    <level>0</level>
+                    <control type="button" format="action">
+                        <data>RunScript(special://home/addons/script.service.ps2overlays/unpatch.py)</data>
+                    </control>
+                </setting>
+            </group>
+        </category>
         <category id="clock" label="30020" help="">
             <group id="1">
                 <setting id="clock_enabled" type="boolean" label="30010" help="">
@@ -288,6 +303,177 @@
                 </setting>
             </group>
         </category>
+        <category id="crystal" label="30027" help="">
+            <group id="1">
+                <setting id="crystal_enabled" type="boolean" label="30090" help="">
+                    <level>0</level>
+                    <default>true</default>
+                    <control type="toggle"/>
+                </setting>
+                <setting id="crystal_color" type="integer" label="30003" help="">
+                    <level>0</level>
+                    <default>0</default>
+                    <constraints>
+                        <options>
+                            <option label="30700">0</option>
+                            <option label="30701">1</option>
+                            <option label="30702">2</option>
+                            <option label="30703">3</option>
+                            <option label="30704">4</option>
+                            <option label="30705">5</option>
+                            <option label="30706">6</option>
+                            <option label="30707">7</option>
+                            <option label="30708">8</option>
+                            <option label="30709">9</option>
+                            <option label="30710">10</option>
+                            <option label="30711">11</option>
+                            <option label="30712">12</option>
+                            <option label="30713">13</option>
+                        </options>
+                    </constraints>
+                    <control type="list" format="string">
+                        <heading>30003</heading>
+                    </control>
+                </setting>
+                <setting id="crystal_light_color" type="integer" label="30092" help="">
+                    <level>0</level>
+                    <default>0</default>
+                    <constraints>
+                        <options>
+                            <option label="30750">0</option>
+                            <option label="30751">1</option>
+                            <option label="30752">2</option>
+                            <option label="30753">3</option>
+                            <option label="30754">4</option>
+                            <option label="30755">5</option>
+                            <option label="30756">6</option>
+                            <option label="30757">7</option>
+                            <option label="30758">8</option>
+                            <option label="30759">9</option>
+                            <option label="30760">10</option>
+                        </options>
+                    </constraints>
+                    <control type="list" format="string">
+                        <heading>30092</heading>
+                    </control>
+                </setting>
+                <setting id="crystal_opacity" type="integer" label="30004" help="">
+                    <level>0</level>
+                    <default>100</default>
+                    <constraints>
+                        <minimum>10</minimum>
+                        <step>5</step>
+                        <maximum>100</maximum>
+                    </constraints>
+                    <control type="slider" format="percentage">
+                        <popup>false</popup>
+                    </control>
+                </setting>
+                <setting id="crystal_speed" type="integer" label="30005" help="">
+                    <level>0</level>
+                    <default>100</default>
+                    <constraints>
+                        <minimum>25</minimum>
+                        <step>25</step>
+                        <maximum>300</maximum>
+                    </constraints>
+                    <control type="slider" format="percentage">
+                        <popup>false</popup>
+                    </control>
+                </setting>
+                <setting id="crystal_size" type="integer" label="30093" help="">
+                    <level>0</level>
+                    <default>22</default>
+                    <constraints>
+                        <minimum>5</minimum>
+                        <step>1</step>
+                        <maximum>100</maximum>
+                    </constraints>
+                    <control type="slider" format="percentage">
+                        <popup>false</popup>
+                    </control>
+                </setting>
+                <setting id="crystal_glow" type="integer" label="30094" help="">
+                    <level>0</level>
+                    <default>55</default>
+                    <constraints>
+                        <minimum>0</minimum>
+                        <step>5</step>
+                        <maximum>100</maximum>
+                    </constraints>
+                    <control type="slider" format="percentage">
+                        <popup>false</popup>
+                    </control>
+                </setting>
+            </group>
+            <group id="2" label="30009">
+                <setting id="crystal_pos_x" type="integer" label="30033" help="">
+                    <level>0</level>
+                    <default>82</default>
+                    <constraints>
+                        <minimum>0</minimum>
+                        <step>1</step>
+                        <maximum>100</maximum>
+                    </constraints>
+                    <control type="slider" format="percentage">
+                        <popup>false</popup>
+                    </control>
+                </setting>
+                <setting id="crystal_pos_y" type="integer" label="30034" help="">
+                    <level>0</level>
+                    <default>22</default>
+                    <constraints>
+                        <minimum>0</minimum>
+                        <step>1</step>
+                        <maximum>100</maximum>
+                    </constraints>
+                    <control type="slider" format="percentage">
+                        <popup>false</popup>
+                    </control>
+                </setting>
+            </group>
+            <group id="3" label="30089">
+                <setting id="crystal_shine" type="boolean" label="30095" help="">
+                    <level>0</level>
+                    <default>true</default>
+                    <control type="toggle"/>
+                </setting>
+                <setting id="crystal_zoom" type="boolean" label="30096" help="">
+                    <level>0</level>
+                    <default>true</default>
+                    <control type="toggle"/>
+                </setting>
+                <setting id="crystal_zoom_amt" type="integer" label="30097" help="">
+                    <level>0</level>
+                    <default>10</default>
+                    <constraints>
+                        <minimum>1</minimum>
+                        <step>1</step>
+                        <maximum>30</maximum>
+                    </constraints>
+                    <control type="slider" format="percentage">
+                        <popup>false</popup>
+                    </control>
+                </setting>
+                <setting id="crystal_bounce" type="boolean" label="30098" help="">
+                    <level>0</level>
+                    <default>true</default>
+                    <control type="toggle"/>
+                </setting>
+                <setting id="crystal_bounce_h" type="integer" label="30099" help="">
+                    <level>0</level>
+                    <default>16</default>
+                    <constraints>
+                        <minimum>1</minimum>
+                        <step>1</step>
+                        <maximum>40</maximum>
+                    </constraints>
+                    <control type="slider" format="percentage">
+                        <popup>false</popup>
+                    </control>
+                </setting>
+            </group>
+        </category>
         <category id="sweep" label="30023" help="">
             <group id="1">
                 <setting id="sweep_enabled" type="boolean" label="30013" help="">
@@ -383,6 +569,187 @@
                         <minimum>0</minimum>
                         <step>1</step>
                         <maximum>30</maximum>
+                    </constraints>
+                    <control type="slider" format="percentage">
+                        <popup>false</popup>
+                    </control>
+                </setting>
+            </group>
+        </category>
+        <category id="sparkles" label="30024" help="">
+            <group id="1">
+                <setting id="sparkles_enabled" type="boolean" label="30014" help="">
+                    <level>0</level>
+                    <default>true</default>
+                    <control type="toggle"/>
+                </setting>
+                <setting id="sparkles_color" type="integer" label="30003" help="">
+                    <level>0</level>
+                    <default>0</default>
+                    <constraints>
+                        <options>
+                            <option label="30500">0</option>
+                            <option label="30501">1</option>
+                            <option label="30502">2</option>
+                            <option label="30503">3</option>
+                            <option label="30504">4</option>
+                            <option label="30505">5</option>
+                            <option label="30506">6</option>
+                            <option label="30507">7</option>
+                            <option label="30508">8</option>
+                            <option label="30509">9</option>
+                            <option label="30510">10</option>
+                            <option label="30511">11</option>
+                            <option label="30512">12</option>
+                            <option label="30513">13</option>
+                            <option label="30514">14</option>
+                            <option label="30515">15</option>
+                            <option label="30516">16</option>
+                            <option label="30517">17</option>
+                        </options>
+                    </constraints>
+                    <control type="list" format="string">
+                        <heading>30003</heading>
+                    </control>
+                </setting>
+                <setting id="sparkles_count" type="integer" label="30060" help="">
+                    <level>0</level>
+                    <default>110</default>
+                    <constraints>
+                        <minimum>10</minimum>
+                        <step>10</step>
+                        <maximum>250</maximum>
+                    </constraints>
+                    <control type="slider" format="integer">
+                        <popup>false</popup>
+                    </control>
+                </setting>
+                <setting id="sparkles_size" type="integer" label="30061" help="">
+                    <level>0</level>
+                    <default>100</default>
+                    <constraints>
+                        <minimum>30</minimum>
+                        <step>10</step>
+                        <maximum>250</maximum>
+                    </constraints>
+                    <control type="slider" format="percentage">
+                        <popup>false</popup>
+                    </control>
+                </setting>
+                <setting id="sparkles_opacity" type="integer" label="30004" help="">
+                    <level>0</level>
+                    <default>100</default>
+                    <constraints>
+                        <minimum>10</minimum>
+                        <step>5</step>
+                        <maximum>100</maximum>
+                    </constraints>
+                    <control type="slider" format="percentage">
+                        <popup>false</popup>
+                    </control>
+                </setting>
+                <setting id="sparkles_speed" type="integer" label="30005" help="">
+                    <level>0</level>
+                    <default>100</default>
+                    <constraints>
+                        <minimum>25</minimum>
+                        <step>25</step>
+                        <maximum>300</maximum>
+                    </constraints>
+                    <control type="slider" format="percentage">
+                        <popup>false</popup>
+                    </control>
+                </setting>
+                <setting id="sparkles_light" type="integer" label="30063" help="">
+                    <level>0</level>
+                    <default>100</default>
+                    <constraints>
+                        <minimum>0</minimum>
+                        <step>5</step>
+                        <maximum>100</maximum>
+                    </constraints>
+                    <control type="slider" format="percentage">
+                        <popup>false</popup>
+                    </control>
+                </setting>
+                <setting id="sparkles_dim" type="integer" label="30065" help="">
+                    <level>0</level>
+                    <default>40</default>
+                    <constraints>
+                        <minimum>0</minimum>
+                        <step>5</step>
+                        <maximum>90</maximum>
+                    </constraints>
+                    <control type="slider" format="percentage">
+                        <popup>false</popup>
+                    </control>
+                </setting>
+            </group>
+        </category>
+        <category id="waves" label="30025" help="">
+            <group id="1">
+                <setting id="waves_enabled" type="boolean" label="30015" help="">
+                    <level>0</level>
+                    <default>true</default>
+                    <control type="toggle"/>
+                </setting>
+                <setting id="waves_color" type="integer" label="30003" help="">
+                    <level>0</level>
+                    <default>1</default>
+                    <constraints>
+                        <options>
+                            <option label="30600">0</option>
+                            <option label="30601">1</option>
+                            <option label="30602">2</option>
+                            <option label="30603">3</option>
+                            <option label="30604">4</option>
+                            <option label="30605">5</option>
+                            <option label="30606">6</option>
+                            <option label="30607">7</option>
+                            <option label="30608">8</option>
+                            <option label="30609">9</option>
+                            <option label="30610">10</option>
+                            <option label="30611">11</option>
+                            <option label="30612">12</option>
+                            <option label="30613">13</option>
+                            <option label="30614">14</option>
+                        </options>
+                    </constraints>
+                    <control type="list" format="string">
+                        <heading>30003</heading>
+                    </control>
+                </setting>
+                <setting id="waves_strength" type="integer" label="30070" help="">
+                    <level>0</level>
+                    <default>60</default>
+                    <constraints>
+                        <minimum>0</minimum>
+                        <step>5</step>
+                        <maximum>100</maximum>
+                    </constraints>
+                    <control type="slider" format="percentage">
+                        <popup>false</popup>
+                    </control>
+                </setting>
+                <setting id="waves_speed" type="integer" label="30005" help="">
+                    <level>0</level>
+                    <default>100</default>
+                    <constraints>
+                        <minimum>25</minimum>
+                        <step>25</step>
+                        <maximum>300</maximum>
+                    </constraints>
+                    <control type="slider" format="percentage">
+                        <popup>false</popup>
+                    </control>
+                </setting>
+                <setting id="waves_height" type="integer" label="30071" help="">
+                    <level>0</level>
+                    <default>50</default>
+                    <constraints>
+                        <minimum>0</minimum>
+                        <step>1</step>
+                        <maximum>100</maximum>
                     </constraints>
                     <control type="slider" format="percentage">
                         <popup>false</popup>

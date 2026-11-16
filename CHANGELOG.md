@@ -2,6 +2,7 @@
 
 ## Addon updates since 3.0.0
 
+- **PS2 Overlays 2.1.7:** new PS5-style sparkles background and PSP-style waves background (many colours), a crystal emblem with halo glow, shine, zoom and bounce options, and a double light sweep. Supports the Arctic Zephyr Martian skin: the overlays are drawn inside the skin, behind its widgets and menus.
 - **Game Launcher 1.7.1:** new options to minimise Kodi after it has been out of focus for a set time (to save GPU while a game runs), and to bring Kodi back when the game closes.
 - **Cinema Themes 1.2.5:** the normal fade-in and fade-out can now be set up to 10000 ms. The switch fades stay at 5000 ms at most.
 - **Cinema Themes 1.2.4:** root themes now have their own order, loop and random start settings, and every setting has a description.

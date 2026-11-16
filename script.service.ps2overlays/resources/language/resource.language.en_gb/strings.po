@@ -47,6 +47,14 @@ msgctxt "#30013"
 msgid "Enable light sweep animation"
 msgstr ""
 
+msgctxt "#30014"
+msgid "Enable sparkles background"
+msgstr ""
+
+msgctxt "#30015"
+msgid "Enable waves background"
+msgstr ""
+
 msgctxt "#30020"
 msgid "Clock"
 msgstr ""
@@ -61,6 +69,18 @@ msgstr ""
 
 msgctxt "#30023"
 msgid "Light sweep"
+msgstr ""
+
+msgctxt "#30024"
+msgid "Sparkles"
+msgstr ""
+
+msgctxt "#30025"
+msgid "Waves"
+msgstr ""
+
+msgctxt "#30026"
+msgid "General"
 msgstr ""
 
 msgctxt "#30030"
@@ -109,6 +129,38 @@ msgstr ""
 
 msgctxt "#30054"
 msgid "Drift towards the corner (percent of screen height)"
+msgstr ""
+
+msgctxt "#30060"
+msgid "Number of sparkles"
+msgstr ""
+
+msgctxt "#30061"
+msgid "Sparkle size"
+msgstr ""
+
+msgctxt "#30063"
+msgid "Light from the top and floor haze (0 = off)"
+msgstr ""
+
+msgctxt "#30065"
+msgid "Dark navy tint over the screen"
+msgstr ""
+
+msgctxt "#30070"
+msgid "Background strength (how much of the screen the gradient covers)"
+msgstr ""
+
+msgctxt "#30071"
+msgid "Wave position (0 = higher, 100 = lower)"
+msgstr ""
+
+msgctxt "#30080"
+msgid "Draw the overlays inside the skin, behind its widgets (patches the skin)"
+msgstr ""
+
+msgctxt "#30081"
+msgid "Remove the skin patch now"
 msgstr ""
 
 msgctxt "#30100"
@@ -295,3 +347,278 @@ msgctxt "#30407"
 msgid "Green"
 msgstr ""
 
+msgctxt "#30500"
+msgid "PS5 original"
+msgstr ""
+
+msgctxt "#30501"
+msgid "Ice blue"
+msgstr ""
+
+msgctxt "#30502"
+msgid "Cyan"
+msgstr ""
+
+msgctxt "#30503"
+msgid "Teal"
+msgstr ""
+
+msgctxt "#30504"
+msgid "Green"
+msgstr ""
+
+msgctxt "#30505"
+msgid "Lime"
+msgstr ""
+
+msgctxt "#30506"
+msgid "Gold"
+msgstr ""
+
+msgctxt "#30507"
+msgid "Orange"
+msgstr ""
+
+msgctxt "#30508"
+msgid "Red"
+msgstr ""
+
+msgctxt "#30509"
+msgid "Rose"
+msgstr ""
+
+msgctxt "#30510"
+msgid "Pink"
+msgstr ""
+
+msgctxt "#30511"
+msgid "Purple"
+msgstr ""
+
+msgctxt "#30512"
+msgid "Violet"
+msgstr ""
+
+msgctxt "#30513"
+msgid "Multi: Aurora"
+msgstr ""
+
+msgctxt "#30514"
+msgid "Multi: Sunset"
+msgstr ""
+
+msgctxt "#30515"
+msgid "Multi: Neon"
+msgstr ""
+
+msgctxt "#30516"
+msgid "Multi: Candy"
+msgstr ""
+
+msgctxt "#30517"
+msgid "Multi: Rainbow"
+msgstr ""
+
+msgctxt "#30600"
+msgid "Automatic (by month)"
+msgstr ""
+
+msgctxt "#30601"
+msgid "PSP blue"
+msgstr ""
+
+msgctxt "#30602"
+msgid "Cyan"
+msgstr ""
+
+msgctxt "#30603"
+msgid "Teal"
+msgstr ""
+
+msgctxt "#30604"
+msgid "Green"
+msgstr ""
+
+msgctxt "#30605"
+msgid "Lime"
+msgstr ""
+
+msgctxt "#30606"
+msgid "Gold"
+msgstr ""
+
+msgctxt "#30607"
+msgid "Orange"
+msgstr ""
+
+msgctxt "#30608"
+msgid "Red"
+msgstr ""
+
+msgctxt "#30609"
+msgid "Pink"
+msgstr ""
+
+msgctxt "#30610"
+msgid "Magenta"
+msgstr ""
+
+msgctxt "#30611"
+msgid "Purple"
+msgstr ""
+
+msgctxt "#30612"
+msgid "Violet"
+msgstr ""
+
+msgctxt "#30613"
+msgid "Silver"
+msgstr ""
+
+msgctxt "#30614"
+msgid "Graphite"
+msgstr ""
+
+msgctxt "#30027"
+msgid "Crystal emblem"
+msgstr ""
+
+msgctxt "#30089"
+msgid "Animation"
+msgstr ""
+
+msgctxt "#30090"
+msgid "Enable crystal emblem"
+msgstr ""
+
+msgctxt "#30092"
+msgid "Light colour"
+msgstr ""
+
+msgctxt "#30093"
+msgid "Crystal size"
+msgstr ""
+
+msgctxt "#30094"
+msgid "Halo glow around the crystal (0 = off)"
+msgstr ""
+
+msgctxt "#30095"
+msgid "Shine (light streaks running through the crystal and a star flare)"
+msgstr ""
+
+msgctxt "#30096"
+msgid "Zoom in and out"
+msgstr ""
+
+msgctxt "#30097"
+msgid "Zoom amount"
+msgstr ""
+
+msgctxt "#30098"
+msgid "Bounce"
+msgstr ""
+
+msgctxt "#30099"
+msgid "Bounce height"
+msgstr ""
+
+msgctxt "#30700"
+msgid "Sapphire blue"
+msgstr ""
+
+msgctxt "#30701"
+msgid "Ice blue"
+msgstr ""
+
+msgctxt "#30702"
+msgid "Cyan"
+msgstr ""
+
+msgctxt "#30703"
+msgid "Emerald"
+msgstr ""
+
+msgctxt "#30704"
+msgid "Green"
+msgstr ""
+
+msgctxt "#30705"
+msgid "Lime"
+msgstr ""
+
+msgctxt "#30706"
+msgid "Gold"
+msgstr ""
+
+msgctxt "#30707"
+msgid "Orange"
+msgstr ""
+
+msgctxt "#30708"
+msgid "Ruby red"
+msgstr ""
+
+msgctxt "#30709"
+msgid "Rose"
+msgstr ""
+
+msgctxt "#30710"
+msgid "Pink"
+msgstr ""
+
+msgctxt "#30711"
+msgid "Amethyst purple"
+msgstr ""
+
+msgctxt "#30712"
+msgid "Violet"
+msgstr ""
+
+msgctxt "#30713"
+msgid "Diamond white"
+msgstr ""
+
+msgctxt "#30750"
+msgid "Automatic (matches the crystal)"
+msgstr ""
+
+msgctxt "#30751"
+msgid "White"
+msgstr ""
+
+msgctxt "#30752"
+msgid "Warm gold"
+msgstr ""
+
+msgctxt "#30753"
+msgid "Ice blue"
+msgstr ""
+
+msgctxt "#30754"
+msgid "Cyan"
+msgstr ""
+
+msgctxt "#30755"
+msgid "Mint"
+msgstr ""
+
+msgctxt "#30756"
+msgid "Lime"
+msgstr ""
+
+msgctxt "#30757"
+msgid "Orange"
+msgstr ""
+
+msgctxt "#30758"
+msgid "Red"
+msgstr ""
+
+msgctxt "#30759"
+msgid "Pink"
+msgstr ""
+
+msgctxt "#30760"
+msgid "Purple"
+msgstr ""

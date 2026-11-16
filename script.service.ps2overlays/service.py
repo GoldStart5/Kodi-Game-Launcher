@@ -11,9 +11,20 @@ Independent transparent overlays are drawn on the Kodi Home window
   * Rings - glowing dots circling in orbiting rings.
   * Light sweep - two slow anamorphic light streaks (top / bottom, opposite
             directions) drifting behind the others.
-  * Backdrop - the dark shade behind the clock; its own bottom layer.
+  * Backdrop - the dark shade behind the clock; its own layer.
+  * Waves - PSP / XMB style rolling wave background in many colours (also
+            automatic by month); the very bottom layer.
+  * Sparkles - PS5-style background (breathing top light, floor haze, hovering
+            and twinkling specks and bokeh) measured from a reference clip;
+            the very bottom layer.
 
-Layer order (bottom to top): backdrop, light sweep, clock, rings, cubes. When an
+Two ways of drawing (setting "skin_patch"):
+  * inside the skin (default on a supported skin, see skinpatch.py): the overlays
+    are written into the skin as an include, so they are drawn BEHIND all of the
+    skin's widgets, menus and text, in every window that uses its background.
+  * on top of the skin: live controls on the Home window (the original method).
+
+Layer order (bottom to top): waves, sparkles, backdrop, light sweep, clock, rings, cubes. When an
 overlay is rebuilt, everything above it is rebuilt too, so the order holds.
 The clock lights the bar of the current hour (12 o'clock = top bar).
 
@@ -23,6 +34,7 @@ prefixed clock_ / cubes_ / rings_). Fade in / out times are global. There is no
 only that overlay. All overlays are rebuilt after skin / theme / resolution
 changes.
 """
+import colorsys
 import json
 import math
 import os
@@ -32,6 +44,10 @@ import time
 import xbmc
 import xbmcaddon
 import xbmcgui
+import xbmcvfs
+
+import skinpatch
+from focus import FocusWatcher
 
 ADDON = xbmcaddon.Addon()
 ADDON_PATH = ADDON.getAddonInfo('path')
@@ -65,6 +81,23 @@ def set_hour_property():
         pass
 
 
+def set_focus_property(win, focused):
+    """Publish whether Kodi is the foreground app ('1'/'0') for the skin include."""
+    try:
+        win.setProperty(skinpatch.FOCUS_PROP, '1' if focused else '0')
+    except Exception:
+        pass
+
+
+def focus_fade_cfg():
+    """(fade_in_ms, fade_out_ms) of the focus fade (always on, uses the Fading sliders)."""
+    a = xbmcaddon.Addon()
+    try:
+        return (clamp(a.getSettingInt('fade_in'), 0, 10000), clamp(a.getSettingInt('fade_out'), 0, 10000))
+    except Exception:
+        return (1000, 500)
+
+
 def skin_signature():
     return (xbmc.getSkinDir(),
             xbmc.getInfoLabel('Skin.CurrentTheme'),
@@ -78,6 +111,7 @@ class Overlay(object):
     """Base class: control life-cycle, fading and settings handling."""
 
     PREFIX = ''          # 'clock', 'cubes', 'rings', ...
+    READ_OPACITY = True  # False: overlay has no opacity setting
     # (key, default, min, max) integer settings, read as <PREFIX>_<key>
     INTS = []
     # (key, default) boolean settings, read as <PREFIX>_<key>
@@ -94,6 +128,7 @@ class Overlay(object):
         self.settings_changed = False
         self.last_build = 0.0
         self.sig = None
+        self.rec = None             # list = record specs for the skin include
         self.cfg = self.read()
         self.prop_on = 'ps2overlays.%s.on' % self.PREFIX
         self.prop_ids = 'ps2overlays.%s.ids' % self.PREFIX
@@ -108,9 +143,9 @@ class Overlay(object):
             cfg['enabled'] = a.getSettingBool(p + 'enabled')
         except Exception:
             cfg['enabled'] = True
-        for key, default, lo, hi in ([('color', 0, 0, len(self.PALETTES) - 1),
-                                      ('opacity', 100, 5, 100),
-                                      ('speed', 100, 10, 1000),
+        for key, default, lo, hi in ([('color', 0, 0, len(self.PALETTES) - 1)] +
+                                     ([('opacity', 100, 5, 100)] if self.READ_OPACITY else []) +
+                                     [('speed', 100, 10, 1000),
                                       ('fade_in', 1000, 0, 10000),
                                       ('fade_out', 500, 0, 10000)] + self.INTS):
             try:
@@ -208,6 +243,29 @@ class Overlay(object):
         return a
 
     def add(self, image, x, y, w, h, alpha_pct, colour, anims, extra_cond=None):
+        if self.rec is not None:
+            # skin mode: only record; the skin draws it (always behind its widgets).
+            # Window change: the overlay fades out with the old window, then fades
+            # in with the new one (Kodi runs the two one after the other, and
+            # skin animations restart in each window, so this hides the restart).
+            # The hour-shine layers also cross-fade when the hour changes.
+            fin, fout = self.cfg['fade_in'], self.cfg['fade_out']
+            fades = []
+            if fout > 0:
+                fades.append(('WindowClose', 'effect=fade start=100 end=0 time=%d '
+                              'tween=sine easing=inout' % min(fout, 2000)))
+            if fin > 0:
+                fades.append(('WindowOpen', 'effect=fade start=0 end=100 time=%d '
+                              'tween=sine easing=inout' % fin))
+            if extra_cond:
+                fades += [a for a in self.fade_anims() if a[0] in ('Visible', 'Hidden')]
+            self.rec.append(dict(image=image, x=x, y=y, w=w, h=h,
+                                 colour=argb(clamp(alpha_pct, 0, 100), colour),
+                                 cond=extra_cond,
+                                 anims=fades + [('Conditional', a) for a in anims],
+                                 **(dict(group=self._grp[0], group_anims=[('Conditional', a) for a in self._grp[1]])
+                                    if getattr(self, '_grp', None) else {})))
+            return None
         ctrl = xbmcgui.ControlImage(
             int(x), int(y), max(1, int(w)), max(1, int(h)),
             os.path.join(MEDIA, image), 0,
@@ -238,6 +296,9 @@ class Overlay(object):
         self.cfg = self.read()
         self.sig = skin_signature()
         if not self.cfg['enabled']:
+            return
+        if self.rec is not None:
+            self.build_content(1920, 1080)      # skin layout is 1920x1080
             return
         self.win = xbmcgui.Window(HOME_WINDOW_ID)
         self.win.setProperty(self.prop_on, '0')
@@ -360,6 +421,193 @@ class Clock(Overlay):
                              % (self.dur(2.0), self.dur(0.28 * k)))
                     self.add('gleam_%02d_%d.png' % (hour, k), x, y, w, h, op,
                              'FFFFFF', [zoom, gleam], cond)
+
+
+# ----------------------------------------------------------------------
+class Waves(Overlay):
+    """PSP / XMB style background: a blue gradient with soft translucent waves
+    rolling across it. Gradient, wave shapes, speeds and colours were measured
+    from a reference loop (about one wavelength per screen width, the main wave
+    travelling left in ~14 s, the whole group swaying every ~10 s). Colours are
+    the reference's own hue-rotated, so every theme keeps the same contrast."""
+    PREFIX = 'waves'
+    READ_OPACITY = False
+    INTS = [('strength', 60, 0, 100), ('height', 50, 0, 100)]
+
+    # reference colours: dark sky, mid sky, light sky, left ground, wave tint
+    BASE = [(0, 2, 75), (0, 98, 186), (6, 176, 221), (54, 151, 212), (48, 182, 229)]
+    # (label, hue shift in degrees, saturation x, value x); None = by month
+    PALETTES = [
+        ('Automatic (by month)', None, None, None),
+        ('PSP blue', 0, 1.0, 1.0),
+        ('Cyan', -22, 0.95, 1.0),
+        ('Teal', -48, 0.85, 0.95),
+        ('Green', -68, 0.78, 0.9),
+        ('Lime', -108, 0.72, 0.92),
+        ('Gold', -165, 0.82, 0.95),
+        ('Orange', -180, 0.88, 0.97),
+        ('Red', -205, 0.88, 0.92),
+        ('Pink', 140, 0.72, 1.0),
+        ('Magenta', 112, 0.82, 0.92),
+        ('Purple', 80, 0.82, 0.92),
+        ('Violet', 52, 0.9, 0.98),
+        ('Silver', 0, 0.08, 1.0),
+        ('Graphite', 0, 0.15, 0.6),
+    ]
+    # theme for each month (index into PALETTES), January first
+    MONTHS = [13, 9, 5, 4, 3, 2, 1, 12, 11, 7, 8, 6]
+    # (image, direction: -1 = moves left, +1 = moves right, seconds per screen width)
+    LAYERS = [('wave_layer_0.png', -1, 14.0), ('wave_layer_1.png', -1, 19.0),
+              ('wave_layer_2.png', 1, 44.0)]
+
+    def read(self):
+        cfg = super(Waves, self).read()
+        theme = cfg['color']
+        if self.PALETTES[theme][1] is None:
+            theme = self.MONTHS[time.localtime().tm_mon - 1]
+        cfg['theme'] = theme
+        return cfg
+
+    def colours(self, theme):
+        """The reference colours moved to the theme's hue. The original blue
+        keeps the reference's exact hue spread (navy -> blue -> cyan); other
+        themes keep only 30% of it so the gradient stays one clean colour."""
+        _, hue, sat, val = self.PALETTES[theme]
+        spread = 1.0 if hue == 0 and sat == 1.0 else 0.3
+        mid_h = colorsys.rgb_to_hsv(*[x / 255.0 for x in self.BASE[1]])[0]
+        out = []
+        for r, g, b in self.BASE:
+            h, sv, v = colorsys.rgb_to_hsv(r / 255.0, g / 255.0, b / 255.0)
+            d = ((h - mid_h + 0.5) % 1.0) - 0.5                 # offset from the mid colour
+            h = (mid_h + hue / 360.0 + d * spread) % 1.0
+            sv = clamp(sv * sat, 0.0, 1.0)
+            v = clamp(v * val, 0.0, 1.0)
+            out.append('%02X%02X%02X' % tuple(int(round(x * 255)) for x in colorsys.hsv_to_rgb(h, sv, v)))
+        return out
+
+    def build_content(self, W, H):
+        c = self.cfg
+        st = c['strength']
+        if st <= 0:
+            return
+        dark, mid, light, accent, tint = self.colours(c['theme'])
+        off = int((c['height'] - 50) / 100.0 * 0.5 * H)     # +-25 % of the screen
+        # three-stop sky gradient, then the lighter ground on the left
+        self.add('solid.png', 0, 0, W, H, st, dark, [])
+        self.add('wave_sky1.png', 0, 0, W, H, st, mid, [])
+        self.add('wave_sky2.png', 0, 0, W, H, st, light, [])
+        self.add('wave_ground.png', 0, 0, W, H, st, accent, [])
+        # translucent waves: each image is two screen widths of a seamless wave,
+        # slid by exactly one screen width per loop, plus a slow vertical sway
+        for i, (img, direction, period) in enumerate(self.LAYERS):
+            x0 = 0 if direction < 0 else -W
+            slide = ('effect=slide start=0,0 end=%d,0 time=%d tween=linear '
+                     'loop=true condition=true'
+                     % (direction * W, self.dur(period)))
+            sway = ('effect=slide start=0,0 end=0,%d time=%d delay=%d tween=sine '
+                    'easing=inout pulse=true condition=true'
+                    % (int(0.025 * H), self.dur(5.0 + 1.3 * i), self.dur(1.7 * i)))
+            self.add(img, x0, off, 2 * W, int(1.5 * H), st, tint, [slide, sway])
+
+
+# ----------------------------------------------------------------------
+class Sparkles(Overlay):
+    """PS5-style background, rebuilt from a reference recording: a warm light
+    cone from the top left that slowly breathes, a grey-blue haze on the floor,
+    and a cloud of tiny glowing specks and soft gold bokeh that hover and
+    twinkle (specks flash, bokeh breathe, everything floats). Light, haze and the particle layout (sparks.json: position, size
+    and colour of every particle) were measured from the recording."""
+    PREFIX = 'sparkles'
+    INTS = [('count', 110, 10, 250), ('size', 100, 30, 250),
+            ('light', 100, 0, 100), ('dim', 40, 0, 90)]
+    BEAM_HALF_S = 3.5               # light breathes dim -> bright -> dim in ~7 s
+    NAVY = '050513'
+    # (label, colour multiplied onto the light/haze and, when the third item is
+    # None, onto the particles' original colours; or a list of particle colours)
+    PALETTES = [
+        ('PS5 original', 'FFFFFF', None),
+        ('Ice blue', 'B8D8FF', None),
+        ('Cyan', 'A8F0FF', None),
+        ('Teal', 'B0FFF0', None),
+        ('Green', 'C0FFC0', None),
+        ('Lime', 'E0FFA0', None),
+        ('Gold', 'FFE0A0', None),
+        ('Orange', 'FFC890', None),
+        ('Red', 'FFB0B0', None),
+        ('Rose', 'FFC0D0', None),
+        ('Pink', 'FFB8E8', None),
+        ('Purple', 'D2B8FF', None),
+        ('Violet', 'C0B0FF', None),
+        ('Multi: Aurora', 'B8D8FF', ['3FE0C8', '4FA3FF', 'B07CFF', 'FFFFFF']),
+        ('Multi: Sunset', 'FFD0B0', ['FFB04A', 'FF5F8A', 'B07CFF', 'FFFFFF']),
+        ('Multi: Neon', 'D8C8FF', ['FF4FD8', '4FD8FF', 'C6F135', 'FFFFFF']),
+        ('Multi: Candy', 'FFD8EC', ['FF8AD8', '8AE0FF', 'FFE08A', 'C8A0FF']),
+        ('Multi: Rainbow', 'FFFFFF', ['FF5A5A', 'FFB04A', 'FFE45A', '5AE07A', '4FA3FF', 'B07CFF']),
+    ]
+
+    def __init__(self, mon):
+        super(Sparkles, self).__init__(mon)
+        self.sparks = None
+
+    @staticmethod
+    def mul(a, b):
+        """Multiply two RRGGBB colours."""
+        return ''.join('%02X' % (int(a[i:i + 2], 16) * int(b[i:i + 2], 16) // 255)
+                       for i in (0, 2, 4))
+
+    def build_content(self, W, H):
+        if self.sparks is None:
+            with open(os.path.join(MEDIA, 'sparks.json'), 'r') as f:
+                self.sparks = json.load(f)
+        c = self.cfg
+        _, tint, multi = self.PALETTES[c['color']]
+        # dark navy tint (the reference is near-black; the skin behind is not)
+        if c['dim'] > 0:
+            self.add('solid.png', 0, 0, W, H, c['dim'], self.NAVY, [])
+        # light cone + floor haze, and the breathing of the light
+        if c['light'] > 0:
+            self.add('ps5_plate.png', 0, 0, W, H, c['light'], tint, [])
+            self.add('ps5_beam.png', 0, 0, W, H, c['light'], tint,
+                     [self.a_fade(0, 100, self.BEAM_HALF_S)])
+        # particles, most important first, so the count slider keeps the best
+        rnd = random.Random(5050)           # fixed seed = stable motion
+        scale = c['size'] / 100.0
+        for n, sp in enumerate(self.sparks[:c['count']]):
+            d = sp['d'] * H * scale
+            if sp['k'] == 'disc':
+                img, size, alpha = 'spark_disc.png', max(10.0, d * 1.3), sp['a'] * 0.95
+            else:
+                img, size, alpha = 'spark_dot.png', max(7.0, d * 4.0 * min(1.0, scale + 0.2)), min(1.0, sp['a'] * 1.2)
+            x = sp['u'] * W - size / 2.0
+            y = sp['v'] * H - size / 2.0
+            colour = multi[n % len(multi)] if multi else self.mul(sp['c'], tint)
+            # smooth float along a sine path: tens of pixels, back and forth
+            amp = H * rnd.uniform(0.03, 0.08)
+            ang = rnd.uniform(0, 6.2832)
+            anims = [('effect=slide start=0,0 end=%d,%d time=%d delay=%d tween=sine '
+                      'easing=inout pulse=true condition=true'
+                      % (int(amp * math.cos(ang)), int(amp * math.sin(ang)),
+                         self.dur(rnd.uniform(7, 16)), self.dur(rnd.uniform(0, 8))))]
+            if sp['k'] == 'disc':
+                # bokeh breathe gently
+                period = rnd.uniform(3.0, 7.0)
+                anims.append('effect=fade start=%d end=100 time=%d delay=%d tween=sine '
+                             'easing=inout pulse=true condition=true'
+                             % (rnd.randint(45, 70), self.dur(period),
+                                self.dur(rnd.uniform(0, 2 * period))))
+            else:
+                # specks shine: flash from nearly dark to full brightness with a
+                # small bloom, then fade away again
+                period = rnd.uniform(1.2, 3.8)
+                delay = self.dur(rnd.uniform(0, 2 * period))
+                anims.append('effect=fade start=%d end=100 time=%d delay=%d tween=sine '
+                             'easing=inout pulse=true condition=true'
+                             % (rnd.randint(3, 20), self.dur(period), delay))
+                anims.append('effect=zoom start=%d end=%d center=auto time=%d delay=%d '
+                             'tween=sine easing=inout pulse=true condition=true'
+                             % (rnd.randint(55, 75), rnd.randint(120, 160),
+                                self.dur(period), delay))
+            self.add(img, x, y, size, size, c['opacity'] * alpha, colour, anims)
 
 
 # ----------------------------------------------------------------------
@@ -578,7 +826,147 @@ class Rings(Overlay):
                  [self.a_spin(3.8, True)])
 
 
+class Crystal(Overlay):
+    """Faceted glass emblem (four diamond tiles) with light shining inside: crystal body, inner
+    light (the whole glass glows, as on the clock bars), bright facet edges,
+    slanted gleams running through the crystal and a star flare, with an
+    optional halo. Optional bounce and zoom."""
+    PREFIX = 'crystal'
+    INTS = [('size', 22, 5, 100), ('pos_x', 82, 0, 100), ('pos_y', 22, 0, 100),
+            ('light_color', 0, 0, 10), ('glow', 55, 0, 100),
+            ('bounce_h', 16, 1, 40), ('zoom_amt', 10, 1, 30)]
+    BOOLS = [('bounce', True), ('zoom', True), ('shine', True)]
+    PALETTES = [
+        ('Sapphire blue', '4F8FFF'),
+        ('Ice blue', '8CCDFF'),
+        ('Cyan', '3FD8F0'),
+        ('Emerald', '3FE0A0'),
+        ('Green', '5CE05C'),
+        ('Lime', 'C6F135'),
+        ('Gold', 'FFC24A'),
+        ('Orange', 'FF8A3D'),
+        ('Ruby red', 'FF4D5A'),
+        ('Rose', 'FF7FB0'),
+        ('Pink', 'FF5FD0'),
+        ('Amethyst purple', 'B07CFF'),
+        ('Violet', '7C7FF0'),
+        ('Diamond white', 'FFFFFF'),
+    ]
+    LIGHTS = [
+        ('Automatic (matches the crystal)', None),
+        ('White', 'FFFFFF'),
+        ('Warm gold', 'FFD98A'),
+        ('Ice blue', 'BFE3FF'),
+        ('Cyan', '9FF4FF'),
+        ('Mint', 'A8FFD8'),
+        ('Lime', 'E4FF8A'),
+        ('Orange', 'FFB070'),
+        ('Red', 'FF8A8A'),
+        ('Pink', 'FFA8DC'),
+        ('Purple', 'D2A8FF'),
+    ]
+    SPOT = (216 / 512.0, 82 / 512.0)       # where the star flare sits on the artwork
+
+    @staticmethod
+    def mix(a, b, t):
+        """Blend RRGGBB a towards b by t."""
+        return ''.join('%02X' % int(int(a[i:i + 2], 16) * (1 - t) + int(b[i:i + 2], 16) * t)
+                       for i in (0, 2, 4))
+
+    def build_content(self, W, H):
+        c = self.cfg
+        op = c['opacity']
+        crystal = self.PALETTES[c['color']][1]
+        light = self.LIGHTS[c['light_color']][1] or self.mix(crystal, 'FFFFFF', 0.55)
+        edge = self.mix(crystal, 'FFFFFF', 0.75)
+        glint = self.mix(light, 'FFFFFF', 0.5)
+        d = int(min(W, H) * c['size'] / 100.0)
+        cx = int(W * c['pos_x'] / 100.0)
+        cy = int(H * c['pos_y'] / 100.0)
+        x, y = cx - d // 2, cy - d // 2
+        motion = []
+        # Kodi snaps unrotated images to whole pixels, so a slow, small move or zoom
+        # advances one pixel at a time and looks like skipped frames. Motions here
+        # are bigger and quicker, and a tiny sway (rotation) is added: rotated
+        # images are not pixel-snapped, which keeps the move smooth.
+        if c['zoom']:
+            motion.append('effect=zoom start=%d end=%d center=%d,%d time=%d tween=sine '
+                          'easing=inout pulse=true condition=true'
+                          % (100 - c['zoom_amt'], 100 + c['zoom_amt'], cx, cy, self.dur(2.4)))
+        if c['bounce']:
+            motion.append('effect=slide start=0,0 end=0,%d time=%d tween=sine '
+                          'easing=inout pulse=true condition=true'
+                          % (-int(d * c['bounce_h'] / 100.0), self.dur(1.2)))
+        if c['zoom'] or c['bounce']:
+            motion.append('effect=rotate start=-1 end=1 center=%d,%d time=%d tween=sine '
+                          'easing=inout pulse=true condition=true' % (cx, cy, self.dur(2.4)))
+        if self.rec is not None:
+            # skin mode: one animated group, so every layer moves rigidly together
+            self._grp = ('crystal', motion)
+            motion = []
+        else:
+            self._grp = None
+        # halo
+        if c['glow'] > 0:
+            g = int(d * 1.9)
+            self.add('glow.png', cx - g // 2, cy - g // 2, g, g, op * c['glow'] / 100.0 * 0.6,
+                     light, [self.a_fade(50, 100, 4.0)] + motion)
+        self.add('crystal_body.png', x, y, d, d, op, crystal, list(motion))
+        self.add('crystal_light.png', x, y, d, d, op * 0.95, light,
+                 [self.a_fade(55, 100, 2.0)] + motion)
+        self.add('crystal_edges.png', x, y, d, d, op, edge, list(motion))
+        if c['shine']:
+            # sharp slanted gleams running through the glass, one band after
+            # another (staggered delays), like the shine on the clock bars
+            for k in range(5):
+                glint_a = ('effect=fade start=0 end=100 time=%d tween=cubic easing=in '
+                           'pulse=true condition=true delay=%d'
+                           % (self.dur(2.0), self.dur(0.28 * k)))
+                self.add('crystal_gleam_%d.png' % k, x, y, d, d, op, glint,
+                         [glint_a] + motion)
+            f = int(d * 0.5)
+            fx = x + int(d * self.SPOT[0]) - f // 2
+            fy = y + int(d * self.SPOT[1]) - f // 2
+            flare = ('effect=fade start=0 end=100 time=%d tween=cubic easing=in pulse=true '
+                     'condition=true delay=%d' % (self.dur(1.8), self.dur(0.5)))
+            self.add('crystal_flare.png', fx, fy, f, f, op, 'FFFFFF', [flare] + motion)
+        self._grp = None
+
+
 # ----------------------------------------------------------------------
+# ----------------------------------------------------------------------
+def collect_specs(overlays):
+    """What every enabled overlay would draw, bottom to top, as plain data."""
+    specs = []
+    for ov in overlays:
+        ov.rec = specs
+        try:
+            ov.build()
+        finally:
+            ov.rec = None
+        ov.built = False                    # nothing live: the skin draws it
+    return specs
+
+
+def media_base():
+    """Texture folder as the skin should name it."""
+    media = os.path.normpath(MEDIA)
+    try:
+        home = os.path.normpath(xbmcvfs.translatePath('special://home/'))
+        if media.startswith(home + os.sep):
+            return 'special://home/' + os.path.relpath(media, home).replace(os.sep, '/') + '/'
+    except Exception:
+        pass
+    return media.replace(os.sep, '/') + '/'
+
+
+def notify(message):
+    try:
+        xbmcgui.Dialog().notification('PS2 Overlays', message, xbmcgui.NOTIFICATION_WARNING, 7000)
+    except Exception:
+        pass
+
+
 class Watcher(xbmc.Monitor):
     def __init__(self):
         super(Watcher, self).__init__()
@@ -590,27 +978,136 @@ class Watcher(xbmc.Monitor):
 
 def main():
     mon = Watcher()
-    # bottom -> top; a rebuilt overlay also rebuilds everything above it
-    overlays = [Backdrop(mon), Sweep(mon), Clock(mon), Rings(mon), Cubes(mon)]
+    # bottom -> top; in python mode a rebuilt overlay also rebuilds those above it
+    overlays = [Waves(mon), Sparkles(mon), Backdrop(mon), Sweep(mon), Clock(mon), Rings(mon), Crystal(mon), Cubes(mon)]
     if mon.waitForAbort(3):
         return
     for ov in overlays:
         ov.reap_old()
 
     settle_until = 0.0
+    last_theme_check = 0.0
+    mode = None                 # 'skin' (inside the skin) or 'python' (on top)
+    next_eval = 0.0
+    skin_pending = None         # when to (re)write the skin include
+    blocked_skin = None         # skin we failed to patch (until settings change)
+    skin_id = None
+    patcher = None
+    focus = FocusWatcher(log)
+    home = xbmcgui.Window(HOME_WINDOW_ID)
+    applied_focus = None        # focus-fade config the include was written with
+    last_focus = None           # last value published to the skin
+    last_slow = 0.0
 
     while not mon.abortRequested():
-        active = xbmc.getCondVisibility('Window.IsActive(home)')
         now = time.time()
+        # Behind the skin, most ticks only look at window focus (a plain Windows
+        # call, no Kodi API) and publish it when it changes. Every Kodi API call
+        # takes the GUI/Python locks and can make animations stutter, so the rest
+        # of the bookkeeping runs about once a second.
+        if mode == 'skin' and not mon.dirty and now - last_slow < 1.0:
+            f = focus.has_focus()
+            if f != last_focus:
+                last_focus = f
+                set_focus_property(home, f)
+            if mon.waitForAbort(0.25):
+                break
+            continue
+        last_slow = now
+        dirty = mon.dirty
+        mon.dirty = False
+        set_hour_property()
 
-        if mon.dirty:
-            mon.dirty = False
+        cur = xbmc.getSkinDir()
+        if cur != skin_id:
+            skin_id = cur
+            patcher = skinpatch.SkinPatcher(skin_id)
+            next_eval = 0.0
+        if dirty:
+            blocked_skin = None
+            next_eval = 0.0
+
+        # ---- which way to draw
+        if now >= next_eval:
+            next_eval = now + 60
+            try:
+                wants = xbmcaddon.Addon().getSettingBool('skin_patch')
+            except Exception:
+                wants = True
+            want = 'skin' if (wants and blocked_skin != skin_id and patcher.supported()) else 'python'
+            if want != mode:
+                if mode == 'skin':
+                    # switching away: take the patch out of the skin again
+                    try:
+                        if skinpatch.remove_everywhere():
+                            xbmc.executebuiltin('ReloadSkin()')
+                            settle_until = now + 4.0
+                    except Exception as e:
+                        log('unpatch failed: %r' % e)
+                mode = want
+                log('drawing mode: %s' % mode)
+                if mode == 'skin':
+                    for ov in overlays:
+                        ov.clear_now()
+                    skin_pending = now
+                else:
+                    for ov in overlays:
+                        ov.need = True
+                        ov.settings_changed = False
+                        ov.sig = None
+
+        if mode == 'skin':
+            # ---- inside the skin: regenerate the include when something changed
+            ff = focus_fade_cfg()
+            f = focus.has_focus()
+            if f != last_focus:
+                last_focus = f
+                set_focus_property(home, f)
+            if skin_pending is None and ff != applied_focus:
+                skin_pending = now + 2.0
+            if skin_pending is None and (dirty or now - last_theme_check >= 30):
+                last_theme_check = now
+                if any(ov.settings_differ() for ov in overlays):
+                    skin_pending = now + 2.0            # let several slider moves settle
+            if (skin_pending is not None and now >= skin_pending and now >= settle_until
+                    and not xbmc.getCondVisibility('Window.IsVisible(addonsettings)')):
+                skin_pending = None
+                try:
+                    specs = collect_specs(overlays)
+                    applied_focus = focus_fade_cfg()
+                    text = skinpatch.render_include(
+                        specs, media_base(), 'skin %s %s' % (skin_id, patcher.version),
+                        focus_fade=applied_focus)
+                    ok, changed, msg = patcher.apply(text)
+                except Exception as e:
+                    ok, changed, msg = False, False, repr(e)
+                if not ok:
+                    log('skin patch failed: %s' % msg)
+                    notify('Could not patch the skin (%s). Drawing the overlays on top instead.' % msg)
+                    blocked_skin = skin_id
+                    next_eval = 0.0
+                elif changed:
+                    log('skin patched (%d controls), reloading skin' % len(specs))
+                    xbmc.executebuiltin('ReloadSkin()')
+                    settle_until = time.time() + 4.0
+            if mon.waitForAbort(0.25):
+                break
+            continue
+
+        # ---- on top of the skin (live controls)
+        active = xbmc.getCondVisibility('Window.IsActive(home)')
+        if dirty:
             for ov in overlays:
                 if ov.settings_differ():
                     ov.need = True
                     ov.settings_changed = True
 
-        set_hour_property()
+        if now - last_theme_check >= 30:
+            last_theme_check = now
+            for ov in overlays:
+                if isinstance(ov, Waves) and ov.built and ov.settings_differ():
+                    ov.need = True
+                    ov.settings_changed = True
         sig = skin_signature()
         for ov in overlays:
             if ov.sig is not None and sig != ov.sig:
